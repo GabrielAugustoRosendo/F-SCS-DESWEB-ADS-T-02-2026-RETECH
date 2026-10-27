@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReTech | Tecnologia que ganha uma nova vida</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+    <!-- CABEÇALHO -->
+    <header class="cabecalho">
+        <div class="cabecalho-conteudo">
+            <a href="index.html" class="logo" aria-label="ReTech - início">
+                <span class="logo-simbolo">♻</span>
+                <span class="logo-texto">
+                    <strong>Re<span>Tech</span></strong>
+                    <small>TECNOLOGIA QUE REUTILIZA</small>
+                </span>
+            </a>
+    <form class="busca" action="produtos.html" method="get">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input
+            type="search"
+            name="busca"
+            id="campo-busca"
+            placeholder="Buscar celulares, notebooks, videogames..."
+            aria-label="Buscar produtos"
+        >
+    </form>
+            <nav class="menu" aria-label="Menu principal">
+                <a href="produtos.html" class="ativo">Comprar</a>
+                <a href="anunciar.html">Vender</a>
+                <a href="doar-trocar.html">Doar</a>
+                <a href="doar-trocar.html">Trocar</a>
+            </nav>
+
+            <a href="login.html" class="entrar"><i class="fa-regular fa-user"></i> Entrar</a>
+            <a href="anunciar.html" class="botao botao-verde anunciar-topo">
+                <i class="fa-solid fa-plus"></i> Anunciar produto
+            </a>
+        </div>
+    </header>
+
+    <main id="inicio">
+        <!-- BANNER PRINCIPAL -->
+        <section class="banner">
+            <div class="container banner-conteudo">
+                <div class="banner-texto">
+                    <div class="etiqueta"><i class="fa-solid fa-leaf"></i> ELETRÔNICOS USADOS <span></span></div>
+                    <h1>Tecnologia que ganha<br>uma <em>nova vida.</em></h1>
+                    <p>Compre, venda, doe e troque eletrônicos usados com mais consciência e faça parte de uma economia mais circular e sustentável.</p>
+                    <div class="banner-botoes">
+                        <a class="botao botao-verde" href="produtos.html"><i class="fa-solid fa-magnifying-glass"></i> Explorar produtos</a>
+                        <a class="botao botao-contorno" href="anunciar.html"><i class="fa-solid fa-arrow-up-from-bracket"></i> Anunciar agora</a>
+                    </div>
+                </div>
+                <div class="banner-imagem">
+                    <img src="imagens/vitrine.jpg" alt="Eletrônicos reutilizados: celular, notebook, videogame e câmera">
+                </div>
+            </div>
+        </section>
+
+        
+<!-- CATEGORIAS -->
+<section class="container categorias" aria-label="Categorias de produtos">
+    <a href="produtos.html?categoria=celulares" class="categoria">
+        <i class="fa-solid fa-mobile-screen-button"></i>
+        <span>Celulares</span>
+        <i class="fa-solid fa-chevron-right seta"></i>
+    </a>
+
+    <a href="produtos.html?categoria=notebooks" class="categoria">
+        <i class="fa-solid fa-laptop"></i>
+        <span>Notebooks</span>
+        <i class="fa-solid fa-chevron-right seta"></i>
+    </a>
+
+    <a href="produtos.html?categoria=games" class="categoria">
+        <i class="fa-solid fa-gamepad"></i>
+        <span>Games</span>
+        <i class="fa-solid fa-chevron-right seta"></i>
+    </a>
+
+    <a href="produtos.html?categoria=audio" class="categoria">
+        <i class="fa-solid fa-headphones"></i>
+        <span>Áudio</span>
+        <i class="fa-solid fa-chevron-right seta"></i>
+    </a>
+
+    <a href="produtos.html?categoria=cameras" class="categoria">
+        <i class="fa-solid fa-camera"></i>
+        <span>Câmeras</span>
+        <i class="fa-solid fa-chevron-right seta"></i>
+    </a>
+
+    <a href="produtos.html?categoria=acessorios" class="categoria">
+        <i class="fa-solid fa-plug"></i>
+        <span>Acessórios</span>
+        <i class="fa-solid fa-chevron-right seta"></i>
+    </a>
+</section>
+
+
+<!-- PRODUTOS -->
+<section class="container produtos" id="produtos">
+    <div class="titulo-secao">
+        <h2><i class="fa-solid fa-leaf"></i> Destaques da semana</h2>
+        <a href="produtos.html">
+            Ver todos os produtos
+            <i class="fa-solid fa-chevron-right"></i>
+        </a>
+    </div>
+
+    <div class="grade-produtos">
+        <article class="produto">
+            <a href="produto.html?id=iphone" class="produto-link">
+                <img src="imagens/iphone.jpg" alt="iPhone 17 laranja">
+                <div class="produto-info">
+                    <h3>iPhone 17 128 GB</h3>
+                    <p>6,3” · iOS · Câmera dupla de 48 MP</p>
+                    <strong>R$ 4.699</strong>
+                    <span class="produto-detalhes">Ver detalhes</span>
+                </div>
+            </a>
+        </article>
+
+        <article class="produto">
+            <a href="produto.html?id=notebook" class="produto-link">
+                <img src="imagens/notebook.jpg" alt="Notebook ASUS E510MA preto">
+                <div class="produto-info">
+                    <h3>Notebook ASUS E510MA</h3>
+                    <p>Intel Celeron Dual Core · 4 GB RAM · 128 GB SSD</p>
+                    <strong>R$ 1.150</strong>
+                    <span class="produto-detalhes">Ver detalhes</span>
+                </div>
+            </a>
+        </article>
+
+        <article class="produto">
+            <a href="produto.html?id=switch" class="produto-link">
+                <img src="imagens/switch.jpg" alt="Nintendo Switch 2">
+                <div class="produto-info">
+                    <h3>Nintendo Switch 2</h3>
+                    <p>256 GB · Tela 7,9” · Full HD</p>
+                    <strong>R$ 2.800</strong>
+                    <span class="produto-detalhes">Ver detalhes</span>
+                </div>
+            </a>
+        </article>
+
+        <article class="produto">
+            <a href="produto.html?id=camera" class="produto-link">
+                <img src="imagens/camera.jpg" alt="Câmera Canon EOS 6D Mark II">
+                <div class="produto-info">
+                    <h3>Canon EOS 6D Mark II</h3>
+                    <p>26,2 MP · Full HD · Lente 24-105mm</p>
+                    <strong>R$ 3.000</strong>
+                    <span class="produto-detalhes">Ver detalhes</span>
+                </div>
+            </a>
+        </article>
+    </div>
+</section>
+        <!-- VANTAGENS -->
+        <section class="container vantagens" aria-label="Benefícios de reutilizar">
+            <div class="vantagem">
+                <div class="vantagem-icone"><i class="fa-solid fa-leaf"></i></div>
+                <div><h3>Compra consciente</h3><p>Você economiza e faz a diferença.</p></div>
+            </div>
+            <div class="vantagem">
+                <div class="vantagem-icone"><i class="fa-solid fa-recycle"></i></div>
+                <div><h3>Produtos reutilizados</h3><p>Menos lixo eletrônico, mais vida útil.</p></div>
+            </div>
+            <div class="vantagem">
+                <div class="vantagem-icone"><i class="fa-solid fa-earth-americas"></i></div>
+                <div><h3>Economia circular</h3><p>Tecnologia em movimento, um futuro melhor.</p></div>
+            </div>
+        </section>
+
+        <section class="chamada-final" id="anunciar">
+            <h2>Tem um eletrônico parado em casa?</h2>
+            <p>Dê uma nova vida a ele e ajude a reduzir o lixo eletrônico.</p>
+            <a href="anunciar.html" class="botao botao-verde">Quero anunciar</a>
+        </section>
+    </main>
+
+    <footer id="entrar">
+        <p>© 2026 ReTech — Tecnologia que reutiliza.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,94 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do produto | ReTech</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+<body>
+
+    
+<header class="cabecalho">
+    <div class="cabecalho-conteudo">
+
+        <a href="index.html" class="logo" aria-label="ReTech - início">
+            <span class="logo-simbolo">♻</span>
+            <span class="logo-texto">
+                <strong>Re<span>Tech</span></strong>
+                <small>TECNOLOGIA QUE REUTILIZA</small>
+            </span>
+        </a>
+    <form class="busca" action="produtos.html" method="get">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input
+            type="search"
+            name="busca"
+            id="campo-busca"
+            placeholder="Buscar celulares, notebooks, videogames..."
+            aria-label="Buscar produtos"
+        >
+    </form>
+        <nav class="menu" aria-label="Menu principal">
+            <a href="produtos.html" class="ativo">Comprar</a>
+            <a href="anunciar.html">Vender</a>
+            <a href="doar-trocar.html">Doar</a>
+            <a href="doar-trocar.html">Trocar</a>
+        </nav>
+
+        <a href="login.html" class="entrar">
+            <i class="fa-regular fa-user"></i> Entrar
+        </a>
+
+        <a href="anunciar.html"
+        class="botao botao-verde anunciar-topo">
+            <i class="fa-solid fa-plus"></i> Anunciar produto
+        </a>
+
+    </div>
+</header>
+
+
+    <main class="container pagina-produto">
+        <a href="produtos.html" class="voltar-produtos">
+            ← Voltar para os produtos
+        </a>
+
+        <section id="detalhes-produto" class="detalhes-produto">
+            <div class="produto-imagem">
+                <img id="produto-imagem" src="" alt="">
+            </div>
+
+            <div class="produto-informacoes">
+                <span id="produto-categoria" class="produto-categoria"></span>
+                <h1 id="produto-nome">Carregando produto...</h1>
+                <p id="produto-estado" class="produto-estado"></p>
+                <p id="produto-preco" class="produto-preco"></p>
+                <p id="produto-descricao"></p>
+
+                <h3>Características</h3>
+                <ul id="produto-caracteristicas"></ul>
+
+                <a href="produtos.html" class="botao botao-verde">
+                    Continuar explorando
+                </a>
+            </div>
+        </section>
+
+        <p id="produto-nao-encontrado" hidden>
+            Produto não encontrado. Volte ao catálogo para escolher outro item.
+        </p>
+    </main>
+
+    <footer class="rodape">
+        <div class="container">
+            <p>ReTech — Tecnologia que Reutiliza.</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
