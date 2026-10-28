@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Anuncie eletrônicos usados na ReTech para venda, doação ou troca.">
+    <title>Anunciar produto | ReTech — Tecnologia que reutiliza</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+    <header class="cabecalho">
+        <div class="cabecalho-conteudo">
+            <a href="index.html" class="logo" aria-label="ReTech - início">
+                <span class="logo-simbolo">♻</span>
+                <span class="logo-texto">
+                    <strong>Re<span>Tech</span></strong>
+                    <small>TECNOLOGIA QUE REUTILIZA</small>
+                </span>
+            </a>
+            <form class="busca" action="catalogo.html" method="get">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input
+                    type="search"
+                    name="busca"
+                    id="campo-busca"
+                    placeholder="Buscar celulares, notebooks, videogames..."
+                    aria-label="Buscar catalogo"
+                >
+            </form>
+            <nav class="menu" aria-label="Menu principal">
+                <a href="catalogo.html">Comprar</a>
+                <a href="anunciar.html" class="ativo">Vender</a>
+                <a href="doar-trocar.html">Doar</a>
+                <a href="doar-trocar.html">Trocar</a>
+            </nav>
+            <a href="login.html" class="entrar"><i class="fa-regular fa-user"></i> Entrar</a>
+            <a href="anunciar.html" class="botao botao-verde anunciar-topo">
+                <i class="fa-solid fa-plus"></i> Anunciar produto
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <section class="catalogo-banner">
+            <div class="container catalogo-banner-conteudo">
+                <div>
+                    <div class="etiqueta"><i class="fa-solid fa-recycle"></i> ECONOMIA CIRCULAR <span></span></div>
+                    <h1>Anuncie e dê uma<br><em>nova vida</em> ao seu eletrônico.</h1>
+                    <p>Publique aparelhos para venda, doação ou troca e ajude a reduzir o lixo eletrônico, promovendo reutilização e inclusão digital.</p>
+                </div>
+                <div class="catalogo-banner-icone" aria-hidden="true"><i class="fa-solid fa-plus"></i></div>
+            </div>
+        </section>
+
+        <section class="container pagina-anunciar" aria-labelledby="titulo-anunciar">
+            <form class="formulario-anuncio" action="catalogo.html" method="get">
+                <h2 id="titulo-anunciar"><i class="fa-solid fa-leaf"></i> Publicar anúncio</h2>
+                <p>Preencha os dados do eletrônico. Os campos obrigatórios estão marcados.</p>
+
+                <label for="nome-produto">Nome do produto</label>
+                <input type="text" id="nome-produto" name="nome" placeholder="Ex.: iPhone 17 128 GB" required maxlength="80">
+
+                <label for="categoria-produto">Categoria</label>
+                <select id="categoria-produto" name="categoria" required>
+                    <option value="">Selecione a categoria</option>
+                    <option value="celulares">Celulares</option>
+                    <option value="notebooks">Notebooks</option>
+                    <option value="games">Games</option>
+                    <option value="audio">Áudio</option>
+                    <option value="cameras">Câmeras</option>
+                    <option value="acessorios">Acessórios</option>
+                </select>
+
+                <label for="descricao-produto">Descrição</label>
+                <textarea id="descricao-produto" name="descricao" rows="5" placeholder="Conte o estado do aparelho, o que acompanha e por que ele ainda pode ser útil." required minlength="20" maxlength="600"></textarea>
+
+                <label for="estado-produto">Estado de conservação</label>
+                <select id="estado-produto" name="estado" required>
+                    <option value="">Selecione o estado</option>
+                    <option value="muito-bom">Muito bom</option>
+                    <option value="bom">Bom</option>
+                    <option value="usado">Usado</option>
+                </select>
+
+                <fieldset>
+                    <legend>Modalidade</legend>
+                    <label class="opcao-radio"><input type="radio" name="modalidade" value="venda" required> Venda</label>
+                    <label class="opcao-radio"><input type="radio" name="modalidade" value="doacao"> Doação</label>
+                    <label class="opcao-radio"><input type="radio" name="modalidade" value="troca"> Troca</label>
+                </fieldset>
+
+                <label for="preco-produto">Preço (R$)</label>
+                <input type="number" id="preco-produto" name="preco" placeholder="0,00" min="0" step="0.01">
+                <p class="ajuda-campo">Informe o valor em caso de venda. Em doação, deixe em branco ou use 0.</p>
+
+                <label for="imagem-produto">Imagem do produto</label>
+                <input type="file" id="imagem-produto" name="imagem" accept="image/*">
+
+                <button type="submit" class="botao botao-verde">
+                    <i class="fa-solid fa-arrow-up-from-bracket"></i> Publicar anúncio
+                </button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 ReTech — Tecnologia que reutiliza.</p>
+    </footer>
+</body>
+</html>

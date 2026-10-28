@@ -820,3 +820,106 @@ footer {
     cursor: pointer;
 }
 
+/* PÁGINA DE ANUNCIAR */
+
+.pagina-anunciar {
+    display: flex;
+    justify-content: center;
+    padding: 40px 0 60px;
+}
+
+.formulario-anuncio {
+    width: 100%;
+    max-width: 720px;
+    padding: 28px;
+    background-color: #fbfdfb;
+    border: 1px solid #e1e9e3;
+    border-radius: 12px;
+}
+
+.formulario-anuncio h2 {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.formulario-anuncio h2 i {
+    color: #16813d;
+    margin-right: 8px;
+}
+
+.formulario-anuncio > p {
+    color: #667580;
+    font-size: 14px;
+    margin-bottom: 22px;
+}
+
+.formulario-anuncio label,
+.formulario-anuncio legend {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.formulario-anuncio input[type="text"],
+.formulario-anuncio input[type="number"],
+.formulario-anuncio input[type="file"],
+.formulario-anuncio select,
+.formulario-anuncio textarea {
+    width: 100%;
+    margin-bottom: 16px;
+    padding: 12px 14px;
+    border: 1px solid #cdded3;
+    border-radius: 8px;
+    color: #142c3e;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    outline: none;
+    background-color: white;
+}
+
+.formulario-anuncio textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.formulario-anuncio input:focus,
+.formulario-anuncio select:focus,
+.formulario-anuncio textarea:focus {
+    border-color: #16813d;
+}
+
+.formulario-anuncio fieldset {
+    margin: 4px 0 16px;
+    padding: 12px 14px;
+    border: 1px solid #cdded3;
+    border-radius: 8px;
+}
+
+.formulario-anuncio .opcao-radio {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 10px 0;
+    font-size: 13px;
+    font-weight: normal;
+    color: #435a65;
+    cursor: pointer;
+}
+
+.formulario-anuncio .opcao-radio input {
+    accent-color: #16813d;
+}
+
+.ajuda-campo {
+    margin: -10px 0 16px;
+    color: #667580;
+    font-size: 12px;
+}
+
+.formulario-anuncio .botao {
+    width: 100%;
+    border: none;
+    cursor: pointer;
+}
+
