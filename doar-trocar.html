@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Doe ou troque eletrônicos usados na ReTech e prolongue o uso da tecnologia.">
+    <title>Doar ou trocar | ReTech — Tecnologia que reutiliza</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+    <header class="cabecalho">
+        <div class="cabecalho-conteudo">
+            <a href="index.html" class="logo" aria-label="ReTech - página inicial">
+                <span class="logo-simbolo">♻</span>
+                <span class="logo-texto"><strong>Re<span>Tech</span></strong><small>TECNOLOGIA QUE REUTILIZA</small></span>
+            </a>
+            <form class="busca" action="catalogo.html" method="get">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="search" name="busca" id="campo-busca" placeholder="Buscar celulares, notebooks, videogames..." aria-label="Buscar produtos">
+            </form>
+            <nav class="menu" aria-label="Menu principal">
+                <a href="catalogo.html">Comprar</a>
+                <a href="anunciar.html">Vender</a>
+                <a href="doar-trocar.html" class="ativo">Doar</a>
+                <a href="doar-trocar.html">Trocar</a>
+            </nav>
+            <a href="login.html" class="entrar"><i class="fa-regular fa-user"></i> Entrar</a>
+            <a href="anunciar.html" class="botao botao-verde anunciar-topo"><i class="fa-solid fa-plus"></i> Anunciar produto</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="catalogo-banner">
+            <div class="container catalogo-banner-conteudo">
+                <div>
+                    <div class="etiqueta"><i class="fa-solid fa-leaf"></i> ECONOMIA CIRCULAR <span></span></div>
+                    <h1>Doe ou troque.<br>Dê uma <em>nova vida</em> à tecnologia.</h1>
+                    <p>Encontre aparelhos disponíveis para doação ou troca com pessoas da sua comunidade.</p>
+                </div>
+                <div class="catalogo-banner-icone" aria-hidden="true"><i class="fa-solid fa-handshake"></i></div>
+            </div>
+        </section>
+
+        <section class="container catalogo" aria-labelledby="titulo-anuncios">
+            <div class="catalogo-cabecalho">
+                <div>
+                    <h2 id="titulo-anuncios">Anúncios disponíveis</h2>
+                    <p>Produtos esperando uma nova oportunidade de uso.</p>
+                </div>
+                <label class="ordenacao">Ordenar por
+                    <select id="ordenacao">
+                        <option value="relevancia">Mais recentes</option>
+                        <option value="nome">Nome (A–Z)</option>
+                    </select>
+                </label>
+            </div>
+
+            <div class="catalogo-layout">
+                <aside class="filtros">
+                    <h3><i class="fa-solid fa-sliders"></i> Filtrar anúncios</h3>
+                    <div class="filtro-grupo">
+                        <h4>Modalidade</h4>
+                        <label><input type="radio" name="modalidade" value="todos" checked> Todas</label>
+                        <label><input type="radio" name="modalidade" value="doacao"> Doação</label>
+                        <label><input type="radio" name="modalidade" value="troca"> Troca</label>
+                    </div>
+                    <div class="filtro-grupo">
+                        <h4>Categoria</h4>
+                        <label><input type="radio" name="categoria" value="todos" checked> Todas as categorias</label>
+                        <label><input type="radio" name="categoria" value="celulares"> Celulares</label>
+                        <label><input type="radio" name="categoria" value="notebooks"> Notebooks</label>
+                        <label><input type="radio" name="categoria" value="games"> Games</label>
+                        <label><input type="radio" name="categoria" value="cameras"> Câmeras</label>
+                    </div>
+                    <button class="botao botao-contorno botao-limpar" id="limpar-filtros" type="button">Limpar filtros</button>
+                </aside>
+
+                <div class="catalogo-resultados">
+                    <p class="resultado-contagem" id="resultado-contagem" aria-live="polite">4 anúncios encontrados</p>
+                    <div class="grade-catalogo" id="grade-catalogo">
+                        <article class="produto produto-catalogo" data-modalidade="doacao" data-categoria="celulares" data-nome="Celular Samsung Galaxy A12">
+                            <span class="selo-produto selo-verde">Doação</span>
+                            <img src="imagens/iphone.jpg" alt="Celular disponível para doação">
+                            <div class="produto-info">
+                                <p class="produto-categoria">Celulares · Bom estado</p>
+                                <h3>Celular Samsung Galaxy A12</h3>
+                                <p>64 GB · Tela 6,5” · Retirada em Curitiba</p>
+                                <strong>Grátis</strong>
+                                <a href="produto.html?id=iphone" class="link-produto">Ver detalhes <i class="fa-solid fa-arrow-right"></i></a>
+                            </div>
+                        </article>
+
+                        <article class="produto produto-catalogo" data-modalidade="troca" data-categoria="notebooks" data-nome="Notebook Lenovo IdeaPad">
+                            <span class="selo-produto selo-neutro">Troca</span>
+                            <img src="imagens/notebook.jpg" alt="Notebook disponível para troca">
+                            <div class="produto-info">
+                                <p class="produto-categoria">Notebooks · Usado</p>
+                                <h3>Notebook Lenovo IdeaPad</h3>
+                                <p>Troco por tablet ou notebook mais moderno</p>
+                                <strong>Para trocar</strong>
+                                <a href="produto.html?id=notebook" class="link-produto">Ver detalhes <i class="fa-solid fa-arrow-right"></i></a>
+                            </div>
+                        </article>
+
+                        <article class="produto produto-catalogo" data-modalidade="troca" data-categoria="games" data-nome="Nintendo Switch Lite">
+                            <span class="selo-produto selo-neutro">Troca</span>
+                            <img src="imagens/switch.jpg" alt="Console Nintendo disponível para troca">
+                            <div class="produto-info">
+                                <p class="produto-categoria">Games · Muito bom</p>
+                                <h3>Nintendo Switch Lite</h3>
+                                <p>Troco por câmera ou celular seminovo</p>
+                                <strong>Para trocar</strong>
+                                <a href="produto.html?id=switch" class="link-produto">Ver detalhes <i class="fa-solid fa-arrow-right"></i></a>
+                            </div>
+                        </article>
+
+                        <article class="produto produto-catalogo" data-modalidade="doacao" data-categoria="cameras" data-nome="Câmera Canon EOS usada">
+                            <span class="selo-produto selo-verde">Doação</span>
+                            <img src="imagens/camera.jpg" alt="Câmara fotográfica disponível para doação">
+                            <div class="produto-info">
+                                <p class="produto-categoria">Câmeras · Precisa de revisão</p>
+                                <h3>Câmera Canon EOS usada</h3>
+                                <p>Destinada a estudante ou projeto cultural</p>
+                                <strong>Grátis</strong>
+                                <a href="produto.html?id=camera" class="link-produto">Ver detalhes <i class="fa-solid fa-arrow-right"></i></a>
+                            </div>
+                        </article>
+                    </div>
+                    <div class="catalogo-vazio" id="catalogo-vazio" hidden>
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <h3>Nenhum anúncio encontrado</h3>
+                        <p>Tente alterar os filtros selecionados.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="chamada-final">
+            <h2>Tem um aparelho sem uso?</h2>
+            <p>Você pode ajudar outra pessoa e evitar que a tecnologia vire lixo eletrônico.</p>
+            <a href="anunciar.html" class="botao botao-verde"><i class="fa-solid fa-plus"></i> Anunciar doação ou troca</a>
+        </section>
+    </main>
+
+    <footer><p>© 2026 ReTech — Tecnologia que reutiliza.</p></footer>
+
+    <script>
+        const grade = document.querySelector('#grade-catalogo');
+        const contador = document.querySelector('#resultado-contagem');
+        const mensagemVazia = document.querySelector('#catalogo-vazio');
+
+        function atualizarAnuncios() {
+            const modalidade = document.querySelector('input[name="modalidade"]:checked').value;
+            const categoria = document.querySelector('input[name="categoria"]:checked').value;
+            const anuncios = Array.from(grade.querySelectorAll('.produto-catalogo'));
+
+            const encontrados = anuncios.filter((anuncio) => {
+                const modalidadeCorresponde = modalidade === 'todos' || anuncio.dataset.modalidade === modalidade;
+                const categoriaCorresponde = categoria === 'todos' || anuncio.dataset.categoria === categoria;
+                anuncio.hidden = !(modalidadeCorresponde && categoriaCorresponde);
+                return !anuncio.hidden;
+            });
+
+            contador.textContent = `${encontrados.length} ${encontrados.length === 1 ? 'anúncio encontrado' : 'anúncios encontrados'}`;
+            mensagemVazia.hidden = encontrados.length > 0;
+
+            if (document.querySelector('#ordenacao').value === 'nome') {
+                encontrados.sort((a, b) => a.dataset.nome.localeCompare(b.dataset.nome, 'pt-BR'))
+                    .forEach((anuncio) => grade.appendChild(anuncio));
+            }
+        }
+
+        document.querySelectorAll('input[name="modalidade"], input[name="categoria"]')
+            .forEach((filtro) => filtro.addEventListener('change', atualizarAnuncios));
+
+        document.querySelector('#ordenacao').addEventListener('change', atualizarAnuncios);
+
+        document.querySelector('#limpar-filtros').addEventListener('click', () => {
+            document.querySelector('input[name="modalidade"][value="todos"]').checked = true;
+            document.querySelector('input[name="categoria"][value="todos"]').checked = true;
+            document.querySelector('#ordenacao').value = 'relevancia';
+            atualizarAnuncios();
+        });
+
+        atualizarAnuncios();
+    </script>
+</body>
+</html>
