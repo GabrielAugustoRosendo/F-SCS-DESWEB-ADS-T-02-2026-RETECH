@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Entre na ReTech para comprar, vender, doar e trocar eletrônicos usados.">
+    <title>Entrar | ReTech — Tecnologia que reutiliza</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+    <header class="cabecalho">
+        <div class="cabecalho-conteudo">
+            <a href="index.html" class="logo" aria-label="ReTech - início">
+                <span class="logo-simbolo">♻</span>
+                <span class="logo-texto">
+                    <strong>Re<span>Tech</span></strong>
+                    <small>TECNOLOGIA QUE REUTILIZA</small>
+                </span>
+            </a>
+            <form class="busca" action="catalogo.html" method="get">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input
+                    type="search"
+                    name="busca"
+                    id="campo-busca"
+                    placeholder="Buscar celulares, notebooks, videogames..."
+                    aria-label="Buscar catalogo"
+                >
+            </form>
+            <nav class="menu" aria-label="Menu principal">
+                <a href="catalogo.html">Comprar</a>
+                <a href="anunciar.html">Vender</a>
+                <a href="doar-trocar.html">Doar</a>
+                <a href="doar-trocar.html">Trocar</a>
+            </nav>
+            <a href="login.html" class="entrar ativo"><i class="fa-regular fa-user"></i> Entrar</a>
+            <a href="anunciar.html" class="botao botao-verde anunciar-topo">
+                <i class="fa-solid fa-plus"></i> Anunciar produto
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <section class="catalogo-banner">
+            <div class="container catalogo-banner-conteudo">
+                <div>
+                    <div class="etiqueta"><i class="fa-solid fa-leaf"></i> CONTA RETECH <span></span></div>
+                    <h1>Entre para dar uma<br><em>nova vida</em> à tecnologia.</h1>
+                    <p>Acesse sua conta para comprar, vender, doar e trocar eletrônicos usados com mais consciência.</p>
+                </div>
+                <div class="catalogo-banner-icone" aria-hidden="true"><i class="fa-regular fa-user"></i></div>
+            </div>
+        </section>
+
+        <section class="container pagina-login" aria-labelledby="titulo-login">
+            <form class="formulario-login" action="index.html" method="get">
+                <h2 id="titulo-login"><i class="fa-solid fa-leaf"></i> Entrar na ReTech</h2>
+                <p>Use seu e-mail e senha para continuar.</p>
+
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" placeholder="seuemail@exemplo.com" autocomplete="email" required>
+
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" name="senha" placeholder="Digite sua senha" autocomplete="current-password" required minlength="6">
+
+                <label class="lembrar">
+                    <input type="checkbox" name="lembrar" value="sim">
+                    Lembrar de mim
+                </label>
+
+                <button type="submit" class="botao botao-verde">
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i> Entrar
+                </button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 ReTech — Tecnologia que reutiliza.</p>
+    </footer>
+</body>
+</html>

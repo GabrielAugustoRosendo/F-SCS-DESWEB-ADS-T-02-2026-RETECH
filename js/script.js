@@ -20,9 +20,9 @@ function atualizarCatalogo() {
     const termo = (campoBusca?.value || '').trim().toLocaleLowerCase('pt-BR');
     const categoriaSelecionada = document.querySelector('input[name="categoria"]:checked')?.value || 'todos';
     const estadoSelecionado = document.querySelector('input[name="estado"]:checked')?.value || 'todos';
-    const produtos = Array.from(grade.querySelectorAll('.produto-catalogo'));
+    const catalogo = Array.from(grade.querySelectorAll('.produto-catalogo'));
 
-    const encontrados = produtos.filter((produto) => {
+    const encontrados = catalogo.filter((produto) => {
         const correspondeBusca = produto.dataset.nome.toLocaleLowerCase('pt-BR').includes(termo)
             || produto.dataset.categoria.toLocaleLowerCase('pt-BR').includes(termo);
         const correspondeCategoria = categoriaSelecionada === 'todos' || produto.dataset.categoria === categoriaSelecionada;
@@ -35,11 +35,11 @@ function atualizarCatalogo() {
         if (ordenacao.value === 'menor-preco') return Number(a.dataset.preco) - Number(b.dataset.preco);
         if (ordenacao.value === 'maior-preco') return Number(b.dataset.preco) - Number(a.dataset.preco);
         if (ordenacao.value === 'nome') return a.dataset.nome.localeCompare(b.dataset.nome, 'pt-BR');
-        return produtos.indexOf(a) - produtos.indexOf(b);
+        return catalogo.indexOf(a) - catalogo.indexOf(b);
     });
     encontrados.forEach((produto) => grade.appendChild(produto));
 
-    contador.textContent = `${encontrados.length} ${encontrados.length === 1 ? 'produto encontrado' : 'produtos encontrados'}`;
+    contador.textContent = `${encontrados.length} ${encontrados.length === 1 ? 'produto encontrado' : 'catalogo encontrados'}`;
     mensagemVazia.hidden = encontrados.length > 0;
 }
 
@@ -83,10 +83,10 @@ if (buscaInicial || categoriaInicial) {
 }
 
 
-/* Detalhes dos produtos do ReTech */
+/* Detalhes dos catalogo do ReTech */
 
 (function () {
-    const produtos = {
+    const catalogo = {
         iphone: {
             nome: "iPhone 17 128 GB",
             preco: 4699,
@@ -153,7 +153,7 @@ if (buscaInicial || categoriaInicial) {
 
     const parametros = new URLSearchParams(window.location.search);
     const idProduto = parametros.get("id");
-    const produto = produtos[idProduto];
+    const produto = catalogo[idProduto];
 
     const detalhes = document.getElementById("detalhes-produto");
     const mensagemErro = document.getElementById("produto-nao-encontrado");

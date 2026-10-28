@@ -259,9 +259,9 @@ a {
     background-color: #d7edda;
 }
 
-/* PRODUTOS EM DESTAQUE */
+/* CATALOGO EM DESTAQUE */
 
-.produtos {
+#catalogo {
     margin-top: 25px;
     margin-bottom: 20px;
 }
@@ -287,7 +287,7 @@ a {
     font-size: 12px;
 }
 
-.grade-produtos {
+.grade-catalogo {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 18px;
@@ -457,7 +457,7 @@ footer {
         flex: 1 1 40%;
     }
 
-    .grade-produtos {
+    .grade-catalogo {
         grid-template-columns: repeat(2, 1fr);
     }
 
@@ -469,7 +469,7 @@ footer {
 
 @media (max-width: 480px) {
 
-    .grade-produtos {
+    .grade-catalogo {
         grid-template-columns: 1fr;
     }
 
@@ -521,7 +521,7 @@ footer {
 .filtro-grupo input { accent-color: #16813d; }
 .botao-limpar { width: 100%; padding: 10px; font-size: 13px; cursor: pointer; }
 .resultado-contagem { margin-bottom: 13px; color: #667580; font-size: 13px; }
-.grade-catalogo { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.catalogo-resultados .grade-catalogo { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 .produto-catalogo { position: relative; transition: transform .2s ease, box-shadow .2s ease; }
 .produto-catalogo:hover { transform: translateY(-3px); box-shadow: 0 8px 20px #142c3e12; }
 .produto-catalogo img { height: 175px; }
@@ -541,7 +541,7 @@ footer {
 
 @media (max-width: 1050px) {
     .catalogo-layout { grid-template-columns: 200px minmax(0, 1fr); gap: 18px; }
-    .grade-catalogo { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .catalogo-resultados .grade-catalogo { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .catalogo-banner-icone { width: 120px; height: 120px; font-size: 55px; }
 }
 @media (max-width: 768px) {
@@ -561,7 +561,7 @@ footer {
     .catalogo-banner h1 { font-size: 29px; }
     .catalogo { padding-top: 25px; }
     .catalogo-cabecalho h2 { font-size: 23px; }
-    .grade-catalogo { grid-template-columns: 1fr; }
+    .catalogo-resultados .grade-catalogo { grid-template-columns: 1fr; }
     .produto-catalogo img { height: 210px; }
     .filtros { grid-template-columns: 1fr; }
     .filtros h3, .botao-limpar { grid-column: auto; }
@@ -577,7 +577,7 @@ footer {
     padding: 35px 20px 60px;
 }
 
-.voltar-produtos {
+.voltar-catalogo {
     display: inline-block;
     margin-bottom: 25px;
     color: #287a52;
@@ -585,7 +585,7 @@ footer {
     text-decoration: none;
 }
 
-.voltar-produtos:hover {
+.voltar-catalogo:hover {
     text-decoration: underline;
 }
 
@@ -708,7 +708,7 @@ footer {
     }
 }
 
-/* Links dos cards de produtos */
+/* Links dos cards de catalogo */
 .produto-link {
     display: block;
     height: 100%;
@@ -736,5 +736,87 @@ footer {
 .produto-link:focus-visible {
     outline: 2px solid #238636;
     outline-offset: 3px;
+}
+
+/* PÁGINA DE LOGIN */
+
+.entrar.ativo {
+    color: #16813d;
+}
+
+.pagina-login {
+    display: flex;
+    justify-content: center;
+    padding: 40px 0 60px;
+}
+
+.formulario-login {
+    width: 100%;
+    max-width: 460px;
+    padding: 28px;
+    background-color: #fbfdfb;
+    border: 1px solid #e1e9e3;
+    border-radius: 12px;
+}
+
+.formulario-login h2 {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.formulario-login h2 i {
+    color: #16813d;
+    margin-right: 8px;
+}
+
+.formulario-login > p {
+    color: #667580;
+    font-size: 14px;
+    margin-bottom: 22px;
+}
+
+.formulario-login label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.formulario-login input[type="email"],
+.formulario-login input[type="password"] {
+    width: 100%;
+    margin-bottom: 16px;
+    padding: 12px 14px;
+    border: 1px solid #cdded3;
+    border-radius: 8px;
+    color: #142c3e;
+    font-size: 14px;
+    outline: none;
+}
+
+.formulario-login input[type="email"]:focus,
+.formulario-login input[type="password"]:focus {
+    border-color: #16813d;
+}
+
+.formulario-login .lembrar {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 4px 0 20px;
+    font-size: 13px;
+    font-weight: normal;
+    color: #435a65;
+    cursor: pointer;
+}
+
+.formulario-login .lembrar input {
+    accent-color: #16813d;
+}
+
+.formulario-login .botao {
+    width: 100%;
+    border: none;
+    cursor: pointer;
 }
 
