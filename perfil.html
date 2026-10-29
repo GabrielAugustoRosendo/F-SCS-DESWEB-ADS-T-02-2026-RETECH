@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Gerencie seu perfil, anúncios e favoritos na ReTech.">
+    <title>Meu perfil | ReTech — Tecnologia que reutiliza</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+    <header class="cabecalho">
+        <div class="cabecalho-conteudo">
+            <a href="index.html" class="logo" aria-label="ReTech - início">
+                <span class="logo-simbolo">♻</span>
+                <span class="logo-texto">
+                    <strong>Re<span>Tech</span></strong>
+                    <small>TECNOLOGIA QUE REUTILIZA</small>
+                </span>
+            </a>
+            <form class="busca" action="catalogo.html" method="get">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="search" name="busca" id="campo-busca" placeholder="Buscar celulares, notebooks, videogames..." aria-label="Buscar catálogo">
+            </form>
+            <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu-principal" aria-label="Abrir menu"><i class="fa-solid fa-bars"></i></button>
+            <nav class="menu" id="menu-principal" aria-label="Menu principal">
+                <a href="index.html">Início</a>
+                <a href="catalogo.html">Comprar</a>
+                <a href="doar-trocar.html">Doar/Trocar</a>
+                <div class="menu-mais">
+                    <button class="menu-mais-botao" type="button" aria-expanded="false" aria-haspopup="true">Mais <i class="fa-solid fa-chevron-down"></i></button>
+                    <div class="submenu-mais" role="menu">
+                        <a href="sobre.html" role="menuitem">Sobre o ReTech</a>
+                        <a href="blog.html" role="menuitem">Blog e sustentabilidade</a>
+                        <a href="contato.html" role="menuitem">Contato e ajuda</a>
+                        <a href="perfil.html" role="menuitem">Meu perfil</a>
+                    </div>
+                </div>
+            </nav>
+            <div class="acoes-cabecalho">
+                <a href="perfil.html" class="entrar ativo" aria-current="page"><i class="fa-regular fa-user"></i> Meu perfil</a>
+                <a href="anunciar.html" class="botao botao-verde anunciar-topo"><i class="fa-solid fa-plus"></i> Anunciar produto</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="perfil-cabecalho">
+            <div class="container perfil-cabecalho-conteudo">
+                <div class="perfil-identidade">
+                    <div class="perfil-avatar">
+                        <img id="imagem-perfil" src="perfil.png" alt="Foto de perfil de Ana Silva" onerror="this.style.display='none'; this.parentElement.classList.add('avatar-sem-imagem')">
+                        <span aria-hidden="true"><i class="fa-solid fa-user"></i></span>
+                    </div>
+                    <div>
+                        <div class="etiqueta"><i class="fa-solid fa-leaf"></i> PERFIL RETECH <span></span></div>
+                        <h1 id="nome-perfil">Ana Silva</h1>
+                        <p id="local-perfil"><i class="fa-solid fa-location-dot"></i> São Paulo, SP</p>
+                    </div>
+                </div>
+                <a href="anunciar.html" class="botao botao-verde"><i class="fa-solid fa-plus"></i> Novo anúncio</a>
+            </div>
+        </section>
+
+        <div class="container perfil-layout">
+            <aside class="perfil-resumo" aria-label="Resumo do perfil">
+                <section class="perfil-card">
+                    <h2>Sobre mim</h2>
+                    <p id="sobre-perfil">Gosto de reutilizar tecnologia, colaborar com a economia circular e ajudar equipamentos a ganharem uma nova vida.</p>
+                    <dl class="perfil-dados">
+                        <div><dt><i class="fa-solid fa-envelope"></i> E-mail</dt><dd id="email-perfil">ana.silva@email.com</dd></div>
+                        <div><dt><i class="fa-solid fa-phone"></i> Telefone</dt><dd id="telefone-perfil">(11) 99999-0000</dd></div>
+                        <div><dt><i class="fa-solid fa-calendar"></i> Membro desde</dt><dd>Janeiro de 2026</dd></div>
+                    </dl>
+                </section>
+
+                <section class="perfil-card perfil-estatisticas" aria-label="Estatísticas">
+                    <div><strong id="total-anuncios">0</strong><span>Anúncios ativos</span></div>
+                    <div><strong id="total-vendidos">0</strong><span>Itens reutilizados</span></div>
+                    <div><strong id="total-favoritos">3</strong><span>Favoritos</span></div>
+                </section>
+            </aside>
+
+            <section class="perfil-conteudo">
+                <div class="perfil-abas" role="tablist" aria-label="Seções do perfil">
+                    <button type="button" class="perfil-aba ativa" role="tab" aria-selected="true" aria-controls="painel-anuncios" id="aba-anuncios" data-painel="painel-anuncios"><i class="fa-solid fa-box-open"></i> Meus anúncios</button>
+                    <button type="button" class="perfil-aba" role="tab" aria-selected="false" aria-controls="painel-favoritos" id="aba-favoritos" data-painel="painel-favoritos"><i class="fa-solid fa-heart"></i> Favoritos</button>
+                    <button type="button" class="perfil-aba" role="tab" aria-selected="false" aria-controls="painel-dados" id="aba-dados" data-painel="painel-dados"><i class="fa-solid fa-pen-to-square"></i> Editar dados</button>
+                </div>
+
+                <div class="perfil-painel ativo" id="painel-anuncios" role="tabpanel" aria-labelledby="aba-anuncios">
+                    <div class="perfil-painel-topo">
+                        <h2>Meus anúncios</h2>
+                        <a href="anunciar.html" class="botao botao-contorno"><i class="fa-solid fa-plus"></i> Adicionar</a>
+                    </div>
+                    <div id="perfil-anuncios" class="perfil-anuncios"></div>
+                </div>
+
+                <div class="perfil-painel" id="painel-favoritos" role="tabpanel" aria-labelledby="aba-favoritos" hidden>
+                    <h2>Produtos favoritos</h2>
+                    <div class="perfil-favoritos">
+                        <article><img src="imagens/iphone.jpg" alt="iPhone 17 128 GB"><div><span>Celulares</span><h3>iPhone 17 128 GB</h3><strong>R$ 4.699,00</strong></div><a href="produto.html?id=iphone" aria-label="Ver iPhone 17"><i class="fa-solid fa-arrow-right"></i></a></article>
+                        <article><img src="imagens/notebook.jpg" alt="Notebook ASUS E510MA"><div><span>Informática</span><h3>Notebook ASUS E510MA</h3><strong>R$ 1.150,00</strong></div><a href="produto.html?id=notebook" aria-label="Ver Notebook ASUS"><i class="fa-solid fa-arrow-right"></i></a></article>
+                        <article><img src="imagens/switch.jpg" alt="Nintendo Switch 2"><div><span>Games</span><h3>Nintendo Switch 2</h3><strong>R$ 2.800,00</strong></div><a href="produto.html?id=switch" aria-label="Ver Nintendo Switch"><i class="fa-solid fa-arrow-right"></i></a></article>
+                    </div>
+                </div>
+
+                <div class="perfil-painel" id="painel-dados" role="tabpanel" aria-labelledby="aba-dados" hidden>
+                    <h2>Editar meus dados</h2>
+                    <form id="formulario-perfil" class="perfil-formulario">
+                        <div class="perfil-campo-duplo">
+                            <label>Nome completo<input type="text" id="campo-nome" value="Ana Silva" autocomplete="name" required></label>
+                            <label>Localidade<input type="text" id="campo-local" value="São Paulo, SP" autocomplete="address-level2"></label>
+                        </div>
+                        <div class="perfil-campo-duplo">
+                            <label>E-mail<input type="email" id="campo-email" value="ana.silva@email.com" autocomplete="email" required></label>
+                            <label>Telefone<input type="tel" id="campo-telefone" value="(11) 99999-0000" autocomplete="tel"></label>
+                        </div>
+                        <label>Sobre mim<textarea id="campo-sobre" rows="4">Gosto de reutilizar tecnologia, colaborar com a economia circular e ajudar equipamentos a ganharem uma nova vida.</textarea></label>
+                        <p id="perfil-status" role="status" aria-live="polite"></p>
+                        <button type="submit" class="botao botao-verde"><i class="fa-solid fa-check"></i> Salvar alterações</button>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer><p>© 2026 ReTech — Tecnologia que reutiliza.</p></footer>
+
+    <script src="js/script.js"></script>
+    <script>
+        const CHAVE_PERFIL = "retech-perfil";
+        const perfilPadrao = {
+            nome: "Ana Silva",
+            local: "São Paulo, SP",
+            email: "ana.silva@email.com",
+            telefone: "(11) 99999-0000",
+            sobre: "Gosto de reutilizar tecnologia, colaborar com a economia circular e ajudar equipamentos a ganharem uma nova vida.",
+            reutilizados: 0
+        };
+
+        function carregarPerfil() {
+            try {
+                return { ...perfilPadrao, ...(JSON.parse(localStorage.getItem(CHAVE_PERFIL)) || {}) };
+            } catch (erro) {
+                return perfilPadrao;
+            }
+        }
+
+        function aplicarPerfil(perfil) {
+            document.getElementById("nome-perfil").textContent = perfil.nome;
+            document.getElementById("local-perfil").innerHTML = '<i class="fa-solid fa-location-dot"></i> ' + perfil.local;
+            document.getElementById("email-perfil").textContent = perfil.email;
+            document.getElementById("telefone-perfil").textContent = perfil.telefone;
+            document.getElementById("sobre-perfil").textContent = perfil.sobre;
+            document.getElementById("imagem-perfil").alt = "Foto de perfil de " + perfil.nome;
+            document.getElementById("campo-nome").value = perfil.nome;
+            document.getElementById("campo-local").value = perfil.local;
+            document.getElementById("campo-email").value = perfil.email;
+            document.getElementById("campo-telefone").value = perfil.telefone;
+            document.getElementById("campo-sobre").value = perfil.sobre;
+        }
+
+        const perfil = carregarPerfil();
+        aplicarPerfil(perfil);
+
+        document.querySelectorAll(".perfil-aba").forEach((aba) => {
+            aba.addEventListener("click", () => {
+                document.querySelectorAll(".perfil-aba").forEach((item) => {
+                    item.classList.remove("ativa");
+                    item.setAttribute("aria-selected", "false");
+                });
+                document.querySelectorAll(".perfil-painel").forEach((painel) => {
+                    painel.classList.remove("ativo");
+                    painel.hidden = true;
+                });
+                aba.classList.add("ativa");
+                aba.setAttribute("aria-selected", "true");
+                const painel = document.getElementById(aba.dataset.painel);
+                painel.hidden = false;
+                painel.classList.add("ativo");
+            });
+        });
+
+        document.getElementById("formulario-perfil").addEventListener("submit", (evento) => {
+            evento.preventDefault();
+            const novoPerfil = {
+                nome: document.getElementById("campo-nome").value.trim(),
+                local: document.getElementById("campo-local").value.trim(),
+                email: document.getElementById("campo-email").value.trim(),
+                telefone: document.getElementById("campo-telefone").value.trim(),
+                sobre: document.getElementById("campo-sobre").value.trim(),
+                reutilizados: perfil.reutilizados
+            };
+            localStorage.setItem(CHAVE_PERFIL, JSON.stringify(novoPerfil));
+            aplicarPerfil(novoPerfil);
+            const status = document.getElementById("perfil-status");
+            status.textContent = "Dados salvos neste dispositivo.";
+            status.className = "perfil-status-sucesso";
+        });
+
+        let anuncios = [];
+        try {
+            anuncios = JSON.parse(localStorage.getItem("retech-anuncios")) || [];
+        } catch (erro) {
+            anuncios = [];
+        }
+        document.getElementById("total-anuncios").textContent = anuncios.length;
+        document.getElementById("total-vendidos").textContent = perfil.reutilizados;
+
+        const gradeAnuncios = document.getElementById("perfil-anuncios");
+        if (anuncios.length === 0) {
+            gradeAnuncios.innerHTML = '<div class="perfil-vazio"><i class="fa-solid fa-box-open"></i><h3>Você ainda não publicou anúncios</h3><p>Coloque um aparelho em circulação novamente.</p><a href="anunciar.html" class="botao botao-verde">Criar anúncio</a></div>';
+        } else {
+            gradeAnuncios.innerHTML = anuncios.map((anuncio) => `
+                <article class="perfil-anuncio">
+                    <img src="${anuncio.imagem || "imagens/vitrine.jpg"}" alt="${anuncio.nome}">
+                    <div><span>${anuncio.modalidade === "venda" ? "Venda" : anuncio.modalidade === "troca" ? "Troca" : "Doação"}</span><h3>${anuncio.nome}</h3><p>${anuncio.descricao}</p></div>
+                    <a href="produto.html?id=${encodeURIComponent(anuncio.id)}" class="botao botao-contorno">Ver anúncio</a>
+                </article>
+            `).join("");
+        }
+    </script>
+</body>
+</html>
