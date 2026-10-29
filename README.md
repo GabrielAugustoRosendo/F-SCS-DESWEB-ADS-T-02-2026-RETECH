@@ -67,7 +67,7 @@ Arquivo: `index.html`
 
 Apresentação do ReTech, com banner principal, categorias, produtos em destaque e informações sobre sustentabilidade.
 
-Status: Implementada.
+Status: Implementada, com melhorias previstas.
 
 ### 2. Catálogo de produtos
 Arquivo: `catalogo.html`
@@ -94,7 +94,7 @@ Conteúdo:
 - Características técnicas.
 - Estado de conservação.
 
-Status: Implementada.
+Status: Implementada, com melhorias previstas.
 
 ### 4. Anunciar produto
 Arquivo: `anunciar.html`
@@ -110,7 +110,7 @@ Funcionalidades previstas:
 - Imagem.
 - Modalidade de venda, doação ou troca.
 
-Status: Planejada.
+Status: Implementada, com melhorias previstas.
 
 ### 5. Login e cadastro
 Arquivo: `login.html`
@@ -123,7 +123,7 @@ Funcionalidades previstas:
 - Validação dos campos.
 - Acesso ao perfil.
 
-Status: Planejada.
+Status: Implementada, com melhorias previstas.
 
 ### 6. Doações e trocas
 Arquivo: `doar-trocar.html`
@@ -136,7 +136,7 @@ Funcionalidades previstas:
 - Informações dos anúncios.
 - Contato com anunciantes.
 
-Status: Planejada.
+Status: Implementada, com melhorias previstas.
 
 ### 7. Meu perfil
 Arquivo: `perfil.html`
@@ -150,7 +150,7 @@ Funcionalidades previstas:
 - Gerenciamento dos anúncios.
 - Edição do perfil.
 
-Status: Planejada.
+Status: Implementada, com melhorias previstas.
 
 ### 8. Sobre o ReTech
 Arquivo: `sobre.html`
@@ -158,13 +158,10 @@ Arquivo: `sobre.html`
 Página institucional com informações sobre o projeto.
 
 Conteúdo:
-- História e missão.
 - Visão e valores.
 - Sustentabilidade.
 - Economia circular.
 - Impacto social.
-- Dados e informações sobre lixo eletrônico.
-- Galeria de imagens com legendas e fontes.
 
 Status: Planejada.
 
