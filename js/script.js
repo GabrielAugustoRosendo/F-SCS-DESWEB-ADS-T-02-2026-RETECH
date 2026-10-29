@@ -15,7 +15,7 @@ if (campoBusca && termoInicial) {
 }
 
 function atualizarCatalogo() {
-    if (!grade) return;
+    if (!grade || !window.location.pathname.toLowerCase().includes('catalogo.html')) return;
 
     const termo = (campoBusca?.value || '').trim().toLocaleLowerCase('pt-BR');
     const categoriaSelecionada = document.querySelector('input[name="categoria"]:checked')?.value || 'todos';
@@ -153,7 +153,30 @@ if (buscaInicial || categoriaInicial) {
 
     const parametros = new URLSearchParams(window.location.search);
     const idProduto = parametros.get("id");
-    const produto = catalogo[idProduto];
+    let anunciosSalvos = [];
+    try {
+        anunciosSalvos = JSON.parse(localStorage.getItem("retech-anuncios")) || [];
+    } catch (erro) {
+        anunciosSalvos = [];
+    }
+    const anuncio = idProduto?.startsWith("anuncio-")
+        ? anunciosSalvos.find((item) => item.id === idProduto)
+        : null;
+
+    const produto = catalogo[idProduto] || (anuncio ? {
+        nome: anuncio.nome,
+        preco: anuncio.preco,
+        modalidade: anuncio.modalidade,
+        categoria: obterNomeCategoria(anuncio.categoria),
+        estado: obterNomeEstado(anuncio.estado),
+        imagem: anuncio.imagem || "imagens/vitrine.jpg",
+        descricao: anuncio.descricao,
+        caracteristicas: [
+            "Anúncio publicado na plataforma ReTech",
+            `Modalidade: ${obterNomeModalidade(anuncio.modalidade)}`,
+            `Estado de conservação: ${obterNomeEstado(anuncio.estado)}`
+        ]
+    } : null);
 
     const detalhes = document.getElementById("detalhes-produto");
     const mensagemErro = document.getElementById("produto-nao-encontrado");
@@ -176,11 +199,16 @@ if (buscaInicial || categoriaInicial) {
     document.getElementById("produto-estado").textContent =
         "Condição: " + produto.estado;
 
-    document.getElementById("produto-preco").textContent =
-        produto.preco.toLocaleString("pt-BR", {
+    const elementoPreco = document.getElementById("produto-preco");
+    if (produto.modalidade && produto.modalidade !== "venda") {
+        elementoPreco.hidden = true;
+    } else if (typeof produto.preco === "number") {
+        elementoPreco.hidden = false;
+        elementoPreco.textContent = produto.preco.toLocaleString("pt-BR", {
             style: "currency",
             currency: "BRL"
         });
+    }
 
     document.getElementById("produto-descricao").textContent =
         produto.descricao;
@@ -196,4 +224,270 @@ if (buscaInicial || categoriaInicial) {
         item.textContent = caracteristica;
         lista.appendChild(item);
     });
+
+    if (anuncio) {
+        const linkVoltar = document.querySelector(".voltar-catalogo");
+        const linkExplorar = document.querySelector(".produto-informacoes .botao");
+        if (linkVoltar) {
+            linkVoltar.href = anuncio.modalidade === "venda" ? "catalogo.html" : "doar-trocar.html";
+            linkVoltar.textContent = anuncio.modalidade === "venda"
+                ? "← Voltar para o catálogo"
+                : "← Voltar para doações e trocas";
+        }
+        if (linkExplorar) {
+            linkExplorar.href = anuncio.modalidade === "venda" ? "catalogo.html" : "doar-trocar.html";
+        }
+    }
+})();
+
+const CHAVE_ANUNCIOS = "retech-anuncios";
+
+function obterAnuncios() {
+    try {
+        return JSON.parse(localStorage.getItem(CHAVE_ANUNCIOS)) || [];
+    } catch (erro) {
+        return [];
+    }
+}
+
+function salvarAnuncios(anuncios) {
+    localStorage.setItem(CHAVE_ANUNCIOS, JSON.stringify(anuncios));
+}
+
+function obterNomeCategoria(categoria) {
+    const nomes = {
+        celulares: "Celulares",
+        notebooks: "Notebooks",
+        games: "Games",
+        audio: "Áudio",
+        cameras: "Câmeras",
+        acessorios: "Acessórios"
+    };
+    return nomes[categoria] || categoria;
+}
+
+function obterNomeEstado(estado) {
+    const nomes = {
+        "muito-bom": "Muito bom",
+        bom: "Bom",
+        usado: "Usado"
+    };
+    return nomes[estado] || estado;
+}
+
+function obterNomeModalidade(modalidade) {
+    return modalidade === "doacao" ? "Doação" : modalidade === "troca" ? "Troca" : "Venda";
+}
+
+function criarCardAnuncio(anuncio) {
+    const artigo = document.createElement("article");
+    artigo.className = "produto produto-catalogo";
+    artigo.dataset.modalidade = anuncio.modalidade;
+    artigo.dataset.categoria = anuncio.categoria;
+    artigo.dataset.estado = anuncio.estado;
+    artigo.dataset.preco = anuncio.modalidade === "venda" ? String(anuncio.preco) : "0";
+    artigo.dataset.nome = anuncio.nome;
+
+    const selo = document.createElement("span");
+    selo.className = `selo-produto ${anuncio.modalidade === "venda" ? "selo-neutro" : "selo-verde"}`;
+    selo.textContent = anuncio.modalidade === "venda" ? obterNomeEstado(anuncio.estado) : obterNomeModalidade(anuncio.modalidade);
+
+    const imagem = document.createElement("img");
+    imagem.src = anuncio.imagem || "imagens/vitrine.jpg";
+    imagem.alt = anuncio.nome;
+
+    const informacoes = document.createElement("div");
+    informacoes.className = "produto-info";
+
+    const categoria = document.createElement("p");
+    categoria.className = "produto-categoria";
+    categoria.textContent = obterNomeCategoria(anuncio.categoria);
+
+    const nome = document.createElement("h3");
+    nome.textContent = anuncio.nome;
+
+    const descricao = document.createElement("p");
+    descricao.textContent = anuncio.descricao;
+
+    const destaque = document.createElement("strong");
+    if (anuncio.modalidade === "venda") {
+        destaque.textContent = Number(anuncio.preco).toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL"
+        });
+    } else {
+        destaque.textContent = anuncio.modalidade === "doacao" ? "Grátis" : "Para trocar";
+    }
+
+    const link = document.createElement("a");
+    link.href = `produto.html?id=${encodeURIComponent(anuncio.id)}`;
+    link.className = "link-produto";
+    link.innerHTML = 'Ver detalhes <i class="fa-solid fa-arrow-right"></i>';
+
+    informacoes.append(categoria, nome, descricao, destaque, link);
+    artigo.append(selo, imagem, informacoes);
+    return artigo;
+}
+
+function renderizarAnunciosNasListas() {
+    const gradeCatalogo = document.querySelector('#grade-catalogo');
+    if (!gradeCatalogo) return;
+
+    const anuncios = obterAnuncios();
+    const estaNoCatalogo = window.location.pathname.toLowerCase().includes('catalogo.html');
+
+    if (estaNoCatalogo) {
+        anuncios.filter((anuncio) => anuncio.modalidade === "venda")
+            .forEach((anuncio) => gradeCatalogo.appendChild(criarCardAnuncio(anuncio)));
+    } else if (window.location.pathname.toLowerCase().includes('doar-trocar.html')) {
+        anuncios.filter((anuncio) => anuncio.modalidade === "doacao" || anuncio.modalidade === "troca")
+            .forEach((anuncio) => gradeCatalogo.appendChild(criarCardAnuncio(anuncio)));
+    }
+}
+
+function inicializarFiltrosDoacaoTroca() {
+    const grade = document.querySelector('#grade-catalogo');
+    const paginaDoacao = window.location.pathname.toLowerCase().includes('doar-trocar.html');
+    if (!grade || !paginaDoacao) return;
+
+    const contador = document.querySelector('#resultado-contagem');
+    const mensagemVazia = document.querySelector('#catalogo-vazio');
+
+    function atualizarAnunciosDoacaoTroca() {
+        const modalidade = document.querySelector('input[name="modalidade"]:checked')?.value || 'todos';
+        const categoria = document.querySelector('input[name="categoria"]:checked')?.value || 'todos';
+        const anuncios = Array.from(grade.querySelectorAll('.produto-catalogo'));
+
+        const encontrados = anuncios.filter((anuncio) => {
+            const correspondeModalidade = modalidade === 'todos' || anuncio.dataset.modalidade === modalidade;
+            const correspondeCategoria = categoria === 'todos' || anuncio.dataset.categoria === categoria;
+            anuncio.hidden = !(correspondeModalidade && correspondeCategoria);
+            return !anuncio.hidden;
+        });
+
+        if (contador) contador.textContent = `${encontrados.length} ${encontrados.length === 1 ? 'anúncio encontrado' : 'anúncios encontrados'}`;
+        if (mensagemVazia) mensagemVazia.hidden = encontrados.length > 0;
+
+        if (document.querySelector('#ordenacao')?.value === 'nome') {
+            encontrados.sort((a, b) => a.dataset.nome.localeCompare(b.dataset.nome, 'pt-BR'))
+                .forEach((anuncio) => grade.appendChild(anuncio));
+        }
+    }
+
+    document.querySelectorAll('input[name="modalidade"], input[name="categoria"]')
+        .forEach((filtro) => filtro.addEventListener('change', atualizarAnunciosDoacaoTroca));
+    document.querySelector('#ordenacao')?.addEventListener('change', atualizarAnunciosDoacaoTroca);
+    document.querySelector('#limpar-filtros')?.addEventListener('click', () => {
+        const modalidadeTodos = document.querySelector('input[name="modalidade"][value="todos"]');
+        const categoriaTodos = document.querySelector('input[name="categoria"][value="todos"]');
+        if (modalidadeTodos) modalidadeTodos.checked = true;
+        if (categoriaTodos) categoriaTodos.checked = true;
+        const ordenacao = document.querySelector('#ordenacao');
+        if (ordenacao) ordenacao.value = 'relevancia';
+        atualizarAnunciosDoacaoTroca();
+    });
+    atualizarAnunciosDoacaoTroca();
+}
+
+function inicializarFormularioAnuncio() {
+    const formulario = document.querySelector('#formulario-anuncio');
+    if (!formulario) return;
+
+    const grupoPreco = document.querySelector('#grupo-preco');
+    const campoPreco = document.querySelector('#preco-produto');
+
+    function atualizarModalidade() {
+        const modalidade = formulario.querySelector('input[name="modalidade"]:checked')?.value || '';
+        const venda = modalidade === 'venda';
+        grupoPreco.hidden = !venda;
+        campoPreco.required = venda;
+        campoPreco.disabled = !venda;
+        if (!venda) campoPreco.value = '';
+    }
+
+    formulario.querySelectorAll('input[name="modalidade"]')
+        .forEach((radio) => radio.addEventListener('change', atualizarModalidade));
+    atualizarModalidade();
+
+    formulario.addEventListener('submit', (evento) => {
+        evento.preventDefault();
+        if (!formulario.reportValidity()) return;
+
+        const dados = new FormData(formulario);
+        const modalidade = dados.get('modalidade');
+        const imagem = formulario.querySelector('#imagem-produto').files[0];
+
+        function publicar(imagemBase64) {
+            const anuncio = {
+                id: `anuncio-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+                nome: dados.get('nome').trim(),
+                categoria: dados.get('categoria'),
+                descricao: dados.get('descricao').trim(),
+                estado: dados.get('estado'),
+                modalidade,
+                preco: modalidade === 'venda' ? Number(dados.get('preco')) : null,
+                imagem: imagemBase64 || '',
+                criadoEm: Date.now()
+            };
+            const anuncios = obterAnuncios();
+            anuncios.push(anuncio);
+            salvarAnuncios(anuncios);
+            window.location.href = modalidade === 'venda' ? 'catalogo.html' : 'doar-trocar.html';
+        }
+
+        if (imagem) {
+            const leitor = new FileReader();
+            leitor.onload = () => publicar(leitor.result);
+            leitor.readAsDataURL(imagem);
+        } else {
+            publicar('');
+        }
+    });
+}
+
+renderizarAnunciosNasListas();
+inicializarFiltrosDoacaoTroca();
+inicializarFormularioAnuncio();
+if (typeof atualizarCatalogo === 'function') atualizarCatalogo();
+
+(function inicializarCabecalho() {
+    const cabecalho = document.querySelector('.cabecalho-conteudo');
+    const botaoMenu = document.querySelector('.menu-toggle');
+    const botaoMais = document.querySelector('.menu-mais-botao');
+    const menuMais = document.querySelector('.menu-mais');
+
+    if (!cabecalho || !botaoMenu) return;
+
+    botaoMenu.addEventListener('click', () => {
+        const aberto = cabecalho.classList.toggle('menu-aberto');
+        botaoMenu.setAttribute('aria-expanded', String(aberto));
+        botaoMenu.setAttribute('aria-label', aberto ? 'Fechar menu' : 'Abrir menu');
+        botaoMenu.innerHTML = aberto
+            ? '<i class="fa-solid fa-xmark"></i>'
+            : '<i class="fa-solid fa-bars"></i>';
+    });
+
+    if (botaoMais && menuMais) {
+        const alternarMais = () => {
+            const aberto = menuMais.classList.toggle('aberto');
+            botaoMais.setAttribute('aria-expanded', String(aberto));
+        };
+
+        botaoMais.addEventListener('click', alternarMais);
+
+        document.addEventListener('keydown', (evento) => {
+            if (evento.key === 'Escape') {
+                menuMais.classList.remove('aberto');
+                botaoMais.setAttribute('aria-expanded', 'false');
+                botaoMais.focus();
+            }
+        });
+
+        document.addEventListener('click', (evento) => {
+            if (!menuMais.contains(evento.target)) {
+                menuMais.classList.remove('aberto');
+                botaoMais.setAttribute('aria-expanded', 'false');
+            }
+        });
+    }
 })();

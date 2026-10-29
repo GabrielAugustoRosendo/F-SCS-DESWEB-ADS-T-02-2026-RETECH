@@ -28,16 +28,26 @@
                     aria-label="Buscar catalogo"
                 >
             </form>
-            <nav class="menu" aria-label="Menu principal">
+            <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu-principal" aria-label="Abrir menu"><i class="fa-solid fa-bars"></i></button>
+            <nav class="menu" id="menu-principal" aria-label="Menu principal">
+                <a href="index.html">Início</a>
                 <a href="catalogo.html">Comprar</a>
-                <a href="anunciar.html" class="ativo">Vender</a>
-                <a href="doar-trocar.html">Doar</a>
-                <a href="doar-trocar.html">Trocar</a>
+                <a href="doar-trocar.html">Doar/Trocar</a>
+                <div class="menu-mais">
+                    <button class="menu-mais-botao" type="button" aria-expanded="false" aria-haspopup="true">Mais <i class="fa-solid fa-chevron-down"></i></button>
+                    <div class="submenu-mais" role="menu">
+                        <a href="sobre.html" role="menuitem">Sobre o ReTech</a>
+                        <a href="blog.html" role="menuitem">Blog e sustentabilidade</a>
+                        <a href="contato.html" role="menuitem">Contato e ajuda</a>
+                        <a href="perfil.html" role="menuitem">Meu perfil</a>
+                    </div>
+                </div>
             </nav>
-            <a href="login.html" class="entrar"><i class="fa-regular fa-user"></i> Entrar</a>
-            <a href="anunciar.html" class="botao botao-verde anunciar-topo">
-                <i class="fa-solid fa-plus"></i> Anunciar produto
-            </a>
+            <div class="acoes-cabecalho">
+                <a href="login.html" class="entrar"><i class="fa-regular fa-user"></i> Entrar</a>
+                <a href="login.html#cadastro" class="criar-conta">Criar conta</a>
+                <a href="anunciar.html" class="botao botao-verde anunciar-topo" aria-current="page"><i class="fa-solid fa-plus"></i> Anunciar produto</a>
+            </div>
         </div>
     </header>
 
@@ -54,7 +64,7 @@
         </section>
 
         <section class="container pagina-anunciar" aria-labelledby="titulo-anunciar">
-            <form class="formulario-anuncio" action="catalogo.html" method="get">
+            <form class="formulario-anuncio" id="formulario-anuncio">
                 <h2 id="titulo-anunciar"><i class="fa-solid fa-leaf"></i> Publicar anúncio</h2>
                 <p>Preencha os dados do eletrônico. Os campos obrigatórios estão marcados.</p>
 
@@ -90,9 +100,11 @@
                     <label class="opcao-radio"><input type="radio" name="modalidade" value="troca"> Troca</label>
                 </fieldset>
 
-                <label for="preco-produto">Preço (R$)</label>
-                <input type="number" id="preco-produto" name="preco" placeholder="0,00" min="0" step="0.01">
-                <p class="ajuda-campo">Informe o valor em caso de venda. Em doação, deixe em branco ou use 0.</p>
+                <div id="grupo-preco">
+                    <label for="preco-produto">Preço (R$)</label>
+                    <input type="number" id="preco-produto" name="preco" placeholder="0,00" min="0.01" step="0.01">
+                    <p class="ajuda-campo">O preço é obrigatório para anúncios de venda.</p>
+                </div>
 
                 <label for="imagem-produto">Imagem do produto</label>
                 <input type="file" id="imagem-produto" name="imagem" accept="image/*">
@@ -107,5 +119,6 @@
     <footer>
         <p>© 2026 ReTech — Tecnologia que reutiliza.</p>
     </footer>
+    <script src="js/script.js"></script>
 </body>
 </html>

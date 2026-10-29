@@ -19,14 +19,26 @@
                 <i class="fa-solid fa-magnifying-glass"></i>
                 <input type="search" name="busca" id="campo-busca" placeholder="Buscar celulares, notebooks, videogames..." aria-label="Buscar produtos">
             </form>
-            <nav class="menu" aria-label="Menu principal">
+            <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu-principal" aria-label="Abrir menu"><i class="fa-solid fa-bars"></i></button>
+            <nav class="menu" id="menu-principal" aria-label="Menu principal">
+                <a href="index.html">Início</a>
                 <a href="catalogo.html">Comprar</a>
-                <a href="anunciar.html">Vender</a>
-                <a href="doar-trocar.html" class="ativo">Doar</a>
-                <a href="doar-trocar.html">Trocar</a>
+                <a href="doar-trocar.html" class="ativo" aria-current="page">Doar/Trocar</a>
+                <div class="menu-mais">
+                    <button class="menu-mais-botao" type="button" aria-expanded="false" aria-haspopup="true">Mais <i class="fa-solid fa-chevron-down"></i></button>
+                    <div class="submenu-mais" role="menu">
+                        <a href="sobre.html" role="menuitem">Sobre o ReTech</a>
+                        <a href="blog.html" role="menuitem">Blog e sustentabilidade</a>
+                        <a href="contato.html" role="menuitem">Contato e ajuda</a>
+                        <a href="perfil.html" role="menuitem">Meu perfil</a>
+                    </div>
+                </div>
             </nav>
-            <a href="login.html" class="entrar"><i class="fa-regular fa-user"></i> Entrar</a>
-            <a href="anunciar.html" class="botao botao-verde anunciar-topo"><i class="fa-solid fa-plus"></i> Anunciar produto</a>
+            <div class="acoes-cabecalho">
+                <a href="login.html" class="entrar"><i class="fa-regular fa-user"></i> Entrar</a>
+                <a href="login.html#cadastro" class="criar-conta">Criar conta</a>
+                <a href="anunciar.html" class="botao botao-verde anunciar-topo"><i class="fa-solid fa-plus"></i> Anunciar produto</a>
+            </div>
         </div>
     </header>
 
@@ -145,45 +157,6 @@
 
     <footer><p>© 2026 ReTech — Tecnologia que reutiliza.</p></footer>
 
-    <script>
-        const grade = document.querySelector('#grade-catalogo');
-        const contador = document.querySelector('#resultado-contagem');
-        const mensagemVazia = document.querySelector('#catalogo-vazio');
-
-        function atualizarAnuncios() {
-            const modalidade = document.querySelector('input[name="modalidade"]:checked').value;
-            const categoria = document.querySelector('input[name="categoria"]:checked').value;
-            const anuncios = Array.from(grade.querySelectorAll('.produto-catalogo'));
-
-            const encontrados = anuncios.filter((anuncio) => {
-                const modalidadeCorresponde = modalidade === 'todos' || anuncio.dataset.modalidade === modalidade;
-                const categoriaCorresponde = categoria === 'todos' || anuncio.dataset.categoria === categoria;
-                anuncio.hidden = !(modalidadeCorresponde && categoriaCorresponde);
-                return !anuncio.hidden;
-            });
-
-            contador.textContent = `${encontrados.length} ${encontrados.length === 1 ? 'anúncio encontrado' : 'anúncios encontrados'}`;
-            mensagemVazia.hidden = encontrados.length > 0;
-
-            if (document.querySelector('#ordenacao').value === 'nome') {
-                encontrados.sort((a, b) => a.dataset.nome.localeCompare(b.dataset.nome, 'pt-BR'))
-                    .forEach((anuncio) => grade.appendChild(anuncio));
-            }
-        }
-
-        document.querySelectorAll('input[name="modalidade"], input[name="categoria"]')
-            .forEach((filtro) => filtro.addEventListener('change', atualizarAnuncios));
-
-        document.querySelector('#ordenacao').addEventListener('change', atualizarAnuncios);
-
-        document.querySelector('#limpar-filtros').addEventListener('click', () => {
-            document.querySelector('input[name="modalidade"][value="todos"]').checked = true;
-            document.querySelector('input[name="categoria"][value="todos"]').checked = true;
-            document.querySelector('#ordenacao').value = 'relevancia';
-            atualizarAnuncios();
-        });
-
-        atualizarAnuncios();
-    </script>
+    <script src="js/script.js"></script>
 </body>
 </html>
