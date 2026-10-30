@@ -104,7 +104,7 @@ if (buscaInicial || categoriaInicial) {
         notebook: {
             nome: "Notebook ASUS E510MA",
             preco: 1150,
-            categoria: "Informática",
+            categoria: "Computadores",
             estado: "Usado",
             imagem: "imagens/notebook.jpg",
             descricao: "Notebook usado para atividades do dia a dia.",
@@ -257,11 +257,13 @@ function salvarAnuncios(anuncios) {
 function obterNomeCategoria(categoria) {
     const nomes = {
         celulares: "Celulares",
-        notebooks: "Notebooks",
+        computadores: "Computadores",
+        notebooks: "Computadores",
         games: "Games",
-        audio: "Áudio",
         cameras: "Câmeras",
-        acessorios: "Acessórios"
+        outros: "Outros",
+        audio: "Outros",
+        acessorios: "Outros"
     };
     return nomes[categoria] || categoria;
 }
@@ -283,7 +285,12 @@ function criarCardAnuncio(anuncio) {
     const artigo = document.createElement("article");
     artigo.className = "produto produto-catalogo";
     artigo.dataset.modalidade = anuncio.modalidade;
-    artigo.dataset.categoria = anuncio.categoria;
+    const categoriasNormalizadas = {
+        notebooks: "computadores",
+        audio: "outros",
+        acessorios: "outros"
+    };
+    artigo.dataset.categoria = categoriasNormalizadas[anuncio.categoria] || anuncio.categoria;
     artigo.dataset.estado = anuncio.estado;
     artigo.dataset.preco = anuncio.modalidade === "venda" ? String(anuncio.preco) : "0";
     artigo.dataset.nome = anuncio.nome;
@@ -466,6 +473,11 @@ if (typeof atualizarCatalogo === 'function') atualizarCatalogo();
             ? '<i class="fa-solid fa-xmark"></i>'
             : '<i class="fa-solid fa-bars"></i>';
     });
+
+    const paginaMaisAtiva = menuMais?.querySelector('[aria-current="page"]');
+    if (paginaMaisAtiva && menuMais) {
+        menuMais.classList.add('ativo');
+    }
 
     if (botaoMais && menuMais) {
         const alternarMais = () => {
