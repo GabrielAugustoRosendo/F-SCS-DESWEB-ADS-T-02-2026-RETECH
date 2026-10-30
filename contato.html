@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Entre em contato com o ReTech para tirar dúvidas sobre compra, venda, doação, troca ou suporte.">
+    <title>Contato e ajuda | ReTech</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
+</head>
+<body>
+    <header class="cabecalho">
+        <div class="cabecalho-conteudo">
+            <a href="index.html" class="logo" aria-label="ReTech - página inicial">
+                <span class="logo-simbolo">♻</span>
+                <span class="logo-texto">
+                    <strong>Re<span>Tech</span></strong>
+                    <small>TECNOLOGIA QUE REUTILIZA</small>
+                </span>
+            </a>
+
+            <form class="busca" action="catalogo.html" method="get" role="search">
+                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                <input type="search" name="busca" id="campo-busca" placeholder="Buscar celulares, notebooks, videogames..." aria-label="Buscar no catálogo">
+            </form>
+
+            <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu-principal" aria-label="Abrir menu">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+
+            <nav class="menu" id="menu-principal" aria-label="Menu principal">
+                <a href="index.html">Início</a>
+                <a href="catalogo.html">Comprar</a>
+                <a href="doar-trocar.html">Doar/Trocar</a>
+                <div class="menu-mais">
+                    <button class="menu-mais-botao" type="button" aria-expanded="false" aria-haspopup="true">
+                        Mais <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                    </button>
+                    <div class="submenu-mais" role="menu">
+                        <a href="sobre.html" role="menuitem">Sobre o ReTech</a>
+                        <a href="blog.html" role="menuitem">Blog e sustentabilidade</a>
+                        <a href="contato.html" role="menuitem" class="ativo" aria-current="page">Contato e ajuda</a>
+                        <a href="perfil.html" role="menuitem">Meu perfil</a>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="acoes-cabecalho">
+                <a href="login.html" class="entrar"><i class="fa-regular fa-user" aria-hidden="true"></i> Entrar</a>
+                <a href="login.html#cadastro" class="criar-conta">Criar conta</a>
+                <a href="anunciar.html" class="botao botao-verde anunciar-topo">
+                    <i class="fa-solid fa-plus" aria-hidden="true"></i> Anunciar produto
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="catalogo-banner" aria-labelledby="titulo-contato">
+            <div class="container catalogo-banner-conteudo">
+                <div>
+                    <p class="etiqueta"><i class="fa-solid fa-headset" aria-hidden="true"></i> CONTATO E AJUDA <span></span></p>
+                    <h1 id="titulo-contato">Estamos prontos para <em>ajudar.</em></h1>
+                    <p>Envie sua dúvida sobre produtos, anúncios, doações, trocas, cadastro ou sustentabilidade. Nossa equipe orientará você da melhor forma.</p>
+                </div>
+                <div class="catalogo-banner-icone" aria-hidden="true">
+                    <i class="fa-solid fa-envelope"></i>
+                </div>
+            </div>
+        </section>
+
+        <section class="container contato-canais" aria-label="Canais de atendimento">
+            <article>
+                <div class="contato-canal-icone"><i class="fa-solid fa-envelope" aria-hidden="true"></i></div>
+                <h2>E-mail</h2>
+                <p>Use o formulário ao lado para enviar sua mensagem à equipe do ReTech.</p>
+            </article>
+            <article>
+                <div class="contato-canal-icone"><i class="fa-solid fa-clock" aria-hidden="true"></i></div>
+                <h2>Tempo de resposta</h2>
+                <p>As solicitações devem ser respondidas em até dois dias úteis.</p>
+            </article>
+            <article>
+                <div class="contato-canal-icone"><i class="fa-solid fa-circle-question" aria-hidden="true"></i></div>
+                <h2>Central de ajuda</h2>
+                <p>Consulte as perguntas frequentes antes de enviar uma nova solicitação.</p>
+            </article>
+        </section>
+
+        <section class="container contato-conteudo" aria-labelledby="titulo-formulario">
+            <form class="contato-formulario" action="#" method="post">
+                <h2 id="titulo-formulario"><i class="fa-solid fa-leaf" aria-hidden="true"></i> Enviar mensagem</h2>
+                <p>Preencha os campos abaixo. Todos são obrigatórios.</p>
+
+                <label for="nome-contato">Nome completo</label>
+                <input type="text" id="nome-contato" name="nome" autocomplete="name" minlength="3" maxlength="80" placeholder="Digite seu nome" required>
+
+                <label for="email-contato">E-mail</label>
+                <input type="email" id="email-contato" name="email" autocomplete="email" maxlength="120" placeholder="seuemail@exemplo.com" required>
+
+                <label for="assunto-contato">Assunto</label>
+                <select id="assunto-contato" name="assunto" required>
+                    <option value="">Selecione um assunto</option>
+                    <option value="comprar">Compra de produto</option>
+                    <option value="vender">Venda ou anúncio</option>
+                    <option value="doar">Doação ou troca</option>
+                    <option value="conta">Cadastro ou perfil</option>
+                    <option value="sustentabilidade">Sustentabilidade e reciclagem</option>
+                    <option value="acessibilidade">Acessibilidade</option>
+                    <option value="outro">Outro assunto</option>
+                </select>
+
+                <label for="mensagem-contato">Mensagem</label>
+                <textarea id="mensagem-contato" name="mensagem" rows="6" minlength="20" maxlength="1000" placeholder="Descreva sua dúvida ou solicitação com o máximo de detalhes possível." required></textarea>
+
+                <label class="contato-consentimento">
+                    <input type="checkbox" name="consentimento" required>
+                    Concordo que meus dados sejam utilizados para responder a esta solicitação.
+                </label>
+
+                <button type="submit" class="botao botao-verde">
+                    <i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Enviar mensagem
+                </button>
+            </form>
+
+            <aside class="contato-ajuda" aria-labelledby="titulo-ajuda">
+                <h2 id="titulo-ajuda">Como podemos ajudar?</h2>
+                <p>Escolha o assunto mais próximo da sua necessidade para receber uma orientação adequada.</p>
+
+                <ul>
+                    <li><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i> Informações sobre compra</li>
+                    <li><i class="fa-solid fa-tag" aria-hidden="true"></i> Publicação de anúncios</li>
+                    <li><i class="fa-solid fa-handshake" aria-hidden="true"></i> Doações e trocas</li>
+                    <li><i class="fa-solid fa-recycle" aria-hidden="true"></i> Descarte de eletrônicos</li>
+                </ul>
+
+                <a href="catalogo.html" class="botao botao-contorno">
+                    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i> Ir para o catálogo
+                </a>
+            </aside>
+        </section>
+
+        <section class="container contato-faq" aria-labelledby="titulo-faq">
+            <div class="titulo-secao">
+                <h2 id="titulo-faq"><i class="fa-solid fa-circle-question" aria-hidden="true"></i> Perguntas frequentes</h2>
+            </div>
+
+            <details>
+                <summary>Posso vender um eletrônico usado que ainda funciona?</summary>
+                <p>Sim. Anúncios podem ser publicados informando categoria, estado de conservação, acessórios, preço e possíveis marcas de uso.</p>
+            </details>
+
+            <details>
+                <summary>Como faço uma doação ou proposta de troca?</summary>
+                <p>Na página Doar/Trocar, você pode consultar produtos disponíveis, filtros por modalidade e opções de anúncio para compartilhar seu aparelho.</p>
+            </details>
+
+            <details>
+                <summary>O que devo fazer antes de vender ou trocar meu aparelho?</summary>
+                <p>Faça backup dos dados, remova contas vinculadas, restaure as configurações e informe claramente o estado real do eletrônico.</p>
+            </details>
+
+            <details>
+                <summary>Como deve ser feito o descarte de um eletrônico sem conserto?</summary>
+                <p>Não coloque pilhas ou aparelhos eletrônicos no lixo comum. Procure pontos de coleta de resíduos eletrônicos ou entidades que realizem reciclagem especializada.</p>
+            </details>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 ReTech — Tecnologia que reutiliza.</p>
+    </footer>
+    <script src="js/script.js"></script>
+</body>
+</html>

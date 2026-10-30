@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Artigos, dicas e conteúdos sobre reutilização, reciclagem e economia circular de eletrônicos.">
+    <title>Blog e sustentabilidade | ReTech</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
+</head>
+<body>
+    <header class="cabecalho">
+        <div class="cabecalho-conteudo">
+            <a href="index.html" class="logo" aria-label="ReTech - página inicial">
+                <span class="logo-simbolo">♻</span>
+                <span class="logo-texto">
+                    <strong>Re<span>Tech</span></strong>
+                    <small>TECNOLOGIA QUE REUTILIZA</small>
+                </span>
+            </a>
+
+            <form class="busca" action="catalogo.html" method="get" role="search">
+                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                <input type="search" name="busca" id="campo-busca" placeholder="Buscar celulares, notebooks, videogames..." aria-label="Buscar no catálogo">
+            </form>
+
+            <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu-principal" aria-label="Abrir menu">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+
+            <nav class="menu" id="menu-principal" aria-label="Menu principal">
+                <a href="index.html">Início</a>
+                <a href="catalogo.html">Comprar</a>
+                <a href="doar-trocar.html">Doar/Trocar</a>
+                <div class="menu-mais">
+                    <button class="menu-mais-botao" type="button" aria-expanded="false" aria-haspopup="true">
+                        Mais <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                    </button>
+                    <div class="submenu-mais" role="menu">
+                        <a href="sobre.html" role="menuitem">Sobre o ReTech</a>
+                        <a href="blog.html" role="menuitem" class="ativo" aria-current="page">Blog e sustentabilidade</a>
+                        <a href="contato.html" role="menuitem">Contato e ajuda</a>
+                        <a href="perfil.html" role="menuitem">Meu perfil</a>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="acoes-cabecalho">
+                <a href="login.html" class="entrar"><i class="fa-regular fa-user" aria-hidden="true"></i> Entrar</a>
+                <a href="login.html#cadastro" class="criar-conta">Criar conta</a>
+                <a href="anunciar.html" class="botao botao-verde anunciar-topo">
+                    <i class="fa-solid fa-plus" aria-hidden="true"></i> Anunciar produto
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="blog-banner" aria-labelledby="titulo-blog">
+            <div class="container blog-banner-conteudo">
+                <div>
+                    <p class="etiqueta"><i class="fa-solid fa-leaf" aria-hidden="true"></i> CONTEÚDO E SUSTENTABILIDADE</p>
+                    <h1 id="titulo-blog">Tecnologia consciente começa com <em>boas escolhas.</em></h1>
+                    <p>Artigos e dicas para reutilizar, reparar, comprar, vender, doar e descartar eletrônicos com responsabilidade.</p>
+                </div>
+                <div class="blog-banner-icone" aria-hidden="true">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+            </div>
+        </section>
+
+        <nav class="container blog-categorias" aria-label="Categorias do blog">
+            <a href="#artigos" class="ativo">Todos</a>
+            <a href="#artigos">Reutilização</a>
+            <a href="#artigos">Reciclagem</a>
+            <a href="#artigos">Consumo consciente</a>
+            <a href="#artigos">Dicas práticas</a>
+        </nav>
+
+        <section class="container blog-destaque" aria-labelledby="titulo-destaque">
+            <article>
+                <figure>
+                    <img src="imagens/vitrine.jpg" alt="Eletrônicos usados preparados para ganhar uma nova vida">
+                </figure>
+                <div class="blog-destaque-conteudo">
+                    <p class="blog-meta"><span>Economia circular</span> 7 min de leitura</p>
+                    <h2 id="titulo-destaque">Como prolongar a vida útil dos eletrônicos</h2>
+                    <p>Reparar, reutilizar, vender, trocar e doar são atitudes que reduzem o lixo eletrônico, economizam recursos naturais e facilitam o acesso à tecnologia.</p>
+                    <a href="#economia-circular" class="blog-link">Ler artigo <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                </div>
+            </article>
+        </section>
+
+        <section class="container blog-listagem" id="artigos" aria-labelledby="titulo-artigos">
+            <div class="titulo-secao">
+                <h2 id="titulo-artigos"><i class="fa-solid fa-newspaper" aria-hidden="true"></i> Artigos recentes</h2>
+            </div>
+
+            <div class="blog-grade">
+                <article class="blog-card">
+                    <img src="imagens/iphone.jpg" alt="Smartphone usado">
+                    <div class="blog-card-conteudo">
+                        <p class="blog-meta"><span>Reutilização</span> 5 min</p>
+                        <h3>O que verificar antes de comprar um celular usado</h3>
+                        <p>Confira bateria, tela, câmeras, sistema de identificação, estado geral e histórico do aparelho.</p>
+                        <a href="#comprar-celular" class="blog-link">Ler mais <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+                    </div>
+                </article>
+
+                <article class="blog-card">
+                    <img src="imagens/notebook.jpg" alt="Notebook reutilizado">
+                    <div class="blog-card-conteudo">
+                        <p class="blog-meta"><span>Consumo consciente</span> 4 min</p>
+                        <h3>Como aumentar a vida útil do seu notebook</h3>
+                        <p>Limpeza, manutenção, atualização do sistema e armazenamento adequado ajudam a evitar trocas desnecessárias.</p>
+                        <a href="#artigos" class="blog-link">Ler mais <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+                    </div>
+                </article>
+
+                <article class="blog-card">
+                    <img src="imagens/camera.jpg" alt="Câmera fotográfica usada">
+                    <div class="blog-card-conteudo">
+                        <p class="blog-meta"><span>Reciclagem</span> 6 min</p>
+                        <h3>Para onde vai um eletrônico que não tem conserto?</h3>
+                        <p>Componentes e materiais podem ser reaproveitados por pontos de coleta especializados em resíduos eletrônicos.</p>
+                        <a href="#reciclagem" class="blog-link">Ler mais <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+                    </div>
+                </article>
+
+                <article class="blog-card">
+                    <img src="imagens/switch.jpg" alt="Videogame usado">
+                    <div class="blog-card-conteudo">
+                        <p class="blog-meta"><span>Troca segura</span> 3 min</p>
+                        <h3>Como preparar seu aparelho antes da venda ou troca</h3>
+                        <p>Faça backup, remova contas pessoais, restaure o sistema e documente o estado real do equipamento.</p>
+                        <a href="#artigos" class="blog-link">Ler mais <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+                    </div>
+                </article>
+
+                <article class="blog-card">
+                    <img src="imagens/vitrine.jpg" alt="Eletrônicos organizados para reutilização">
+                    <div class="blog-card-conteudo">
+                        <p class="blog-meta"><span>Dicas práticas</span> 7 min</p>
+                        <h3>Guia básico para vender um eletrônico usado</h3>
+                        <p>Use fotos reais, informe marcas de uso, descreva acessórios e seja transparente sobre defeitos conhecidos.</p>
+                        <a href="#artigos" class="blog-link">Ler mais <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+                    </div>
+                </article>
+
+                <article class="blog-card">
+                    <img src="imagens/perfil.png" alt="Comunidade ReTech">
+                    <div class="blog-card-conteudo">
+                        <p class="blog-meta"><span>Inclusão digital</span> 5 min</p>
+                        <h3>Como eletrônicos acessíveis ampliam oportunidades</h3>
+                        <p>A reutilização pode facilitar o acesso à educação, trabalho, comunicação e participação digital.</p>
+                        <a href="#artigos" class="blog-link">Ler mais <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="container blog-temas" aria-labelledby="titulo-temas">
+            <div class="titulo-secao">
+                <h2 id="titulo-temas"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> Conteúdo educativo</h2>
+            </div>
+            <div class="blog-temas-grade">
+                <article id="economia-circular">
+                    <i class="fa-solid fa-recycle" aria-hidden="true"></i>
+                    <h3>Economia circular</h3>
+                    <p>Reutilizar e reparar mantém equipamentos em uso por mais tempo e reduz a necessidade de produção e extração de recursos.</p>
+                </article>
+                <article id="comprar-celular">
+                    <i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i>
+                    <h3>Compra responsável</h3>
+                    <p>Verifique o estado do aparelho, proteção do vendedor, acessórios, garantia e informações de conservação antes da compra.</p>
+                </article>
+                <article id="reciclagem">
+                    <i class="fa-solid fa-earth-americas" aria-hidden="true"></i>
+                    <h3>Descarte correto</h3>
+                    <p>Não descarte pilhas ou eletrônicos junto com lixo comum. Procure pontos de coleta ou programas especializados.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="container blog-newsletter" aria-labelledby="titulo-newsletter">
+            <h2 id="titulo-newsletter">Receba conteúdos sobre tecnologia sustentável</h2>
+            <p>Novidades, dicas práticas e orientações sobre reutilização.</p>
+            <form action="#" method="post">
+                <label for="email-blog">Seu e-mail</label>
+                <input type="email" id="email-blog" name="email" autocomplete="email" placeholder="nome@email.com" required>
+                <button type="submit" class="botao botao-verde">
+                    <i class="fa-solid fa-envelope" aria-hidden="true"></i> Quero receber
+                </button>
+            </form>
+        </section>
+
+        <section class="chamada-final">
+            <h2>Transforme seu eletrônico em novas oportunidades</h2>
+            <p>Compre, venda, doe ou troque e faça parte da economia circular.</p>
+            <a href="catalogo.html" class="botao botao-verde"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i> Explorar produtos</a>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 ReTech — Tecnologia que reutiliza.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
