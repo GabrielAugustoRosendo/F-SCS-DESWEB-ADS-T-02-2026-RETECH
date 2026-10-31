@@ -83,13 +83,16 @@
                         const confirmarSenha = String(dados.get("confirmar-senha") || "");
                         if (!nome) throw new Error("Informe seu nome.");
                         if (senha.length < 6) throw new Error("A senha deve ter pelo menos 6 caracteres.");
-                        if (senha !== confirmarSenha) throw new Error("As senhas não coincidem.");
-
-                        const { data, error } = await db.auth.signUp({
+                        if (senha !== confirmarSenha) throw new Error("As senhas não coincidem.");                        
+                            const { data, error } = await db.auth.signUp({
                             email,
                             password: senha,
-                            options: { data: { nome } }
+                            options: {
+                            data: { nome },
+                            emailRedirectTo: "https://retech-omega.vercel.app/login.html"
+                            }
                         });
+
                         if (error) throw error;
 
                         if (data.user) {
