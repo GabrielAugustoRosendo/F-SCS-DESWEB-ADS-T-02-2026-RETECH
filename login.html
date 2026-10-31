@@ -39,13 +39,11 @@
                         <a href="sobre.html" role="menuitem">Sobre o ReTech</a>
                         <a href="blog.html" role="menuitem">Blog e sustentabilidade</a>
                         <a href="contato.html" role="menuitem">Contato e ajuda</a>
-                        <a href="perfil.html" role="menuitem">Meu perfil</a>
                     </div>
                 </div>
             </nav>
             <div class="acoes-cabecalho">
                 <a href="login.html" class="entrar ativo" aria-current="page"><i class="fa-regular fa-user"></i> Entrar</a>
-                <a href="login.html#cadastro" class="criar-conta">Criar conta</a>
                 <a href="anunciar.html" class="botao botao-verde anunciar-topo"><i class="fa-solid fa-plus"></i> Anunciar produto</a>
             </div>
         </div>
@@ -63,46 +61,62 @@
             </div>
         </section>
 
-        <section class="container pagina-login" id="cadastro" aria-labelledby="titulo-login">
-            <form class="formulario-login" id="formulario-login" action="#" method="post">
-                <h2 id="titulo-login"><i class="fa-solid fa-leaf"></i> Entrar na ReTech</h2>
-                <p>Use seu e-mail e senha para continuar.</p>
+        <section class="container pagina-login" id="cadastro" aria-label="Acesso à conta">
+            <div class="login-abas" role="tablist" aria-label="Opções de acesso">
+                <button type="button" role="tab" aria-selected="true" aria-controls="painel-entrar" id="aba-entrar" class="login-aba ativa" data-login-painel="painel-entrar">Entrar</button>
+                <button type="button" role="tab" aria-selected="false" aria-controls="painel-cadastro" id="aba-cadastro" class="login-aba" data-login-painel="painel-cadastro">Criar conta</button>
+            </div>
 
-                <label for="email">E-mail</label>
-                <input type="email" id="email" name="email" placeholder="seuemail@exemplo.com" autocomplete="email" required>
+            <div class="login-painel ativo" id="painel-entrar" role="tabpanel" aria-labelledby="aba-entrar">
+                <form class="formulario-login" id="formulario-login" action="#" method="post">
+                    <h2 id="titulo-login"><i class="fa-solid fa-leaf"></i> Entrar na ReTech</h2>
+                    <p>Use seu e-mail e senha para continuar.</p>
 
-                <label for="senha">Senha</label>
-                <input type="password" id="senha" name="senha" placeholder="Digite sua senha" autocomplete="current-password" required minlength="6">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" placeholder="seuemail@exemplo.com" autocomplete="email" required>
 
-                <label class="lembrar">
-                    <input type="checkbox" name="lembrar" value="sim">
-                    Lembrar de mim
-                </label>
+                    <label for="senha">Senha</label>
+                    <div class="campo-senha">
+                        <input type="password" id="senha" name="senha" placeholder="Digite sua senha" autocomplete="current-password" required minlength="6">
+                        <button type="button" data-alternar-senha="senha" aria-label="Mostrar senha"><i class="fa-solid fa-eye"></i></button>
+                    </div>
 
-                <button type="submit" class="botao botao-verde">
-                    <i class="fa-solid fa-arrow-right-to-bracket"></i> Entrar
-                </button>
-                <p role="status" aria-live="polite"></p>
-            </form>
+                    <button type="submit" class="botao botao-verde">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i> Entrar
+                    </button>
+                    <p role="status" aria-live="polite"></p>
+                </form>
+            </div>
 
-            <form class="formulario-login" id="formulario-cadastro" action="#" method="post">
-                <h2><i class="fa-solid fa-user-plus"></i> Criar conta</h2>
-                <p>Cadastre-se para anunciar, comprar, doar e trocar.</p>
+            <div class="login-painel" id="painel-cadastro" role="tabpanel" aria-labelledby="aba-cadastro" hidden>
+                <form class="formulario-login" id="formulario-cadastro" action="#" method="post">
+                    <h2><i class="fa-solid fa-user-plus"></i> Criar conta</h2>
+                    <p>Cadastre-se para anunciar, comprar, doar e trocar.</p>
 
-                <label for="nome-cadastro">Nome completo</label>
-                <input type="text" id="nome-cadastro" name="nome" autocomplete="name" required maxlength="80">
+                    <label for="nome-cadastro">Nome completo</label>
+                    <input type="text" id="nome-cadastro" name="nome" autocomplete="name" required maxlength="80">
 
-                <label for="email-cadastro">E-mail</label>
-                <input type="email" id="email-cadastro" name="email" autocomplete="email" required maxlength="120">
+                    <label for="email-cadastro">E-mail</label>
+                    <input type="email" id="email-cadastro" name="email" autocomplete="email" required maxlength="120">
 
-                <label for="senha-cadastro">Senha</label>
-                <input type="password" id="senha-cadastro" name="senha" autocomplete="new-password" required minlength="6">
+                    <label for="senha-cadastro">Senha</label>
+                    <div class="campo-senha">
+                        <input type="password" id="senha-cadastro" name="senha" autocomplete="new-password" required minlength="6">
+                        <button type="button" data-alternar-senha="senha-cadastro" aria-label="Mostrar senha"><i class="fa-solid fa-eye"></i></button>
+                    </div>
 
-                <button type="submit" class="botao botao-verde">
-                    <i class="fa-solid fa-user-plus"></i> Criar conta
-                </button>
-                <p role="status" aria-live="polite"></p>
-            </form>
+                    <label for="confirmar-senha-cadastro">Confirmar senha</label>
+                    <div class="campo-senha">
+                        <input type="password" id="confirmar-senha-cadastro" name="confirmar-senha" autocomplete="new-password" required minlength="6">
+                        <button type="button" data-alternar-senha="confirmar-senha-cadastro" aria-label="Mostrar senha"><i class="fa-solid fa-eye"></i></button>
+                    </div>
+
+                    <button type="submit" class="botao botao-verde">
+                        <i class="fa-solid fa-user-plus"></i> Criar conta
+                    </button>
+                    <p role="status" aria-live="polite"></p>
+                </form>
+            </div>
         </section>
     </main>
 

@@ -1403,8 +1403,43 @@ footer {
 
 .pagina-login {
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
     padding: 40px 0 60px;
+}
+
+.login-abas {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+    max-width: 460px;
+    overflow: hidden;
+    border: 1px solid #e1e9e3;
+    border-bottom: none;
+    border-radius: 12px 12px 0 0;
+    background: #f7faf8;
+}
+
+.login-aba {
+    min-height: 48px;
+    border: none;
+    border-bottom: 3px solid transparent;
+    background: transparent;
+    color: #667580;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.login-aba.ativa {
+    border-bottom-color: #16813d;
+    color: #16813d;
+    background: #fff;
+}
+
+.login-painel {
+    width: 100%;
+    max-width: 460px;
 }
 
 .formulario-login {
@@ -1440,7 +1475,8 @@ footer {
 }
 
 .formulario-login input[type="email"],
-.formulario-login input[type="password"] {
+.formulario-login input[type="password"],
+.formulario-login input[type="text"] {
     width: 100%;
     margin-bottom: 16px;
     padding: 12px 14px;
@@ -1452,8 +1488,30 @@ footer {
 }
 
 .formulario-login input[type="email"]:focus,
-.formulario-login input[type="password"]:focus {
+.formulario-login input[type="password"]:focus,
+.formulario-login input[type="text"]:focus {
     border-color: #16813d;
+}
+
+.campo-senha {
+    position: relative;
+}
+
+.campo-senha input[type="password"],
+.campo-senha input[type="text"] {
+    padding-right: 46px;
+}
+
+.campo-senha button {
+    position: absolute;
+    top: 0;
+    right: 6px;
+    width: 40px;
+    height: 43px;
+    border: none;
+    background: transparent;
+    color: #667580;
+    cursor: pointer;
 }
 
 .formulario-login .lembrar {

@@ -33,13 +33,11 @@
                         <a href="sobre.html" role="menuitem">Sobre o ReTech</a>
                         <a href="blog.html" role="menuitem">Blog e sustentabilidade</a>
                         <a href="contato.html" role="menuitem">Contato e ajuda</a>
-                        <a href="perfil.html" role="menuitem">Meu perfil</a>
                     </div>
                 </div>
             </nav>
             <div class="acoes-cabecalho">
-                <a href="perfil.html" class="entrar ativo" aria-current="page"><i class="fa-regular fa-user"></i> Meu perfil</a>
-                <a href="login.html#cadastro" class="criar-conta">Criar conta</a>
+                <a href="perfil.html" class="entrar ativo" aria-current="page"><i class="fa-regular fa-user"></i> Perfil</a>
                 <a href="anunciar.html" class="botao botao-verde anunciar-topo"><i class="fa-solid fa-plus"></i> Anunciar produto</a>
             </div>
         </div>
@@ -50,16 +48,19 @@
             <div class="container perfil-cabecalho-conteudo">
                 <div class="perfil-identidade">
                     <div class="perfil-avatar">
-                        <img id="imagem-perfil" src="perfil.png" alt="Foto de perfil de Ana Silva" onerror="this.style.display='none'; this.parentElement.classList.add('avatar-sem-imagem')">
+                        <img id="imagem-perfil" src="imagens/perfil.png" alt="Foto de perfil do usuário" onerror="this.style.display='none'; this.parentElement.classList.add('avatar-sem-imagem')">
                         <span aria-hidden="true"><i class="fa-solid fa-user"></i></span>
                     </div>
                     <div>
                         <div class="etiqueta"><i class="fa-solid fa-leaf"></i> PERFIL RETECH <span></span></div>
-                        <h1 id="nome-perfil">Ana Silva</h1>
-                        <p id="local-perfil"><i class="fa-solid fa-location-dot"></i> São Paulo, SP</p>
+                        <h1 id="nome-perfil">Carregando...</h1>
+                        <p id="local-perfil"><i class="fa-solid fa-location-dot"></i></p>
                     </div>
                 </div>
-                <a href="anunciar.html" class="botao botao-verde"><i class="fa-solid fa-plus"></i> Novo anúncio</a>
+                <div class="perfil-acoes-cabecalho">
+                    <a href="anunciar.html" class="botao botao-verde"><i class="fa-solid fa-plus"></i> Novo anúncio</a>
+                    <button type="button" id="botao-sair" class="botao botao-contorno"><i class="fa-solid fa-right-from-bracket"></i> Sair</button>
+                </div>
             </div>
         </section>
 
@@ -67,10 +68,10 @@
             <aside class="perfil-resumo" aria-label="Resumo do perfil">
                 <section class="perfil-card">
                     <h2>Sobre mim</h2>
-                    <p id="sobre-perfil">Gosto de reutilizar tecnologia, colaborar com a economia circular e ajudar equipamentos a ganharem uma nova vida.</p>
+                    <p id="sobre-perfil">Carregando...</p>
                     <dl class="perfil-dados">
-                        <div><dt><i class="fa-solid fa-envelope"></i> E-mail</dt><dd id="email-perfil">ana.silva@email.com</dd></div>
-                        <div><dt><i class="fa-solid fa-phone"></i> Telefone</dt><dd id="telefone-perfil">(11) 99999-0000</dd></div>
+                        <div><dt><i class="fa-solid fa-envelope"></i> E-mail</dt><dd id="email-perfil">—</dd></div>
+                        <div><dt><i class="fa-solid fa-phone"></i> Telefone</dt><dd id="telefone-perfil">Não informado</dd></div>
                         <div><dt><i class="fa-solid fa-calendar"></i> Membro desde</dt><dd id="membro-perfil">—</dd></div>
                     </dl>
                 </section>
@@ -110,14 +111,14 @@
                     <h2>Editar meus dados</h2>
                     <form id="formulario-perfil" class="perfil-formulario">
                         <div class="perfil-campo-duplo">
-                            <label>Nome completo<input type="text" id="campo-nome" value="Ana Silva" autocomplete="name" required></label>
-                            <label>Localidade<input type="text" id="campo-local" value="São Paulo, SP" autocomplete="address-level2"></label>
+                            <label>Nome completo<input type="text" id="campo-nome" value="" autocomplete="name" required></label>
+                            <label>Localidade<input type="text" id="campo-local" value="" autocomplete="address-level2"></label>
                         </div>
                         <div class="perfil-campo-duplo">
-                            <label>E-mail<input type="email" id="campo-email" value="ana.silva@email.com" autocomplete="email" required></label>
-                            <label>Telefone<input type="tel" id="campo-telefone" value="(11) 99999-0000" autocomplete="tel"></label>
+                            <label>E-mail<input type="email" id="campo-email" value="" autocomplete="email" required readonly></label>
+                            <label>Telefone<input type="tel" id="campo-telefone" value="" autocomplete="tel"></label>
                         </div>
-                        <label>Sobre mim<textarea id="campo-sobre" rows="4">Gosto de reutilizar tecnologia, colaborar com a economia circular e ajudar equipamentos a ganharem uma nova vida.</textarea></label>
+                        <label>Sobre mim<textarea id="campo-sobre" rows="4"></textarea></label>
                         <p id="perfil-status" role="status" aria-live="polite"></p>
                         <button type="submit" class="botao botao-verde"><i class="fa-solid fa-check"></i> Salvar alterações</button>
                     </form>

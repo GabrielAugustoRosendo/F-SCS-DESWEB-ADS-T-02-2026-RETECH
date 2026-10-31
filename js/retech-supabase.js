@@ -29,20 +29,58 @@
     async function atualizarCabecalho() {
         const usuario = await usuarioAtual();
         document.querySelectorAll(".acoes-cabecalho .entrar").forEach((link) => {
-            if (!usuario) return;
-            link.textContent = " Sair";
-            link.className = "entrar";
-            link.href = "#";
-            link.addEventListener("click", async (evento) => {
-                evento.preventDefault();
-                await db.auth.signOut();
-                window.location.href = "index.html";
-            });
+            if (usuario) {
+                link.innerHTML = '<i class="fa-regular fa-user"></i> Perfil';
+                link.href = "perfil.html";
+                link.classList.remove("ativo");
+            } else {
+                link.innerHTML = '<i class="fa-regular fa-user"></i> Entrar';
+                link.href = "login.html";
+                link.classList.toggle("ativo", path.endsWith("login.html"));
+            }
         });
+        document.querySelectorAll(".acoes-cabecalho .criar-conta").forEach((link) => link.remove());
+        document.querySelectorAll(".submenu-mais a[href='perfil.html']").forEach((link) => link.remove());
     }
+
+    db.auth.onAuthStateChange(() => atualizarCabecalho());
 
     async function inicializarLogin() {
         if (!path.endsWith("login.html")) return;
+
+        document.querySelectorAll(".login-aba").forEach((aba) => {
+            aba.addEventListener("click", () => {
+                document.querySelectorAll(".login-aba").forEach((item) => {
+                    item.classList.remove("ativa");
+                    item.setAttribute("aria-selected", "false");
+                });
+                document.querySelectorAll(".login-painel").forEach((painel) => {
+                    painel.classList.remove("ativo");
+                    painel.hidden = true;
+                });
+                aba.classList.add("ativa");
+                aba.setAttribute("aria-selected", "true");
+                const painel = document.getElementById(aba.dataset.loginPainel);
+                painel.hidden = false;
+                painel.classList.add("ativo");
+            });
+        });
+        if (window.location.hash === "#cadastro") {
+            document.getElementById("aba-cadastro")?.click();
+        }
+
+        document.querySelectorAll("[data-alternar-senha]").forEach((botao) => {
+            botao.addEventListener("click", () => {
+                const campo = document.getElementById(botao.dataset.alternarSenha);
+                if (!campo) return;
+                const mostrar = campo.type === "password";
+                campo.type = mostrar ? "text" : "password";
+                botao.innerHTML = mostrar
+                    ? '<i class="fa-solid fa-eye-slash"></i>'
+                    : '<i class="fa-solid fa-eye"></i>';
+                botao.setAttribute("aria-label", mostrar ? "Ocultar senha" : "Mostrar senha");
+            });
+        });
 
         document.querySelectorAll(".formulario-login").forEach((formulario) => {
             formulario.addEventListener("submit", async (evento) => {
@@ -63,9 +101,16 @@
                 try {
                     if (cadastro) {
                         const nome = String(dados.get("nome") || "").trim();
+                        const confirmarSenha = String(dados.get("confirmar-senha") || "");
                         if (!nome) throw new Error("Informe seu nome.");
+                        if (senha.length < 6) throw new Error("A senha deve ter pelo menos 6 caracteres.");
+                        if (senha !== confirmarSenha) throw new Error("As senhas não coincidem.");
 
-                        const { data, error } = await db.auth.signUp({ email, password: senha });
+                        const { data, error } = await db.auth.signUp({
+                            email,
+                            password: senha,
+                            options: { data: { nome } }
+                        });
                         if (error) throw error;
 
                         if (data.user) {
@@ -73,14 +118,17 @@
                                 id: data.user.id,
                                 nome
                             }, { onConflict: "id" });
-                            if (erroPerfil) throw erroPerfil;
+                            if (erroPerfil && data.session) throw erroPerfil;
                         }
 
                         mostrarMensagem(
                             status,
-                            "Cadastro realizado. Confirme o e-mail, quando solicitado, e entre no site.",
+                            data.session
+                                ? "Cadastro realizado com sucesso. Você já pode acessar sua conta."
+                                : "Cadastro realizado. Verifique seu e-mail para confirmar a conta antes de entrar.",
                             true
                         );
+                        if (data.session) window.location.href = "perfil.html";
                     } else {
                         const { error } = await db.auth.signInWithPassword({ email, password: senha });
                         if (error) throw error;
@@ -101,7 +149,14 @@
                         window.location.href = "perfil.html";
                     }
                 } catch (erro) {
-                    mostrarMensagem(status, erro.message || "Não foi possível concluir a operação.");
+                    const mensagem = erro?.message || "";
+                    if (/invalid login credentials/i.test(mensagem)) {
+                        mostrarMensagem(status, "E-mail ou senha incorretos.");
+                    } else if (/email not confirmed/i.test(mensagem)) {
+                        mostrarMensagem(status, "Confirme seu e-mail antes de entrar. Verifique sua caixa de entrada.");
+                    } else {
+                        mostrarMensagem(status, mensagem || "Não foi possível concluir a operação.");
+                    }
                 } finally {
                     botao.disabled = false;
                 }
@@ -115,6 +170,25 @@
         if (!usuario) {
             window.location.href = "login.html";
             return;
+        }
+
+        const botaoSair = document.getElementById("botao-sair");
+        botaoSair?.addEventListener("click", async () => {
+            botaoSair.disabled = true;
+            await db.auth.signOut();
+            window.location.href = "login.html";
+        });
+
+        const { data: perfilExistente } = await db
+            .from("usuarios")
+            .select("id")
+            .eq("id", usuario.id)
+            .maybeSingle();
+        if (!perfilExistente) {
+            await db.from("usuarios").insert({
+                id: usuario.id,
+                nome: usuario.user_metadata?.nome || usuario.email?.split("@")[0] || "Usuário ReTech"
+            });
         }
 
         document.querySelectorAll(".perfil-aba").forEach((aba) => {
@@ -479,9 +553,7 @@
         let vendedores = {};
         if (idsVendedores.length) {
             const { data: vendedoresData } = await db
-                .from("vendedores_publicos")
-                .select("id,nome,foto_url,local")
-                .in("id", idsVendedores);
+                .rpc("listar_vendedores_publicos", { p_ids: idsVendedores });
             vendedores = Object.fromEntries((vendedoresData || []).map((item) => [item.id, item]));
         }
         grade.replaceChildren(...(data || []).map((anuncio) => criarCard(anuncio, vendedores)));
@@ -521,11 +593,9 @@
         document.getElementById("produto-caracteristicas").innerHTML =
             `<li>Modalidade: ${escapeHtml(nomeTipo[data.tipo_anuncio] || data.tipo_anuncio)}</li>`;
 
-        const { data: vendedor } = await db
-            .from("vendedores_publicos")
-            .select("id,nome,foto_url,local")
-            .eq("id", data.usuario_id)
-            .maybeSingle();
+        const { data: vendedoresVetor } = await db
+            .rpc("listar_vendedores_publicos", { p_ids: [data.usuario_id] });
+        const vendedor = vendedoresVetor?.[0] || null;
         if (vendedor) {
             const informacoesVendedor = document.createElement("p");
             informacoesVendedor.className = "produto-vendedor";

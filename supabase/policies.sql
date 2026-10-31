@@ -41,11 +41,28 @@ using (auth.uid() = id);
 -- vazamento de linhas por filtros externos; a view nao expoe telefone ou sobre.
 drop view if exists public.vendedores_publicos;
 create view public.vendedores_publicos
-with (security_barrier = true, security_invoker = false)
+with (security_barrier = true, security_invoker = true)
 as
 select id, nome, foto_url, local
 from public.usuarios;
 grant select (id, nome, foto_url, local) on public.vendedores_publicos to anon, authenticated;
+
+-- RPC segura: expõe apenas os campos públicos dos vendedores informados.
+-- A função não retorna telefone, sobre, email ou outras colunas privadas.
+drop function if exists public.listar_vendedores_publicos(uuid[]);
+create function public.listar_vendedores_publicos(p_ids uuid[] default null)
+returns table(id uuid, nome text, foto_url text, local text)
+language sql
+stable
+security definer
+set search_path = pg_catalog, public
+as $$
+  select u.id, u.nome, u.foto_url, u.local
+  from public.usuarios u
+  where p_ids is null or u.id = any(p_ids);
+$$;
+revoke all on function public.listar_vendedores_publicos(uuid[]) from public;
+grant execute on function public.listar_vendedores_publicos(uuid[]) to anon, authenticated;
 
 -- Categorias publicas.
 drop policy if exists "categorias sao publicas" on public.categorias;
