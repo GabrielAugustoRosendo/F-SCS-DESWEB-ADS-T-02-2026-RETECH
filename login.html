@@ -64,7 +64,7 @@
         </section>
 
         <section class="container pagina-login" id="cadastro" aria-labelledby="titulo-login">
-            <form class="formulario-login" action="index.html" method="get">
+            <form class="formulario-login" id="formulario-login" action="#" method="post">
                 <h2 id="titulo-login"><i class="fa-solid fa-leaf"></i> Entrar na ReTech</h2>
                 <p>Use seu e-mail e senha para continuar.</p>
 
@@ -82,6 +82,26 @@
                 <button type="submit" class="botao botao-verde">
                     <i class="fa-solid fa-arrow-right-to-bracket"></i> Entrar
                 </button>
+                <p role="status" aria-live="polite"></p>
+            </form>
+
+            <form class="formulario-login" id="formulario-cadastro" action="#" method="post">
+                <h2><i class="fa-solid fa-user-plus"></i> Criar conta</h2>
+                <p>Cadastre-se para anunciar, comprar, doar e trocar.</p>
+
+                <label for="nome-cadastro">Nome completo</label>
+                <input type="text" id="nome-cadastro" name="nome" autocomplete="name" required maxlength="80">
+
+                <label for="email-cadastro">E-mail</label>
+                <input type="email" id="email-cadastro" name="email" autocomplete="email" required maxlength="120">
+
+                <label for="senha-cadastro">Senha</label>
+                <input type="password" id="senha-cadastro" name="senha" autocomplete="new-password" required minlength="6">
+
+                <button type="submit" class="botao botao-verde">
+                    <i class="fa-solid fa-user-plus"></i> Criar conta
+                </button>
+                <p role="status" aria-live="polite"></p>
             </form>
         </section>
     </main>
@@ -92,5 +112,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <script src="js/supabase.js"></script>
     <script src="js/script.js"></script>
+    <script src="js/retech-supabase.js"></script>
 </body>
 </html>

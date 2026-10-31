@@ -188,6 +188,10 @@
             <form action="#" method="post">
                 <label for="email-blog">Seu e-mail</label>
                 <input type="email" id="email-blog" name="email" autocomplete="email" placeholder="nome@email.com" required>
+                <label class="contato-consentimento">
+                    <input type="checkbox" name="consentimento" required>
+                    Concordo em receber conteúdos do ReTech por e-mail.
+                </label>
                 <button type="submit" class="botao botao-verde">
                     <i class="fa-solid fa-envelope" aria-hidden="true"></i> Quero receber
                 </button>
@@ -208,5 +212,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <script src="js/supabase.js"></script>
     <script src="js/script.js"></script>
+    <script src="js/retech-supabase.js"></script>
 </body>
 </html>

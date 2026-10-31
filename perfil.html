@@ -71,14 +71,14 @@
                     <dl class="perfil-dados">
                         <div><dt><i class="fa-solid fa-envelope"></i> E-mail</dt><dd id="email-perfil">ana.silva@email.com</dd></div>
                         <div><dt><i class="fa-solid fa-phone"></i> Telefone</dt><dd id="telefone-perfil">(11) 99999-0000</dd></div>
-                        <div><dt><i class="fa-solid fa-calendar"></i> Membro desde</dt><dd>Janeiro de 2026</dd></div>
+                        <div><dt><i class="fa-solid fa-calendar"></i> Membro desde</dt><dd id="membro-perfil">—</dd></div>
                     </dl>
                 </section>
 
                 <section class="perfil-card perfil-estatisticas" aria-label="Estatísticas">
                     <div><strong id="total-anuncios">0</strong><span>Anúncios ativos</span></div>
                     <div><strong id="total-vendidos">0</strong><span>Itens reutilizados</span></div>
-                    <div><strong id="total-favoritos">3</strong><span>Favoritos</span></div>
+                    <div><strong id="total-favoritos">0</strong><span>Favoritos</span></div>
                 </section>
             </aside>
 
@@ -87,6 +87,8 @@
                     <button type="button" class="perfil-aba ativa" role="tab" aria-selected="true" aria-controls="painel-anuncios" id="aba-anuncios" data-painel="painel-anuncios"><i class="fa-solid fa-box-open"></i> Meus anúncios</button>
                     <button type="button" class="perfil-aba" role="tab" aria-selected="false" aria-controls="painel-favoritos" id="aba-favoritos" data-painel="painel-favoritos"><i class="fa-solid fa-heart"></i> Favoritos</button>
                     <button type="button" class="perfil-aba" role="tab" aria-selected="false" aria-controls="painel-dados" id="aba-dados" data-painel="painel-dados"><i class="fa-solid fa-pen-to-square"></i> Editar dados</button>
+                    <button type="button" class="perfil-aba" role="tab" aria-selected="false" aria-controls="painel-carrinho" id="aba-carrinho" data-painel="painel-carrinho"><i class="fa-solid fa-cart-shopping"></i> Carrinho</button>
+                    <button type="button" class="perfil-aba" role="tab" aria-selected="false" aria-controls="painel-solicitacoes" id="aba-solicitacoes" data-painel="painel-solicitacoes"><i class="fa-solid fa-handshake"></i> Solicitações</button>
                 </div>
 
                 <div class="perfil-painel ativo" id="painel-anuncios" role="tabpanel" aria-labelledby="aba-anuncios">
@@ -100,9 +102,7 @@
                 <div class="perfil-painel" id="painel-favoritos" role="tabpanel" aria-labelledby="aba-favoritos" hidden>
                     <h2>Produtos favoritos</h2>
                     <div class="perfil-favoritos">
-                        <article><img src="imagens/iphone.jpg" alt="iPhone 17 128 GB"><div><span>Celulares</span><h3>iPhone 17 128 GB</h3><strong>R$ 4.699,00</strong></div><a href="produto.html?id=iphone" aria-label="Ver iPhone 17"><i class="fa-solid fa-arrow-right"></i></a></article>
-                        <article><img src="imagens/notebook.jpg" alt="Notebook ASUS E510MA"><div><span>Informática</span><h3>Notebook ASUS E510MA</h3><strong>R$ 1.150,00</strong></div><a href="produto.html?id=notebook" aria-label="Ver Notebook ASUS"><i class="fa-solid fa-arrow-right"></i></a></article>
-                        <article><img src="imagens/switch.jpg" alt="Nintendo Switch 2"><div><span>Games</span><h3>Nintendo Switch 2</h3><strong>R$ 2.800,00</strong></div><a href="produto.html?id=switch" aria-label="Ver Nintendo Switch"><i class="fa-solid fa-arrow-right"></i></a></article>
+                        <p>Os favoritos serão exibidos quando a funcionalidade estiver disponível.</p>
                     </div>
                 </div>
 
@@ -122,6 +122,18 @@
                         <button type="submit" class="botao botao-verde"><i class="fa-solid fa-check"></i> Salvar alterações</button>
                     </form>
                 </div>
+
+                <div class="perfil-painel" id="painel-carrinho" role="tabpanel" aria-labelledby="aba-carrinho" hidden>
+                    <h2>Carrinho</h2>
+                    <div id="perfil-carrinho"></div>
+                    <p id="carrinho-status" role="status" aria-live="polite"></p>
+                </div>
+
+                <div class="perfil-painel" id="painel-solicitacoes" role="tabpanel" aria-labelledby="aba-solicitacoes" hidden>
+                    <h2>Solicitações</h2>
+                    <div id="perfil-solicitacoes"></div>
+                    <p id="solicitacoes-status" role="status" aria-live="polite"></p>
+                </div>
             </section>
         </div>
     </main>
@@ -131,98 +143,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <script src="js/supabase.js"></script>
     <script src="js/script.js"></script>
-    <script>
-        const CHAVE_PERFIL = "retech-perfil";
-        const perfilPadrao = {
-            nome: "Ana Silva",
-            local: "São Paulo, SP",
-            email: "ana.silva@email.com",
-            telefone: "(11) 99999-0000",
-            sobre: "Gosto de reutilizar tecnologia, colaborar com a economia circular e ajudar equipamentos a ganharem uma nova vida.",
-            reutilizados: 0
-        };
-
-        function carregarPerfil() {
-            try {
-                return { ...perfilPadrao, ...(JSON.parse(localStorage.getItem(CHAVE_PERFIL)) || {}) };
-            } catch (erro) {
-                return perfilPadrao;
-            }
-        }
-
-        function aplicarPerfil(perfil) {
-            document.getElementById("nome-perfil").textContent = perfil.nome;
-            document.getElementById("local-perfil").innerHTML = '<i class="fa-solid fa-location-dot"></i> ' + perfil.local;
-            document.getElementById("email-perfil").textContent = perfil.email;
-            document.getElementById("telefone-perfil").textContent = perfil.telefone;
-            document.getElementById("sobre-perfil").textContent = perfil.sobre;
-            document.getElementById("imagem-perfil").alt = "Foto de perfil de " + perfil.nome;
-            document.getElementById("campo-nome").value = perfil.nome;
-            document.getElementById("campo-local").value = perfil.local;
-            document.getElementById("campo-email").value = perfil.email;
-            document.getElementById("campo-telefone").value = perfil.telefone;
-            document.getElementById("campo-sobre").value = perfil.sobre;
-        }
-
-        const perfil = carregarPerfil();
-        aplicarPerfil(perfil);
-
-        document.querySelectorAll(".perfil-aba").forEach((aba) => {
-            aba.addEventListener("click", () => {
-                document.querySelectorAll(".perfil-aba").forEach((item) => {
-                    item.classList.remove("ativa");
-                    item.setAttribute("aria-selected", "false");
-                });
-                document.querySelectorAll(".perfil-painel").forEach((painel) => {
-                    painel.classList.remove("ativo");
-                    painel.hidden = true;
-                });
-                aba.classList.add("ativa");
-                aba.setAttribute("aria-selected", "true");
-                const painel = document.getElementById(aba.dataset.painel);
-                painel.hidden = false;
-                painel.classList.add("ativo");
-            });
-        });
-
-        document.getElementById("formulario-perfil").addEventListener("submit", (evento) => {
-            evento.preventDefault();
-            const novoPerfil = {
-                nome: document.getElementById("campo-nome").value.trim(),
-                local: document.getElementById("campo-local").value.trim(),
-                email: document.getElementById("campo-email").value.trim(),
-                telefone: document.getElementById("campo-telefone").value.trim(),
-                sobre: document.getElementById("campo-sobre").value.trim(),
-                reutilizados: perfil.reutilizados
-            };
-            localStorage.setItem(CHAVE_PERFIL, JSON.stringify(novoPerfil));
-            aplicarPerfil(novoPerfil);
-            const status = document.getElementById("perfil-status");
-            status.textContent = "Dados salvos neste dispositivo.";
-            status.className = "perfil-status-sucesso";
-        });
-
-        let anuncios = [];
-        try {
-            anuncios = JSON.parse(localStorage.getItem("retech-anuncios")) || [];
-        } catch (erro) {
-            anuncios = [];
-        }
-        document.getElementById("total-anuncios").textContent = anuncios.length;
-        document.getElementById("total-vendidos").textContent = perfil.reutilizados;
-
-        const gradeAnuncios = document.getElementById("perfil-anuncios");
-        if (anuncios.length === 0) {
-            gradeAnuncios.innerHTML = '<div class="perfil-vazio"><i class="fa-solid fa-box-open"></i><h3>Você ainda não publicou anúncios</h3><p>Coloque um aparelho em circulação novamente.</p><a href="anunciar.html" class="botao botao-verde">Criar anúncio</a></div>';
-        } else {
-            gradeAnuncios.innerHTML = anuncios.map((anuncio) => `
-                <article class="perfil-anuncio">
-                    <img src="${anuncio.imagem || "imagens/vitrine.jpg"}" alt="${anuncio.nome}">
-                    <div><span>${anuncio.modalidade === "venda" ? "Venda" : anuncio.modalidade === "troca" ? "Troca" : "Doação"}</span><h3>${anuncio.nome}</h3><p>${anuncio.descricao}</p></div>
-                    <a href="produto.html?id=${encodeURIComponent(anuncio.id)}" class="botao botao-contorno">Ver anúncio</a>
-                </article>
-            `).join("");
-        }
-    </script>
+    <script src="js/retech-supabase.js"></script>
 </body>
 </html>
