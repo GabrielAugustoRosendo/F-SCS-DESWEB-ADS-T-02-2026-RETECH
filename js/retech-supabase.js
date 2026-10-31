@@ -48,27 +48,6 @@
     async function inicializarLogin() {
         if (!path.endsWith("login.html")) return;
 
-        document.querySelectorAll(".login-aba").forEach((aba) => {
-            aba.addEventListener("click", () => {
-                document.querySelectorAll(".login-aba").forEach((item) => {
-                    item.classList.remove("ativa");
-                    item.setAttribute("aria-selected", "false");
-                });
-                document.querySelectorAll(".login-painel").forEach((painel) => {
-                    painel.classList.remove("ativo");
-                    painel.hidden = true;
-                });
-                aba.classList.add("ativa");
-                aba.setAttribute("aria-selected", "true");
-                const painel = document.getElementById(aba.dataset.loginPainel);
-                painel.hidden = false;
-                painel.classList.add("ativo");
-            });
-        });
-        if (window.location.hash === "#cadastro") {
-            document.getElementById("aba-cadastro")?.click();
-        }
-
         document.querySelectorAll("[data-alternar-senha]").forEach((botao) => {
             botao.addEventListener("click", () => {
                 const campo = document.getElementById(botao.dataset.alternarSenha);
@@ -132,20 +111,6 @@
                     } else {
                         const { error } = await db.auth.signInWithPassword({ email, password: senha });
                         if (error) throw error;
-                        const { data: sessao } = await db.auth.getUser();
-                        if (sessao?.user) {
-                            const { data: perfilExistente } = await db
-                                .from("usuarios")
-                                .select("id")
-                                .eq("id", sessao.user.id)
-                                .maybeSingle();
-                            if (!perfilExistente) {
-                                await db.from("usuarios").insert({
-                                    id: sessao.user.id,
-                                    nome: email.split("@")[0]
-                                });
-                            }
-                        }
                         window.location.href = "perfil.html";
                     }
                 } catch (erro) {

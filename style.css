@@ -210,12 +210,11 @@ a {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 8px;
+    gap: 10px;
     white-space: nowrap;
 }
 
-.entrar,
-.criar-conta {
+.entrar {
     min-height: 42px;
     display: inline-flex;
     align-items: center;
@@ -231,22 +230,11 @@ a {
     box-shadow: 0 2px 7px rgba(20, 44, 62, 0.06);
 }
 
-.criar-conta {
-    background: #16813d;
-    color: white;
-}
-
 .entrar:hover,
-.criar-conta:hover,
-.entrar.ativo,
-.criar-conta[aria-current="page"] {
+.entrar.ativo {
     border-color: #10652f;
     box-shadow: inset 0 -3px 0 rgba(16, 101, 47, 0.75), 0 4px 10px rgba(22, 129, 61, 0.16);
     transform: translateY(-1px);
-}
-
-.criar-conta:hover {
-    background: #10652f;
 }
 
 .entrar i {
@@ -1402,39 +1390,12 @@ footer {
 }
 
 .pagina-login {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 40px 0 60px;
-}
-
-.login-abas {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    width: 100%;
-    max-width: 460px;
-    overflow: hidden;
-    border: 1px solid #e1e9e3;
-    border-bottom: none;
-    border-radius: 12px 12px 0 0;
-    background: #f7faf8;
-}
-
-.login-aba {
-    min-height: 48px;
-    border: none;
-    border-bottom: 3px solid transparent;
-    background: transparent;
-    color: #667580;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.login-aba.ativa {
-    border-bottom-color: #16813d;
-    color: #16813d;
-    background: #fff;
+    grid-template-columns: repeat(2, minmax(0, 460px));
+    justify-content: center;
+    align-items: start;
+    gap: 24px;
+    padding: 40px 0 60px;
 }
 
 .login-painel {
@@ -1533,6 +1494,12 @@ footer {
     width: 100%;
     border: none;
     cursor: pointer;
+}
+
+@media (max-width: 980px) {
+    .pagina-login {
+        grid-template-columns: minmax(0, 460px);
+    }
 }
 
 /* PÁGINA DE ANUNCIAR */
