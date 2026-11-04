@@ -26,8 +26,7 @@
         return error ? null : data?.user || null;
     }
 
-    async function atualizarCabecalho() {
-        const usuario = await usuarioAtual();
+    function atualizarCabecalho(usuario) {
         document.querySelectorAll(".acoes-cabecalho .entrar").forEach((link) => {
             if (usuario) {
                 link.innerHTML = '<i class="fa-regular fa-user"></i> Perfil';
@@ -43,7 +42,23 @@
         document.querySelectorAll(".submenu-mais a[href='perfil.html']").forEach((link) => link.remove());
     }
 
-    db.auth.onAuthStateChange(() => atualizarCabecalho());
+    // Não chamar métodos Auth dentro do callback: usar a sessão recebida.
+    db.auth.onAuthStateChange((_evento, sessao) => atualizarCabecalho(sessao?.user || null));
+
+    async function garantirPerfil(usuario, nome) {
+        const { data: existente, error: erroConsulta } = await db.from("usuarios")
+            .select("id").eq("id", usuario.id).maybeSingle();
+        if (erroConsulta) throw new Error("Não foi possível consultar o perfil: " + erroConsulta.message);
+        if (existente) return;
+
+        const { data: perfil, error } = await db.from("usuarios").upsert({
+            id: usuario.id,
+            nome: nome || usuario.user_metadata?.nome || usuario.email?.split("@")[0] || "Usuário ReTech"
+        }, { onConflict: "id", ignoreDuplicates: true }).select("id").single();
+        if (error || perfil?.id !== usuario.id) {
+            throw new Error("Não foi possível salvar o perfil: " + (error?.message || "gravação não confirmada"));
+        }
+    }
 
     async function inicializarLogin() {
         if (!path.endsWith("login.html")) return;
@@ -71,6 +86,10 @@
                 const status = formulario.querySelector("[role=status]");
                 const botao = formulario.querySelector('button[type="submit"]');
 
+                if (botao.disabled) return;
+                if (!formulario.reportValidity()) return;
+                status.textContent = "";
+
                 if (!email || !senha) {
                     mostrarMensagem(status, "Preencha e-mail e senha.");
                     return;
@@ -83,37 +102,44 @@
                         const confirmarSenha = String(dados.get("confirmar-senha") || "");
                         if (!nome) throw new Error("Informe seu nome.");
                         if (senha.length < 6) throw new Error("A senha deve ter pelo menos 6 caracteres.");
-                        if (senha !== confirmarSenha) throw new Error("As senhas não coincidem.");                        
-                            const { data, error } = await db.auth.signUp({
+                        if (senha !== confirmarSenha) throw new Error("As senhas não coincidem.");
+                        const { data, error } = await db.auth.signUp({
                             email,
                             password: senha,
                             options: {
-                            data: { nome },
-                            emailRedirectTo: "https://retech-omega.vercel.app/login.html"
+                                data: { nome }
                             }
                         });
 
                         if (error) throw error;
 
-                        if (data.user) {
-                            const { error: erroPerfil } = await db.from("usuarios").upsert({
-                                id: data.user.id,
-                                nome
-                            }, { onConflict: "id" });
-                            if (erroPerfil && data.session) throw erroPerfil;
+                        if (!data?.user?.id || data.user.identities?.length === 0) {
+                            throw new Error("Cadastro não confirmado. Este e-mail pode já estar cadastrado. Tente Entrar com a senha original.");
                         }
 
-                        mostrarMensagem(
-                            status,
-                            data.session
-                                ? "Cadastro realizado com sucesso. Você já pode acessar sua conta."
-                                : "Cadastro realizado. Verifique seu e-mail para confirmar a conta antes de entrar.",
-                            true
-                        );
-                        if (data.session) window.location.href = "perfil.html";
+                        if (!data.session?.user || data.session.user.id !== data.user.id) {
+                            mostrarMensagem(status, "O Supabase não liberou uma sessão. Para testar sem confirmação de e-mail, desative Confirm Email nas configurações de Authentication do projeto e crie uma nova conta.");
+                            return;
+                        }
+
+                        try {
+                            await garantirPerfil(data.user, nome);
+                        } catch (erroPerfil) {
+                            throw new Error("Conta criada em Authentication, mas o perfil não foi confirmado. Tente Entrar para recuperar o perfil. " + erroPerfil.message);
+                        }
+
+                        // Encerra a sessão automática do cadastro para permitir testar Entrar.
+                        const { error: erroSaida } = await db.auth.signOut({ scope: "local" });
+                        if (erroSaida) throw erroSaida;
+                        formulario.reset();
+                        document.getElementById("email").value = email;
+                        document.getElementById("senha").focus();
+                        mostrarMensagem(status, "Conta e perfil criados com sucesso no Supabase. Use o formulário Entrar para testar o acesso.", true);
                     } else {
-                        const { error } = await db.auth.signInWithPassword({ email, password: senha });
+                        const { data, error } = await db.auth.signInWithPassword({ email, password: senha });
                         if (error) throw error;
+                        if (!data?.session || !data?.user?.id) throw new Error("O servidor não confirmou uma sessão de login.");
+                        await garantirPerfil(data.user);
                         window.location.href = "perfil.html";
                     }
                 } catch (erro) {
@@ -121,7 +147,11 @@
                     if (/invalid login credentials/i.test(mensagem)) {
                         mostrarMensagem(status, "E-mail ou senha incorretos.");
                     } else if (/email not confirmed/i.test(mensagem)) {
-                        mostrarMensagem(status, "Confirme seu e-mail antes de entrar. Verifique sua caixa de entrada.");
+                        mostrarMensagem(status, "Esta conta ainda exige confirmação no Supabase. Para o teste sem e-mail, desative Confirm Email nas configurações de Authentication e use uma nova conta.");
+                    } else if (/already registered|user_already_exists|email_exists/i.test(mensagem)) {
+                        mostrarMensagem(status, "Este e-mail já está cadastrado. Use Entrar com a senha original.");
+                    } else if (/fetch|network/i.test(mensagem)) {
+                        mostrarMensagem(status, "Não foi possível conectar ao Supabase. Verifique sua conexão e tente novamente.");
                     } else {
                         mostrarMensagem(status, mensagem || "Não foi possível concluir a operação.");
                     }
@@ -143,20 +173,20 @@
         const botaoSair = document.getElementById("botao-sair");
         botaoSair?.addEventListener("click", async () => {
             botaoSair.disabled = true;
-            await db.auth.signOut();
+            const { error } = await db.auth.signOut({ scope: "local" });
+            if (error) {
+                botaoSair.disabled = false;
+                mostrarMensagem(document.getElementById("perfil-status"), "Não foi possível sair: " + error.message);
+                return;
+            }
             window.location.href = "login.html";
         });
 
-        const { data: perfilExistente } = await db
-            .from("usuarios")
-            .select("id")
-            .eq("id", usuario.id)
-            .maybeSingle();
-        if (!perfilExistente) {
-            await db.from("usuarios").insert({
-                id: usuario.id,
-                nome: usuario.user_metadata?.nome || usuario.email?.split("@")[0] || "Usuário ReTech"
-            });
+        try {
+            await garantirPerfil(usuario);
+        } catch (erro) {
+            mostrarMensagem(document.getElementById("perfil-status"), erro.message);
+            return;
         }
 
         document.querySelectorAll(".perfil-aba").forEach((aba) => {
@@ -757,7 +787,9 @@
         });
     }
 
-    atualizarCabecalho();
+    db.auth.getSession().then(({ data, error }) => {
+        if (!error) atualizarCabecalho(data?.session?.user || null);
+    }).catch(() => {});
     inicializarLogin();
     inicializarPerfil();
     inicializarAnuncio();

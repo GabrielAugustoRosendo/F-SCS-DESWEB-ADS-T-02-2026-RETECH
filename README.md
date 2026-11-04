@@ -1,453 +1,278 @@
-# F-SCS-DESWEB-ADS-T-02-2026-RETECH
-PROJETO DE DEV WEB
+﻿# ReTech
 
-## 1. Identificação do projeto
+**Tecnologia que ganha uma nova vida.**
 
-Nome do projeto: ReTech  
-Tema: Sustentabilidade e Impacto Social  
-Curso: Análise e Desenvolvimento de Sistemas  
-Disciplina: Desenvolvimento Web  
-Professor: Paulo Fratta
-Ano: 2026
+Plataforma web acadêmica para compra, venda, doação e troca de eletrônicos usados. O ReTech incentiva a reutilização de equipamentos, a economia circular e a inclusão digital, combinando anúncios com conteúdos educativos sobre sustentabilidade.
+
+> Projeto em desenvolvimento. As funcionalidades descritas foram identificadas nos arquivos do repositório; a validação completa dos fluxos depende da configuração dos serviços e de testes em ambiente integrado.
+
+## Sumário
+
+- [Identificação e equipe](#identificação-e-equipe)
+- [Contexto e objetivos](#contexto-e-objetivos)
+- [Público-alvo](#público-alvo)
+- [Páginas e funcionalidades](#páginas-e-funcionalidades)
+- [Tecnologias](#tecnologias)
+- [Estrutura do projeto](#estrutura-do-projeto)
+- [Execução local](#execução-local)
+- [Integração de dados](#integração-de-dados)
+- [Identidade visual e qualidade](#identidade-visual-e-qualidade)
+- [Situação atual e próximos passos](#situação-atual-e-próximos-passos)
+- [Validação](#validação)
+- [Documentação e colaboração](#documentação-e-colaboração)
+
+## Identificação e equipe
+
+| Item | Informação |
+| --- | --- |
+| Projeto | ReTech |
+| Tema | Sustentabilidade e Impacto Social |
+| Curso | Análise e Desenvolvimento de Sistemas |
+| Disciplina | Desenvolvimento Web |
+| Professor | Paulo Fratta |
+| Ano | 2026 |
+| Repositório | F-SCS-DESWEB-ADS-T-02-2026-RETECH |
 
 ### Integrantes
-- André
-- Gabriel Augusto
-- Pedro Victor
 
----
+- André Carvalho.
+- Gabriel Augusto.
+- Pedro Victor.
 
-## 2. Contexto e justificativa
+A página [Sobre o ReTech](sobre.html) apresenta André com atuação em formulários e funcionalidades, Gabriel em desenvolvimento e navegação e Pedro em conteúdo e sustentabilidade. As atividades podem ser ajustadas pela equipe durante o desenvolvimento.
 
-O descarte inadequado de aparelhos eletrônicos é um problema ambiental que contribui para o aumento do lixo eletrônico.
-Muitos celulares, computadores, videogames e outros dispositivos são descartados mesmo quando ainda podem ser utilizados.
-Pensando nisso, o ReTech foi criado com a proposta de oferecer uma plataforma para compra, venda, doação e troca de eletrônicos usados.
-O projeto busca incentivar a reutilização desses equipamentos, reduzir o descarte desnecessário e facilitar o acesso à tecnologia.
-Além da sustentabilidade, o ReTech também valoriza a inclusão digital e a acessibilidade para pessoas com deficiência.
+## Contexto e objetivos
 
-## 3. Objetivos
+Eletrônicos que ainda podem ser utilizados são descartados ou permanecem sem uso, enquanto outras pessoas precisam de equipamentos acessíveis para estudar, trabalhar e se comunicar. O ReTech aproxima esses públicos e incentiva o reaproveitamento antes do descarte.
 
-### Objetivo geral
-
-Desenvolver um site acessível e responsivo que incentive a reutilização de equipamentos eletrônicos, promovendo a sustentabilidade e a economia circular.
+O objetivo geral é desenvolver um site acessível e responsivo que promova a reutilização de eletrônicos e o consumo consciente.
 
 ### Objetivos específicos
 
-- Desenvolver 10 páginas HTML interligadas.
-- Criar um catálogo com pelo menos 4 produtos.
-- Permitir a divulgação de produtos para venda, doação e troca.
-- Criar um formulário de contato com validação.
-- Disponibilizar conteúdos educativos sobre sustentabilidade.
-- Adaptar o site para computadores, tablets e celulares.
-- Aplicar recursos de acessibilidade.
-
-## 4. Público-alvo
-
-O ReTech é destinado a pessoas interessadas em adquirir, vender, doar ou trocar equipamentos eletrônicos usados.
-
-### Principais públicos
-
-- Consumidores: pessoas que procuram eletrônicos por preços mais acessíveis.
-- Vendedores: usuários que desejam anunciar equipamentos que não utilizam mais.
-- Doadores: pessoas interessadas em doar aparelhos eletrônicos.
-- Estudantes: usuários que precisam de equipamentos para estudar.
-- Pessoas com deficiência: público prioritário, com necessidades de navegação acessível.
-- Empresas e iniciativas sociais: organizações interessadas em reutilização, doações e consumo consciente.
-
-A plataforma será desenvolvida para utilização em celulares, tablets e computadores.
-
----
-
-## 5. Escopo funcional
-
-O projeto contará com 10 páginas principais.
-
-### 1. Página inicial
-Arquivo: `index.html`
-
-Apresentação do ReTech, com banner principal, categorias, produtos em destaque e informações sobre sustentabilidade.
-
-Status: Implementada, com melhorias previstas.
-
-### 2. Catálogo de produtos
-Arquivo: `catalogo.html`
-
-Apresentação dos eletrônicos disponíveis para compra.
-
-Funcionalidades previstas:
-- Listagem de produtos.
-- Pesquisa por nome.
-- Filtros por categoria.
-- Informações sobre preço e conservação.
-
-Status: Implementada, com melhorias previstas.
-
-### 3. Detalhes do produto
-Arquivo: `produto.html`
-
-Página com informações específicas de cada eletrônico.
-
-Conteúdo:
-- Nome e imagens.
-- Descrição.
-- Preço.
-- Características técnicas.
-- Estado de conservação.
-
-Status: Implementada, com melhorias previstas.
-
-### 4. Anunciar produto
-Arquivo: `anunciar.html`
-
-Página destinada à publicação de anúncios.
-
-Funcionalidades previstas:
-- Nome do produto.
-- Categoria.
-- Descrição.
-- Estado de conservação.
-- Preço.
-- Imagem.
-- Modalidade de venda, doação ou troca.
-
-Status: Implementada, com melhorias previstas.
-
-### 5. Login e cadastro
-Arquivo: `login.html`
-
-Página destinada à autenticação dos usuários.
-
-Funcionalidades previstas:
-- Criação de conta.
-- Login com e-mail e senha.
-- Validação dos campos.
-- Acesso ao perfil.
-
-Status: Implementada, com melhorias previstas.
-
-### 6. Doações e trocas
-Arquivo: `doar-trocar.html`
-
-Página dedicada à reutilização de eletrônicos por meio de doações e trocas.
-
-Funcionalidades previstas:
-- Listagem de produtos.
-- Filtros por modalidade.
-- Informações dos anúncios.
-- Contato com anunciantes.
-
-Status: Implementada, com melhorias previstas.
-
-### 7. Meu perfil
-Arquivo: `perfil.html`
-
-Área pessoal dos usuários.
-
-Funcionalidades previstas:
-- Visualização dos dados pessoais.
-- Histórico de anúncios.
-- Produtos favoritos.
-- Gerenciamento dos anúncios.
-- Edição do perfil.
-
-Status: Implementada, com melhorias previstas.
-
-### 8. Sobre o ReTech
-Arquivo: `sobre.html`
-
-Página institucional com informações sobre o projeto.
-
-Conteúdo:
-- Visão e valores.
-- Sustentabilidade.
-- Economia circular.
-- Impacto social.
-
-Status: Planejada.
-
-### 9. Blog e sustentabilidade
-Arquivo: `blog.html`
-
-Página educativa com conteúdos relacionados à tecnologia e ao meio ambiente.
-
-Conteúdo previsto:
-- Notícias e artigos.
-- Dicas de reutilização.
-- Descarte correto de eletrônicos.
-- Reciclagem.
-- Consumo consciente.
-- Vídeos, áudios e conteúdos incorporados.
-
-Status: Planejada.
-
-### 10. Contato e ajuda
-Arquivo: `contato.html`
-
-Página destinada à comunicação com a equipe.
-
-Funcionalidades previstas:
-- Formulário de contato.
-- Campos obrigatórios.
-- Validação HTML5.
-- Perguntas frequentes.
-- Informações da equipe.
-- Orientações de suporte.
-
-Status: Planejada.
-
----
-
-## 6. Escopo não funcional
-
-### Acessibilidade
-
-O projeto busca atender às necessidades de pessoas com deficiência, utilizando:
-
-- Textos alternativos nas imagens.
-- Contraste adequado.
-- Navegação por teclado.
-- Estrutura semântica HTML5.
-- Identificação dos campos dos formulários.
-- Compatibilidade com leitores de tela.
-- Atributos ARIA quando necessários.
-- Filtros para daltonismo.
-
-### Responsividade
-
-O layout deverá funcionar em:
-- Computadores.
-- Tablets.
-- Smartphones.
-
-### Sustentabilidade
-
-- Incentivo à reutilização de eletrônicos.
-- Conteúdos educativos.
-- Otimização das imagens.
-- Orientações sobre descarte correto.
-
-### Desempenho e SEO
-
-- Código organizado.
-- Imagens otimizadas.
-- Títulos e descrições adequados.
-- Estrutura de títulos organizada.
-
-### Segurança
-
-Na versão com back-end, estão previstos:
-- HTTPS.
-- Proteção de senhas.
-- Validação de formulários.
-- Proteção dos dados pessoais.
-- Adequação à LGPD.
-
----
-
-## 7. Mapa do site
-
-    ReTech
-    │
-    ├── Início
-    │
-    ├── Catálogo de produtos
-    │   └── Detalhes do produto
-    │
-    ├── Anunciar produto
-    │
-    ├── Login e cadastro
-    │   └── Meu perfil
-    │
-    ├── Doações e trocas
-    │
-    ├── Sobre o ReTech
-    │
-    ├── Blog e sustentabilidade
-    │
-    └── Contato e ajuda
-
-Todas as páginas deverão possuir navegação para as demais áreas principais do site.
-
-## 8. Conteúdo e identidade visual
-
-O ReTech utiliza uma identidade visual inspirada na sustentabilidade e na tecnologia.
-
-### Cores principais
-
-- Verde: `#16813D`
-- Azul-escuro: `#142C3E`
-- Verde-claro: `#EEF7EE`
-- Branco: `#FFFFFF`
-
-### Tipografia
-
-A fonte principal utilizada é Arial, com estilo simples e legível.
-
-### Logotipo
-
-A identidade do ReTech utiliza elementos relacionados à reciclagem e à reutilização de tecnologia.
-
-### Mensagem principal
-
-"Tecnologia que ganha uma nova vida."
-
-As imagens utilizadas no projeto deverão possuir autorização de uso ou identificação de suas fontes.
-
----
-
-## 9. Tecnologias e ferramentas
-
-### Front-end
-- HTML5
-- CSS3
-- JavaScript
-
-### Back-end planejado
-- PHP
-- MySQL
-- MySQLi
-
-### Ferramentas
-- Visual Studio Code
-- Git
-- GitHub
-- DevTools
-- W3C Validator
-- Lighthouse
+- Manter dez páginas HTML interligadas.
+- Oferecer catálogo com pelo menos quatro produtos, conforme a meta do escopo acadêmico.
+- Permitir anúncios de venda, doação e troca.
+- Facilitar busca, filtragem e consulta aos equipamentos.
+- Disponibilizar cadastro, login e área pessoal.
+- Oferecer contato com validação de formulário.
+- Publicar conteúdos educativos sobre sustentabilidade e descarte correto.
+- Atender computadores, tablets e smartphones, com recursos de acessibilidade.
+
+## Público-alvo
+
+- Pessoas que procuram eletrônicos usados por preços mais acessíveis.
+- Vendedores que desejam divulgar equipamentos sem uso.
+- Doadores e pessoas interessadas em trocas.
+- Estudantes, famílias e comunidades que precisam de acesso à tecnologia.
+- Pessoas com deficiência que necessitam de navegação acessível.
+- Empresas e iniciativas sociais interessadas em reutilização e consumo consciente.
+
+## Páginas e funcionalidades
+
+As dez páginas principais já estão presentes no repositório.
+
+| Página | Arquivo | Recursos presentes no código |
+| --- | --- | --- |
+| Início | [index.html](index.html) | Apresentação, categorias, destaques e chamadas para reutilização. |
+| Catálogo | [catalogo.html](catalogo.html) | Listagem, busca, filtros por categoria e conservação e ordenação. |
+| Detalhes do produto | [produto.html](produto.html) | Imagem, descrição, preço, condição, modalidade e informações públicas do anunciante. |
+| Anunciar | [anunciar.html](anunciar.html) | Formulário de publicação com categoria, descrição, condição, modalidade, preço e imagem. |
+| Login e cadastro | [login.html](login.html) | Criação de conta, entrada com e-mail e senha e tratamento de confirmação de e-mail. |
+| Doações e trocas | [doar-trocar.html](doar-trocar.html) | Listagem e filtros por modalidade e categoria. |
+| Meu perfil | [perfil.html](perfil.html) | Consulta e edição de dados, anúncios próprios, solicitações, carrinho e saída da conta. |
+| Sobre | [sobre.html](sobre.html) | Missão, visão, valores, equipe, economia circular e impacto social pretendido. |
+| Blog | [blog.html](blog.html) | Conteúdo educativo, consulta de artigos publicados e inscrição em newsletter com consentimento. |
+| Contato e ajuda | [contato.html](contato.html) | Formulário validado, consentimento e informações de suporte. |
+
+### Fluxos de interação
+
+- Usuários autenticados podem publicar anúncios e editar seus dados pessoais.
+- Produtos de venda podem ser adicionados ao carrinho, consultados no perfil e removidos.
+- Doações e trocas permitem enviar solicitações acompanhadas de mensagem ao anunciante.
+- O perfil contém ações para cancelar solicitações pendentes ou aceitá-las e recusá-las, conforme o papel do usuário.
+- Contato e newsletter possuem integração para registrar os dados enviados.
+
+### Limites atuais
+
+- A finalização de compra está explicitamente desabilitada no carrinho, aguardando validação segura de pedidos no servidor.
+- Pagamento, entrega e conclusão integral de negociações não estão documentados como fluxos completos.
+- Favoritos aparecem na interface, mas a integração define seu contador como zero; a persistência permanece pendente.
+- O registro de mensagens nas solicitações não equivale a um chat completo.
+- A presença da interface e da integração não garante que os serviços remotos estejam configurados ou que todos os cenários tenham sido testados.
+
+## Tecnologias
+
+| Tecnologia | Uso |
+| --- | --- |
+| HTML5 | Estrutura semântica, páginas e formulários. |
+| CSS3 | Layout, identidade visual e responsividade. |
+| JavaScript puro | Interações, filtros, validações e integração de dados. |
+| Supabase Auth | Cadastro, login, sessão e saída da conta. |
+| Supabase / PostgreSQL | Persistência e consulta de dados da aplicação. |
+| Supabase Storage | Armazenamento de imagens de anúncios. |
+| `supabase-js` versão 2 | Cliente carregado por CDN. |
+| Font Awesome | Ícones disponibilizados localmente em `vendor/`. |
+| Git e GitHub | Versionamento e colaboração. |
+
+O front-end atual não possui `package.json` nem etapa de compilação. Visual Studio Code e DevTools apoiam o desenvolvimento; W3C Validator e Lighthouse são ferramentas previstas para validação.
 
 ### Hospedagem
 
-A hospedagem prevista para o projeto é a Railway.
+A hospedagem definitiva deve ser confirmada pela equipe. O cadastro atual permanece na página de login para permitir testar o botão Entrar após a criação da conta.
 
-Site: https://railway.com/
+PHP, MySQL, MySQLi e Railway faziam parte do planejamento anterior. A integração presente no repositório utiliza Supabase; a configuração definitiva de hospedagem deve ser documentada pela equipe.
 
----
+## Estrutura do projeto
 
-## 10. Cronograma e divisão de tarefas
+```text
+ReTech/
+├── index.html
+├── catalogo.html
+├── produto.html
+├── anunciar.html
+├── login.html
+├── doar-trocar.html
+├── perfil.html
+├── sobre.html
+├── blog.html
+├── contato.html
+├── style.css
+├── js/
+│   ├── script.js
+│   ├── supabase.js
+│   └── retech-supabase.js
+├── supabase/
+│   ├── policies.sql
+│   └── create-profile-trigger.sql
+├── imagens/
+├── vendor/
+│   └── fontawesome/
+├── README.md
+├── contexto.md
+└── rules.md
+```
 
-O desenvolvimento será dividido em etapas:
+- `js/script.js`: menus, filtros e interações gerais.
+- `js/supabase.js`: inicialização do cliente do Supabase.
+- `js/retech-supabase.js`: autenticação, perfil, anúncios, carrinho, solicitações, blog e contato.
+- `supabase/`: scripts de apoio à configuração do banco e das permissões.
+- `style.css`: estilos compartilhados pelas páginas.
 
-| Etapa | Atividade |
-|---|---|
-| 1 | Planejamento e definição do tema |
-| 2 | Criação da identidade visual |
-| 3 | Desenvolvimento da Home |
-| 4 | Criação do catálogo e detalhes |
-| 5 | Desenvolvimento das demais páginas |
-| 6 | Integração e navegação |
-| 7 | Testes de acessibilidade |
-| 8 | Documentação |
-| 9 | Hospedagem e apresentação |
+## Execução local
 
-### Divisão da equipe
+1. Clone ou abra este repositório no Visual Studio Code.
+2. Sirva a pasta raiz por um servidor HTTP local, por exemplo com a extensão Live Server do VS Code.
+3. Abra `index.html` pelo endereço HTTP fornecido pelo servidor.
+4. Mantenha conexão com a internet para carregar o cliente por CDN e acessar os serviços do Supabase.
+5. Para testar cadastro, login, anúncios e demais operações de dados, confira a configuração descrita abaixo.
 
-André
-- Desenvolvimento das páginas iniciais.
-- Organização da navegação.
-- Apoio na integração.
+Não é necessário executar `npm install` ou um comando de build na estrutura atual.
 
-Gabriel
-- Desenvolvimento de formulários.
-- Páginas de anúncios e cadastro.
-- Apoio na implementação das funcionalidades.
+## Integração de dados
 
-Pedro Victor
-- Conteúdos sobre sustentabilidade.
-- Desenvolvimento das páginas informativas.
-- Revisão dos textos e imagens.
+A inicialização está em [js/supabase.js](js/supabase.js), e os fluxos estão em [js/retech-supabase.js](js/retech-supabase.js).
 
-A divisão poderá ser ajustada durante o desenvolvimento.
+Para utilizar outro ambiente, configurar a URL e a chave publicável correspondentes no cliente. Chaves administrativas, como `service_role`, não devem ser inseridas no front-end.
 
----
+### Dependências do ambiente
 
-## 11. Riscos e restrições
+A integração consulta ou grava dados em `usuarios`, `anuncios`, `categorias`, `carrinho`, `solicitacoes`, `mensagens`, `artigos`, `newsletter` e `contatos`. Também utiliza a função `listar_vendedores_publicos` e o bucket de imagens `anuncios`.
 
-Os principais desafios previstos são:
+Os scripts disponíveis têm finalidades específicas:
 
-- Integração entre os arquivos.
-- Aprendizado de novas tecnologias.
-- Desenvolvimento de funcionalidades dinâmicas.
-- Implementação da acessibilidade.
-- Adaptação para diferentes telas.
-- Hospedagem e publicação do projeto.
+| Script | Finalidade e pré-requisitos |
+| --- | --- |
+| [policies.sql](supabase/policies.sql) | Configura políticas RLS, permissões e regras de Storage para um banco existente. Depende de tabelas, colunas e buckets previamente criados; também referencia `pedidos` e `itens_pedido`. |
+| [create-profile-trigger.sql](supabase/create-profile-trigger.sql) | Define a criação automática do perfil a partir de uma nova conta, conforme a necessidade indicada no próprio script. Depende da tabela `usuarios`. |
 
-Para reduzir esses riscos, o desenvolvimento será realizado por etapas, com testes e revisões.
+O repositório não contém um script completo de criação do esquema e dos buckets. Portanto, esses dois arquivos não são suficientes para reproduzir o ambiente do zero. Revisar os scripts e sua compatibilidade com o banco de destino antes de aplicá-los; esta documentação não implica sua execução.
 
----
+Para testar novas contas sem confirmação de e-mail, desativar **Confirm Email** nas configurações de Authentication do Supabase. Essa exigência é controlada pelo serviço e não pode ser desabilitada apenas no HTML ou no JavaScript do navegador. Após criar a conta e salvar o perfil, o fluxo encerra a sessão automática e mantém o e-mail preenchido no formulário Entrar para testar o login separadamente.
 
-## 12. Documentação
+## Identidade visual e qualidade
 
-A pasta `docs/` deverá conter:
+### Identidade visual
 
-- Escopo do projeto.
-- Diário de bordo.
-- Orçamento de hospedagem e domínio.
-- Evidências de testes.
-- Registros de acessibilidade.
-- Informações sobre o desenvolvimento.
+- **Fonte:** Arial, com alternativa `sans-serif`.
+- **Verde:** `#16813D`.
+- **Azul-escuro:** `#142C3E`.
+- **Verde-claro:** `#EEF7EE`.
+- **Branco:** `#FFFFFF`.
+- **Mensagem:** “Tecnologia que ganha uma nova vida.”
 
-### Orçamento de hospedagem e domínio
+A comunicação deve manter o foco em reutilização, sustentabilidade e inclusão digital. Imagens devem possuir autorização de uso ou identificação das fontes, quando aplicável.
 
-Será elaborado um comparativo contendo:
-- 3 opções de hospedagem, incluindo Railway.
-- 3 opções de domínio.
-- Tabela de preços e recursos.
-- Justificativa da escolha.
+### Requisitos de qualidade
 
----
+- HTML semântico, rótulos nos formulários, textos alternativos e atributos ARIA quando necessários.
+- Navegação por teclado, foco visível e contraste legível.
+- Layout adaptável a computadores, tablets e smartphones.
+- Validação de entradas, mensagens claras e tratamento de estados vazios e erros.
+- Controle de acesso aos dados no serviço, além das verificações de interface.
+- Proteção de dados pessoais e consentimento nos fluxos aplicáveis.
+- Imagens otimizadas, títulos e descrições coerentes e código organizado.
 
-## 13. Estrutura planejada de arquivos
+Esses itens são requisitos a verificar. Não há declaração de conformidade integral de acessibilidade ou LGPD, nem resultados medidos de desempenho neste README.
 
-    ReTech/
-    │
-    ├── index.html
-    ├── produtos.html
-    ├── produto.html
-    ├── anunciar.html
-    ├── login.html
-    ├── doar-trocar.html
-    ├── perfil.html
-    ├── sobre.html
-    ├── blog.html
-    ├── contato.html
-    │
-    ├── css/
-    │   └── style.css
-    │
-    ├── js/
-    │   └── script.js
-    │
-    ├── img/
-    │
-    ├── assets/
-    │
-    ├── docs/
-    │
-    └── README.md
+## Situação atual e próximos passos
 
----
+### Presente no repositório
 
-## 14. Situação do projeto
+- [x] Dez páginas HTML principais.
+- [x] Identidade visual e estilos com regras responsivas.
+- [x] Busca, filtros e menus em JavaScript.
+- [x] Integração de autenticação, perfil e publicação de anúncios.
+- [x] Integração de carrinho e solicitações de doação e troca.
+- [x] Páginas institucionais, blog e contato.
+- [x] Documentos de contexto e regras de desenvolvimento.
 
-### Concluído
-- [x] Definição do tema.
-- [x] Planejamento inicial.
-- [x] Identidade visual.
-- [x] Página inicial.
-- [x] Catálogo de produtos.
-- [x] Detalhes do produto.
+Essas marcações indicam a existência dos arquivos e do código, sem substituir a validação funcional.
 
-### Em desenvolvimento
-- [ ] Página de anúncios.
-- [ ] Login e cadastro.
-- [ ] Doações e trocas.
-- [ ] Meu perfil.
-- [ ] Sobre o ReTech.
-- [ ] Blog e sustentabilidade.
-- [ ] Contato e ajuda.
-- [ ] Recursos multimídia.
-- [ ] Testes e validações.
-- [ ] Documentação final.
-- [ ] Hospedagem.
+### Pendências e melhorias
 
----
+- [ ] Validar os fluxos integrados e as permissões com diferentes usuários.
+- [ ] Completar a documentação de provisionamento do banco e do armazenamento.
+- [ ] Implementar favoritos com persistência.
+- [ ] Ampliar edição e encerramento dos anúncios e confirmação de negociações concluídas.
+- [ ] Definir e implementar a finalização segura de pedidos, caso permaneça no escopo.
+- [ ] Evoluir a comunicação entre usuários.
+- [ ] Implementar e validar filtros de daltonismo previstos no escopo inicial.
+- [ ] Ampliar conteúdos multimídia com acessibilidade.
+- [ ] Registrar testes de responsividade, acessibilidade, desempenho e SEO.
+- [ ] Consolidar a configuração e a documentação de publicação.
+- [ ] Organizar as evidências e a documentação acadêmica complementar.
+
+## Validação
+
+O teste de regressão em `tests/auth.test.mjs` cobre 12 cenários simulados de cadastro, login, perfil e atualização do cabeçalho. Com Node.js instalado, executar:
+
+```sh
+node tests/auth.test.mjs
+```
+
+Esses testes usam respostas simuladas e não substituem a validação com o Supabase. Não há `package.json` nem instalação de dependências necessária para esse teste. O cadastro verifica a sessão e a gravação do perfil antes de exibir sucesso; o login tenta recuperar perfis ausentes e apresenta falhas de persistência sem redirecionar.
+
+Para validar uma entrega:
+
+1. Conferir links, recursos e navegação entre as dez páginas.
+2. Verificar busca, filtros, ordenação e ausência de resultados.
+3. Testar cadastro, confirmação de e-mail, login, edição de perfil e saída da conta.
+4. Testar publicação e upload, carrinho e solicitações em ambiente apropriado.
+5. Conferir o acesso como visitante, usuário autenticado e usuário sem permissão sobre registros de outra pessoa.
+6. Verificar formulários com entradas válidas e inválidas e respostas de falha do serviço.
+7. Avaliar telas de celular, tablet e computador e navegação por teclado.
+8. Registrar verificações com W3C Validator, Lighthouse e leitor de tela quando realizadas.
+
+As métricas propostas estão no [contexto.md](contexto.md#11-métricas). Anúncios publicados não devem ser contabilizados como equipamentos efetivamente reutilizados sem confirmação da conclusão.
+
+## Documentação e colaboração
+
+| Documento | Conteúdo |
+| --- | --- |
+| [README.md](README.md) | Apresentação, recursos atuais, execução e situação do projeto. |
+| [contexto.md](contexto.md) | Problema, público, objetivos, escopo, requisitos e métricas propostas. |
+| [rules.md](rules.md) | Convenções, regras de implementação, exemplos e orientações para pessoas colaboradoras e IA. |
+
+Antes de contribuir, consultar as regras e os arquivos relacionados à alteração. Preservar os padrões existentes, manter mudanças focadas e informar o que foi verificado.
+
+A pasta `docs/` permanece prevista para diário de bordo, evidências de testes, registros de acessibilidade e orçamento de hospedagem e domínio. O planejamento acadêmico inclui comparação de três opções de hospedagem, incluindo Railway, e três opções de domínio, com justificativa da escolha; isso não altera a stack atual.
