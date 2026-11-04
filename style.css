@@ -28,9 +28,9 @@ body > footer {
 
 .perfil-aviso {
     position: fixed;
-    top: 140px;
+    top: var(--perfil-aviso-top, min(432px, 45dvh));
     right: 20px;
-    width: 260px;
+    width: min(260px, calc(100vw - 40px));
     padding: 20px;
     border: 1px solid #cdded3;
     border-left: 4px solid #16813d;
@@ -41,7 +41,7 @@ body > footer {
     z-index: 10;
     font-size: 14px;
     line-height: 1.5;
-    max-height: calc(100dvh - 160px);
+    max-height: calc(100dvh - var(--perfil-aviso-top, min(432px, 45dvh)) - 20px);
     overflow-y: auto;
 }
 
@@ -61,24 +61,6 @@ body > footer {
 
 .perfil-aviso .botao {
     margin-top: 12px;
-}
-
-.perfil-com-pendencias > main {
-    padding-right: 300px;
-}
-
-@media (max-width: 1100px) {
-    .perfil-com-pendencias > main {
-        padding-right: 0;
-    }
-
-    .perfil-aviso {
-        position: sticky;
-        top: 12px;
-        width: 90%;
-        margin: 16px 5% 16px auto;
-        max-height: 45dvh;
-    }
 }
 
 a {

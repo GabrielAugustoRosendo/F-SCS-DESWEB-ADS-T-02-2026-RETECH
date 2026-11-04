@@ -88,7 +88,7 @@ As dez páginas principais já estão presentes no repositório.
 
 - Usuários autenticados podem publicar anúncios e editar seus dados pessoais.
 - Produtos de venda podem ser adicionados ao carrinho, consultados no perfil e removidos.
-- Doações e trocas permitem enviar solicitações acompanhadas de mensagem ao anunciante.
+- Doações e trocas enviam solicitação e mensagem na mesma transação, pela função `criar_solicitacao_com_mensagem`. Reenvios para o mesmo anúncio reutilizam uma solicitação ainda pendente.
 - O perfil contém ações para cancelar solicitações pendentes ou aceitá-las e recusá-las, conforme o papel do usuário.
 - Contato e newsletter possuem integração para registrar os dados enviados.
 
@@ -176,7 +176,11 @@ Para utilizar outro ambiente, configurar a URL e a chave publicável corresponde
 
 ### Dependências do ambiente
 
-A integração consulta ou grava dados em `usuarios`, `anuncios`, `categorias`, `carrinho`, `solicitacoes`, `mensagens`, `artigos`, `newsletter` e `contatos`. Também utiliza a função `listar_vendedores_publicos` e o bucket de imagens `anuncios`.
+A integração consulta ou grava dados em `usuarios`, `anuncios`, `categorias`, `carrinho`, `solicitacoes`, `mensagens`, `artigos`, `newsletter` e `contatos`. Também utiliza as funções `listar_vendedores_publicos` e `criar_solicitacao_com_mensagem` e o bucket de imagens `anuncios`.
+
+A consulta de vendedores retorna somente ID, nome, foto e localidade de quem possui anúncio ativo. O acesso interno fica no esquema `retech_private`, que deve permanecer fora dos esquemas expostos na Data API. A função de solicitações exige autenticação, mantém a aplicação de RLS e desfaz ambas as inserções se houver falha. As definições estão em `supabase/policies.sql`.
+
+O envio de imagens aceita JPEG, PNG e WebP de até 5 MB. Se a publicação falhar, o cliente consulta se o anúncio foi gravado antes de tentar remover a imagem enviada, evitando apagar imagens de publicações concluídas cuja resposta tenha sido interrompida.
 
 Os scripts disponíveis têm finalidades específicas:
 
@@ -244,7 +248,7 @@ Essas marcações indicam a existência dos arquivos e do código, sem substitui
 
 ## Validação
 
-O teste de regressão em `tests/auth.test.mjs` cobre 12 cenários simulados de cadastro, login, perfil e atualização do cabeçalho. Com Node.js instalado, executar:
+O teste de regressão em `tests/auth.test.mjs` cobre 33 cenários simulados de cadastro, login, perfil, cabeçalho, filtros, contato, newsletter, solicitações e upload. Com Node.js instalado, executar:
 
 ```sh
 node tests/auth.test.mjs

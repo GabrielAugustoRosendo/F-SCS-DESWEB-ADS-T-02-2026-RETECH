@@ -104,7 +104,8 @@
                 </div>
 
                 <label for="imagem-produto">Imagem do produto</label>
-                <input type="file" id="imagem-produto" name="imagem" accept="image/*" required>
+                <input type="file" id="imagem-produto" name="imagem" accept="image/jpeg,image/png,image/webp" aria-describedby="imagem-ajuda" required>
+                <p id="imagem-ajuda" class="ajuda-campo">JPEG, PNG ou WebP, até 5 MB.</p>
 
                 <button type="submit" class="botao botao-verde">
                     <i class="fa-solid fa-arrow-up-from-bracket"></i> Publicar anúncio

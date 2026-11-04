@@ -21,6 +21,43 @@
         elemento.className = sucesso ? "perfil-status-sucesso" : "perfil-status-erro";
     }
 
+    async function executarAcao(botao, status, acao) {
+        if (botao.disabled) return;
+        botao.disabled = true;
+        if (status) status.textContent = "";
+        try {
+            await acao();
+        } catch (erro) {
+            const mensagem = /fetch|network/i.test(erro?.message || "")
+                ? "Falha de conexão. Verifique sua conexão e tente novamente."
+                : erro?.message || "Não foi possível concluir. Tente novamente.";
+            if (status) status.textContent = mensagem;
+        } finally {
+            botao.disabled = false;
+        }
+    }
+
+    function statusDaAcao(container) {
+        let status = container.querySelector("[data-status-acao], [role=status]");
+        if (!status) {
+            status = document.createElement("p");
+            status.dataset.statusAcao = "";
+            status.setAttribute("role", "status");
+            status.setAttribute("aria-live", "polite");
+            container.appendChild(status);
+        }
+        return status;
+    }
+
+    function iniciar(acao) {
+        acao().catch((erro) => {
+            const grade = document.getElementById("grade-catalogo");
+            if (grade) grade.textContent = "Não foi possível carregar os anúncios. Atualize a página para tentar novamente.";
+            const main = document.querySelector("main");
+            if (main) statusDaAcao(main).textContent = erro?.message || "Não foi possível carregar os dados. Tente novamente.";
+        });
+    }
+
     async function usuarioAtual() {
         const { data, error } = await db.auth.getUser();
         return error ? null : data?.user || null;
@@ -172,14 +209,11 @@
 
         const botaoSair = document.getElementById("botao-sair");
         botaoSair?.addEventListener("click", async () => {
-            botaoSair.disabled = true;
-            const { error } = await db.auth.signOut({ scope: "local" });
-            if (error) {
-                botaoSair.disabled = false;
-                mostrarMensagem(document.getElementById("perfil-status"), "Não foi possível sair: " + error.message);
-                return;
-            }
-            window.location.href = "login.html";
+            await executarAcao(botaoSair, statusDaAcao(document.querySelector("main")), async () => {
+                const { error } = await db.auth.signOut({ scope: "local" });
+                if (error) throw error;
+                window.location.href = "login.html";
+            });
         });
 
         try {
@@ -214,8 +248,7 @@
             .maybeSingle();
 
         if (erroPerfil) {
-            const status = document.getElementById("perfil-status");
-            if (status) status.textContent = erroPerfil.message;
+            throw new Error("Não foi possível carregar o perfil: " + erroPerfil.message);
         }
 
         const dados = perfil || { nome: usuario.email };
@@ -224,6 +257,15 @@
             { chave: "telefone", rotulo: "Telefone", campo: "campo-telefone" },
             { chave: "sobre", rotulo: "Sobre mim", campo: "campo-sobre" }
         ];
+        function posicionarAvisoPerfil() {
+            const aviso = document.getElementById("perfil-aviso");
+            const abas = document.querySelector(".perfil-abas");
+            if (!aviso || !abas) return;
+            // O aviso flutua sobre a página, sem reservar espaço no conteúdo.
+            const topo = Math.max(20, Math.min(abas.getBoundingClientRect().bottom + 16, window.innerHeight - 200));
+            aviso.style.setProperty("--perfil-aviso-top", `${topo}px`);
+        }
+        window.addEventListener("resize", posicionarAvisoPerfil);
         function atualizarAvisoPerfil(valores) {
             const aviso = document.getElementById("perfil-aviso");
             const lista = document.getElementById("perfil-pendencias");
@@ -235,7 +277,7 @@
                 return item;
             }));
             aviso.hidden = pendencias.length === 0;
-            document.body.classList.toggle("perfil-com-pendencias", pendencias.length > 0);
+            posicionarAvisoPerfil();
         }
         if (!erroPerfil) atualizarAvisoPerfil(dados);
         document.getElementById("perfil-completar")?.addEventListener("click", () => {
@@ -288,12 +330,12 @@
             }
 
             const botao = formulario.querySelector('button[type="submit"]');
+            if (botao.disabled || !formulario.reportValidity()) return;
             botao.disabled = true;
             try {
-                const { data: perfilSalvo, error } = await db.from("usuarios").upsert({
-                    id: usuario.id,
-                    ...atualizacao
-                }, { onConflict: "id" }).select("id,nome,local,telefone,sobre").single();
+                const { data: perfilSalvo, error } = await db.from("usuarios")
+                    .update(atualizacao).eq("id", usuario.id)
+                    .select("id,nome,local,telefone,sobre").single();
 
                 if (error || perfilSalvo?.id !== usuario.id) {
                     mostrarMensagem(status, error?.message || "Não foi possível confirmar os dados salvos.");
@@ -327,7 +369,7 @@
             return;
         }
 
-        document.getElementById("total-anuncios").textContent = String((anuncios || []).length);
+        document.getElementById("total-anuncios").textContent = String((anuncios || []).filter((item) => item.status === "ativo").length);
         document.getElementById("total-vendidos").textContent = String(
             (anuncios || []).filter((item) => item.status === "vendido").length
         );
@@ -387,25 +429,33 @@
 
         grade.querySelectorAll("[data-cancelar-solicitacao]").forEach((botao) => {
             botao.addEventListener("click", async () => {
-                botao.disabled = true;
-                const { error: erro } = await db
+                await executarAcao(botao, status, async () => {
+                const { data: atualizada, error: erro } = await db
                     .from("solicitacoes")
                     .update({ status: "cancelada" })
-                    .eq("id", botao.dataset.cancelarSolicitacao);
-                status.textContent = erro?.message || "Solicitação cancelada.";
-                if (!erro) window.location.reload();
+                    .eq("id", botao.dataset.cancelarSolicitacao).eq("status", "pendente")
+                    .select("id").single();
+                if (erro) throw erro;
+                if (!atualizada) throw new Error("A solicitação não foi alterada. Atualize a página.");
+                status.textContent = "Solicitação cancelada.";
+                window.location.reload();
+                });
             });
         });
 
         grade.querySelectorAll("[data-status-solicitacao]").forEach((botao) => {
             botao.addEventListener("click", async () => {
-                botao.disabled = true;
-                const { error: erro } = await db
+                await executarAcao(botao, status, async () => {
+                const { data: atualizada, error: erro } = await db
                     .from("solicitacoes")
                     .update({ status: botao.dataset.statusSolicitacao })
-                    .eq("id", botao.dataset.solicitacao);
-                status.textContent = erro?.message || "Solicitação atualizada.";
-                if (!erro) window.location.reload();
+                    .eq("id", botao.dataset.solicitacao).eq("status", "pendente")
+                    .select("id").single();
+                if (erro) throw erro;
+                if (!atualizada) throw new Error("A solicitação não foi alterada. Atualize a página.");
+                status.textContent = "Solicitação atualizada.";
+                window.location.reload();
+                });
             });
         });
     }
@@ -445,14 +495,15 @@
 
         grade.querySelectorAll("[data-remover]").forEach((botao) => {
             botao.addEventListener("click", async () => {
-                botao.disabled = true;
+                await executarAcao(botao, status, async () => {
                 const { error: erroRemocao } = await db
                     .from("carrinho")
                     .delete()
                     .eq("usuario_id", usuario.id)
                     .eq("anuncio_id", botao.dataset.remover);
-                if (erroRemocao && status) status.textContent = erroRemocao.message;
-                else window.location.reload();
+                if (erroRemocao) throw erroRemocao;
+                window.location.reload();
+                });
             });
         });
     }
@@ -495,10 +546,19 @@
                 return;
             }
 
+            const extensoes = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp" };
+            if (!extensoes[imagem.type] || imagem.size > 5 * 1024 * 1024 || imagem.size === 0) {
+                status.textContent = "Escolha uma imagem JPEG, PNG ou WebP de até 5 MB, que não esteja vazia.";
+                return;
+            }
+
             const botao = formulario.querySelector('button[type="submit"]');
+            if (botao.disabled) return;
             botao.disabled = true;
             status.textContent = "Publicando anúncio...";
 
+            let caminhoEnviado = null;
+            let anuncioConfirmado = false;
             try {
                 const { data: categoria, error: erroCategoria } = await db
                     .from("categorias")
@@ -508,15 +568,16 @@
                 if (erroCategoria) throw erroCategoria;
                 if (!categoria) throw new Error("Categoria não encontrada.");
 
-                const extensao = imagem.name.split(".").pop()?.toLowerCase() || "jpg";
+                const extensao = extensoes[imagem.type];
                 const caminho = `${usuario.id}/${crypto.randomUUID()}.${extensao}`;
                 const { error: erroUpload } = await db.storage
                     .from("anuncios")
                     .upload(caminho, imagem, { cacheControl: "3600", upsert: false });
                 if (erroUpload) throw erroUpload;
+                caminhoEnviado = caminho;
 
                 const { data: url } = db.storage.from("anuncios").getPublicUrl(caminho);
-                const { error: erroAnuncio } = await db.from("anuncios").insert({
+                const { data: anuncioCriado, error: erroAnuncio } = await db.from("anuncios").insert({
                     usuario_id: usuario.id,
                     categoria_id: categoria.id,
                     nome_anuncio: String(dados.get("nome")).trim(),
@@ -525,12 +586,32 @@
                     tipo_anuncio: tipo,
                     preco_anuncio: tipo === "venda" ? Number(dados.get("preco")) : null,
                     imagem_url: url.publicUrl
-                });
+                }).select("id").single();
                 if (erroAnuncio) throw erroAnuncio;
+                if (!anuncioCriado?.id) throw new Error("Não foi possível confirmar a publicação.");
+                anuncioConfirmado = true;
 
                 window.location.href = tipo === "venda" ? "catalogo.html" : "doar-trocar.html";
             } catch (erro) {
                 status.textContent = erro.message || "Não foi possível publicar o anúncio.";
+                // Em falhas de transporte, o servidor pode ter gravado o anúncio.
+                // Antes de remover a imagem, confirme que ela não está em uso.
+                if (caminhoEnviado && !anuncioConfirmado) {
+                    try {
+                        const imagemUrl = db.storage.from("anuncios").getPublicUrl(caminhoEnviado).data.publicUrl;
+                        const { data: publicados, error: erroConsulta } = await db.from("anuncios")
+                            .select("id").eq("usuario_id", usuario.id).eq("imagem_url", imagemUrl);
+                        if (erroConsulta) throw erroConsulta;
+                        if (publicados?.length) {
+                            status.textContent = "O anúncio foi publicado, mas a resposta foi interrompida. Consulte Meus anúncios antes de tentar novamente.";
+                        } else {
+                            const { error: erroLimpeza } = await db.storage.from("anuncios").remove([caminhoEnviado]);
+                            if (erroLimpeza) throw erroLimpeza;
+                        }
+                    } catch {
+                        status.textContent += " Não foi possível confirmar a limpeza da imagem. Consulte Meus anúncios antes de reenviar.";
+                    }
+                }
             } finally {
                 botao.disabled = false;
             }
@@ -582,13 +663,16 @@
         const idsVendedores = [...new Set((data || []).map((item) => item.usuario_id).filter(Boolean))];
         let vendedores = {};
         if (idsVendedores.length) {
-            const { data: vendedoresData } = await db
+            const { data: vendedoresData, error: erroVendedores } = await db
                 .rpc("listar_vendedores_publicos", { p_ids: idsVendedores });
+            if (erroVendedores) throw new Error("Não foi possível carregar os anunciantes. Tente novamente.");
             vendedores = Object.fromEntries((vendedoresData || []).map((item) => [item.id, item]));
         }
         grade.replaceChildren(...(data || []).map((anuncio) => criarCard(anuncio, vendedores)));
+        if (typeof atualizarCatalogo === "function") atualizarCatalogo();
+        if (typeof atualizarDoacaoTroca === "function") atualizarDoacaoTroca();
         const contador = document.getElementById("resultado-contagem");
-        if (contador) {
+        if (contador && typeof atualizarCatalogo !== "function" && typeof atualizarDoacaoTroca !== "function") {
             contador.textContent = `${data?.length || 0} ${(data?.length || 0) === 1 ? "anúncio encontrado" : "anúncios encontrados"}`;
         }
     }
@@ -623,8 +707,11 @@
         document.getElementById("produto-caracteristicas").innerHTML =
             `<li>Modalidade: ${escapeHtml(nomeTipo[data.tipo_anuncio] || data.tipo_anuncio)}</li>`;
 
-        const { data: vendedoresVetor } = await db
+        const { data: vendedoresVetor, error: erroVendedor } = await db
             .rpc("listar_vendedores_publicos", { p_ids: [data.usuario_id] });
+        if (erroVendedor) {
+            statusDaAcao(document.querySelector(".produto-informacoes")).textContent = "Não foi possível carregar o anunciante.";
+        }
         const vendedor = vendedoresVetor?.[0] || null;
         if (vendedor) {
             const informacoesVendedor = document.createElement("p");
@@ -636,6 +723,7 @@
         const usuario = await usuarioAtual();
         const informacoes = document.querySelector(".produto-informacoes");
         if (!informacoes || !usuario) return;
+        const statusAcao = statusDaAcao(informacoes);
 
         if (data.tipo_anuncio === "venda") {
             if (data.usuario_id === usuario.id || data.status !== "ativo") return;
@@ -644,15 +732,16 @@
             botao.className = "botao botao-contorno";
             botao.textContent = "Adicionar ao carrinho";
             botao.addEventListener("click", async () => {
-                botao.disabled = true;
-                const { data: existente } = await db
+                await executarAcao(botao, statusAcao, async () => {
+                const { data: existente, error: erroConsulta } = await db
                     .from("carrinho")
                     .select("id")
                     .eq("usuario_id", usuario.id)
                     .eq("anuncio_id", data.id)
                     .maybeSingle();
+                if (erroConsulta) throw erroConsulta;
                 if (existente) {
-                    botao.textContent = "Já está no carrinho";
+                    statusAcao.textContent = "Já está no carrinho.";
                     return;
                 }
                 const { error: erro } = await db.from("carrinho").insert({
@@ -660,10 +749,12 @@
                     anuncio_id: data.id
                 });
                 if (erro?.code === "23505") {
-                    botao.textContent = "Já está no carrinho";
+                    statusAcao.textContent = "Já está no carrinho.";
                 } else {
-                    botao.textContent = erro ? erro.message : "Adicionado ao carrinho";
+                    if (erro) throw erro;
+                    statusAcao.textContent = "Adicionado ao carrinho.";
                 }
+                });
             });
             informacoes.appendChild(botao);
         } else if (
@@ -678,25 +769,15 @@
             botao.addEventListener("click", async () => {
                 const mensagemTexto = window.prompt("Envie uma mensagem ao anunciante:");
                 if (!mensagemTexto?.trim()) return;
-                botao.disabled = true;
-                const { error: erroSolicitacao } = await db.from("solicitacoes").insert({
-                    solicitante_id: usuario.id,
-                    anuncio_id: data.id,
-                    tipo: data.tipo_anuncio,
-                    mensagem: mensagemTexto.trim(),
-                    status: "pendente"
+                await executarAcao(botao, statusAcao, async () => {
+                const { data: solicitacaoId, error: erroSolicitacao } = await db.rpc("criar_solicitacao_com_mensagem", {
+                    p_anuncio_id: data.id,
+                    p_mensagem: mensagemTexto.trim()
                 });
-                if (erroSolicitacao) {
-                    botao.textContent = erroSolicitacao.message;
-                    return;
-                }
-                const { error: erroMensagem } = await db.from("mensagens").insert({
-                    remetente_id: usuario.id,
-                    destinatario_id: data.usuario_id,
-                    anuncio_id: data.id,
-                    conteudo: mensagemTexto.trim()
+                if (erroSolicitacao) throw erroSolicitacao;
+                if (!solicitacaoId) throw new Error("O envio não foi confirmado. Consulte Solicitações antes de reenviar.");
+                statusAcao.textContent = "Solicitação e mensagem enviadas.";
                 });
-                botao.textContent = erroMensagem ? erroMensagem.message : "Solicitação e mensagem enviadas";
             });
             informacoes.appendChild(botao);
         }
@@ -706,21 +787,26 @@
         if (!path.endsWith("blog.html")) return;
         const grade = document.querySelector(".blog-grade");
         if (grade) {
-            const { data, error } = await db
-                .from("artigos")
-                .select("id,titulo,slug,categoria,resumo,conteudo,imagem_url,tempo_leitura,destaque,publicado,created_at")
-                .eq("publicado", true)
-                .order("created_at", { ascending: false });
-            if (!error && data?.length) {
-                grade.innerHTML = data.map((artigo) => `
-                    <article class="blog-card">
-                        <img src="${escapeHtml(artigo.imagem_url || "imagens/vitrine.jpg")}" alt="${escapeHtml(artigo.titulo || "Artigo ReTech")}">
-                        <div class="blog-card-conteudo">
-                            <p class="blog-meta"><span>${escapeHtml(artigo.categoria || "ReTech")}</span>${artigo.tempo_leitura ? ` ${escapeHtml(artigo.tempo_leitura)} min` : ""}</p>
-                            <h3>${escapeHtml(artigo.titulo || "")}</h3>
-                            <p>${escapeHtml(artigo.resumo || "")}</p>
-                        </div>
-                    </article>`).join("");
+            try {
+                const { data, error } = await db
+                    .from("artigos")
+                    .select("id,titulo,slug,categoria,resumo,conteudo,imagem_url,tempo_leitura,destaque,publicado,created_at")
+                    .eq("publicado", true)
+                    .order("created_at", { ascending: false });
+                if (error) throw error;
+                if (data?.length) {
+                    grade.innerHTML = data.map((artigo) => `
+                        <article class="blog-card">
+                            <img src="${escapeHtml(artigo.imagem_url || "imagens/vitrine.jpg")}" alt="${escapeHtml(artigo.titulo || "Artigo ReTech")}">
+                            <div class="blog-card-conteudo">
+                                <p class="blog-meta"><span>${escapeHtml(artigo.categoria || "ReTech")}</span>${artigo.tempo_leitura ? ` ${escapeHtml(artigo.tempo_leitura)} min` : ""}</p>
+                                <h3>${escapeHtml(artigo.titulo || "")}</h3>
+                                <p>${escapeHtml(artigo.resumo || "")}</p>
+                            </div>
+                        </article>`).join("");
+                }
+            } catch {
+                statusDaAcao(grade.parentElement).textContent = "Não foi possível carregar os artigos atualizados. Os conteúdos de exemplo continuam disponíveis.";
             }
         }
 
@@ -745,24 +831,22 @@
             }
 
             const botao = formulario.querySelector('button[type="submit"]');
-            botao.disabled = true;
+            const status = statusDaAcao(formulario);
+            await executarAcao(botao, status, async () => {
             const { error } = await db.from("newsletter").insert({
                 email,
                 ativo: true,
                 consentimento_em: new Date().toISOString()
             });
 
-            let status = formulario.querySelector("[role=status]");
-            if (!status) {
-                status = document.createElement("p");
-                status.setAttribute("role", "status");
-                formulario.appendChild(status);
+            if (error?.code === "23505") {
+                status.textContent = "Este e-mail já está inscrito.";
+                return;
             }
-            status.textContent = error
-                ? (error.code === "23505" ? "Este e-mail já está inscrito." : error.message)
-                : "Inscrição realizada com sucesso.";
-            if (!error) formulario.reset();
-            botao.disabled = false;
+            if (error) throw error;
+            status.textContent = "Inscrição realizada com sucesso.";
+            formulario.reset();
+            });
         });
     }
 
@@ -799,9 +883,9 @@
                 return;
             }
 
-            const usuario = await usuarioAtual();
             const botao = formulario.querySelector('button[type="submit"]');
-            botao.disabled = true;
+            await executarAcao(botao, status, async () => {
+            const usuario = await usuarioAtual();
             status.textContent = "Enviando mensagem...";
 
             const { error } = await db.from("contatos").insert({
@@ -813,20 +897,21 @@
                 consentimento_em: new Date().toISOString()
             });
 
-            status.textContent = error ? error.message : "Mensagem enviada com sucesso.";
-            if (!error) formulario.reset();
-            botao.disabled = false;
+            if (error) throw error;
+            status.textContent = "Mensagem enviada com sucesso.";
+            formulario.reset();
+            });
         });
     }
 
     db.auth.getSession().then(({ data, error }) => {
         if (!error) atualizarCabecalho(data?.session?.user || null);
     }).catch(() => {});
-    inicializarLogin();
-    inicializarPerfil();
-    inicializarAnuncio();
-    inicializarCatalogo();
-    inicializarProduto();
-    inicializarBlog();
-    inicializarContato();
+    iniciar(inicializarLogin);
+    iniciar(inicializarPerfil);
+    iniciar(inicializarAnuncio);
+    iniciar(inicializarCatalogo);
+    iniciar(inicializarProduto);
+    iniciar(inicializarBlog);
+    iniciar(inicializarContato);
 })();

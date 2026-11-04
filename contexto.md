@@ -94,6 +94,8 @@ Desenvolver um site acessível e responsivo que incentive a reutilização de el
 
 O código de integração também contempla adição e remoção de itens do carrinho, solicitações de doação ou troca e registro de mensagens relacionadas a essas solicitações. A existência desses recursos não comprova um fluxo completo de pagamento, entrega ou conclusão de negociações.
 
+Solicitação e mensagem são enviadas em uma única transação pela função `criar_solicitacao_com_mensagem`, mantendo as permissões do usuário. A consulta `listar_vendedores_publicos` retorna apenas dados públicos de vendedores com anúncios ativos. O upload valida imagens JPEG, PNG e WebP de até 5 MB, e os filtros são reaplicados após a carga dos anúncios. O teste existente em `tests/auth.test.mjs` cobre 33 cenários simulados; gravações reais não foram utilizadas para essa validação.
+
 ### Limites do escopo atual
 
 - A integração dinâmica depende de autenticação, banco de dados, armazenamento e permissões configurados no Supabase.

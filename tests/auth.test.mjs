@@ -112,3 +112,229 @@ for (const caso of [
   }
 ]) await testarAuth(caso);
 console.log(authTests.length + ' cenários de autenticação aprovados.');
+
+
+// Regressões de integração: todas as respostas são simuladas, sem rede ou gravações reais.
+function funcao(nome, proximo) {
+    return source.slice(source.indexOf('    ' + nome), source.indexOf('    ' + proximo, source.indexOf('    ' + nome) + 1));
+}
+const helpers = funcao('async function executarAcao(', 'async function usuarioAtual(');
+function ambiente(valores) {
+    const ctx = vm.createContext({ ...valores });
+    new vm.Script(helpers).runInContext(ctx);
+    return ctx;
+}
+
+for (const area of ['contato', 'newsletter']) {
+    for (const modo of ['rede', 'servidor', 'sucesso', 'sem-consentimento']) {
+        let enviar, gravacoes = 0, resets = 0;
+        const status = { textContent: '' }, botao = { disabled: false };
+        const formulario = {
+            reportValidity: () => true,
+            querySelector(s) { return s.includes('submit') ? botao : s.includes('consentimento') ? { checked: modo !== 'sem-consentimento' } : status; },
+            addEventListener(_evento, fn) { enviar = fn; },
+            reset() { resets++; }
+        };
+        const ctx = ambiente({
+            path: area === 'contato' ? '/contato.html' : '/blog.html',
+            document: { querySelector(s) { return s === '.blog-grade' ? null : formulario; } },
+            usuarioAtual: async () => null,
+            db: { from() { return { insert: async () => {
+                gravacoes++;
+                if (modo === 'rede') throw new Error('fetch failed');
+                return { error: modo === 'servidor' ? { message: 'Permissão negada' } : null };
+            } }; } },
+            FormData: class { get(k) { return { nome: 'Teste', email: 'teste@example.com', mensagem: 'Mensagem de teste com tamanho suficiente.', assunto: 'conta' }[k]; } }
+        });
+        const nome = area === 'contato' ? 'inicializarContato' : 'inicializarBlog';
+        const trecho = area === 'contato'
+            ? source.slice(source.indexOf('    async function inicializarContato('), source.indexOf('    db.auth.getSession()'))
+            : funcao('async function inicializarBlog(', 'async function inicializarContato(');
+        new vm.Script(trecho).runInContext(ctx);
+        await ctx[nome]();
+        await enviar({ preventDefault() {} });
+        assert.equal(botao.disabled, false, area + ' deve permitir nova tentativa');
+        assert.equal(gravacoes, modo === 'sem-consentimento' ? 0 : 1);
+        assert.equal(resets, modo === 'sucesso' ? 1 : 0);
+        if (modo === 'rede') assert.match(status.textContent, /conexão/);
+        if (modo === 'servidor') assert.match(status.textContent, /Permissão negada/);
+        authTests.push(area + ': ' + modo);
+    }
+}
+
+{
+    let chamadas = 0;
+    const ctx = ambiente({});
+    await ctx.executarAcao({ disabled: true }, {}, async () => { chamadas++; });
+    assert.equal(chamadas, 0);
+    const botao = { disabled: false }, status = {};
+    await ctx.executarAcao(botao, status, async () => { chamadas++; });
+    assert.equal(chamadas, 1);
+    assert.equal(botao.disabled, false);
+    authTests.push('Ações bloqueiam envio duplicado e restauram o botão');
+}
+
+for (const falhaRPC of [false, true]) {
+    const grade = { replaceChildren(...cards) { this.cards = cards; } };
+    let filtroCompra = 0, filtroDoacao = 0;
+    const ctx = ambiente({
+        path: '/catalogo.html',
+        document: { getElementById(id) { return id === 'grade-catalogo' ? grade : {}; } },
+        db: {
+            from() { return { select() { return this; }, in() { return this; }, eq() { return this; }, order: async () => ({ data: [{ id: 1, usuario_id: 'u1' }] }) }; },
+            rpc: async () => ({ data: [], error: falhaRPC ? { message: 'RPC indisponível' } : null })
+        },
+        criarCard: v => v,
+        escapeHtml: v => v,
+        atualizarCatalogo() { filtroCompra++; },
+        atualizarDoacaoTroca() { filtroDoacao++; }
+    });
+    new vm.Script(funcao('async function inicializarCatalogo(', 'async function inicializarProduto(')).runInContext(ctx);
+    if (falhaRPC) {
+        await assert.rejects(() => ctx.inicializarCatalogo(), /anunciantes/);
+    } else {
+        await ctx.inicializarCatalogo();
+        assert.equal(filtroCompra, 1);
+        assert.equal(filtroDoacao, 1);
+        assert.equal(grade.cards.length, 1);
+    }
+    authTests.push('Catálogo: ' + (falhaRPC ? 'erro de anunciante visível' : 'filtros reaplicados'));
+}
+
+for (const falha of [false, true]) {
+    let salvar, payload;
+    const dados = { id: 'u1', nome: 'Teste', local: '', telefone: '', sobre: '' };
+    const elementos = Object.fromEntries([
+        'nome-perfil', 'email-perfil', 'local-perfil', 'telefone-perfil', 'sobre-perfil',
+        'campo-nome', 'campo-local', 'campo-email', 'campo-telefone', 'campo-sobre',
+        'perfil-status', 'perfil-anuncios', 'total-anuncios', 'total-vendidos', 'total-favoritos'
+    ].map(id => [id, { value: '', textContent: '' }]));
+    const botao = { disabled: false };
+    elementos['formulario-perfil'] = { reportValidity: () => true, addEventListener(_e, fn) { salvar = fn; }, querySelector() { return botao; } };
+    const ctx = ambiente({
+        path: '/perfil.html',
+        window: { addEventListener() {} },
+        document: {
+            getElementById(id) { return elementos[id] || null; },
+            querySelectorAll() { return []; }
+        },
+        usuarioAtual: async () => ({ id: 'u1', email: 'teste@example.com' }),
+        garantirPerfil: async () => {},
+        mostrarMensagem(el, msg) { el.textContent = msg; },
+        inicializarSolicitacoes: async () => {}, inicializarCarrinho: async () => {},
+        db: { from(tabela) { return {
+            select() { return this; }, eq() { return this; },
+            maybeSingle: async () => ({ data: { ...dados } }),
+            order: async () => ({ data: [] }),
+            update(valores) { payload = valores; return this; },
+            single: async () => falha ? { error: { message: 'RLS negou' } } : { data: { id: 'u1', ...payload } }
+        }; } }
+    });
+    new vm.Script(funcao('async function inicializarPerfil(', 'async function inicializarSolicitacoes(')).runInContext(ctx);
+    await ctx.inicializarPerfil();
+    elementos['campo-local'].value = 'São Paulo';
+    await salvar({ preventDefault() {} });
+    assert.equal(Object.hasOwn(payload, 'id'), false, 'id não deve ser enviado no UPDATE');
+    assert.equal(botao.disabled, false);
+    assert.match(elementos['perfil-status'].textContent, falha ? /RLS negou/ : /sucesso/);
+    assert.equal(elementos['local-perfil'].textContent, falha ? '' : 'São Paulo');
+    authTests.push('Perfil: ' + (falha ? 'falha não altera resumo' : 'update somente de campos editáveis'));
+}
+
+for (const imagem of [{ type: 'image/gif', size: 100 }, { type: 'image/png', size: 5242881 }, { type: 'image/png', size: 0 }]) {
+    let enviar;
+    const status = { setAttribute() {} };
+    const formulario = { appendChild() {}, querySelectorAll() { return []; }, reportValidity() { return true; }, addEventListener(_e, fn) { enviar = fn; } };
+    const ctx = ambiente({
+        path: '/anunciar.html',
+        usuarioAtual: async () => ({ id: 'u1' }),
+        document: {
+            getElementById(id) { return id === 'formulario-anuncio' ? formulario : { files: [imagem] }; },
+            createElement() { return status; }
+        },
+        FormData: class { get() { return 'venda'; } }
+    });
+    new vm.Script(funcao('async function inicializarAnuncio(', 'function criarCard(')).runInContext(ctx);
+    await ctx.inicializarAnuncio();
+    await enviar({ preventDefault() {} });
+    assert.match(status.textContent, /JPEG, PNG ou WebP/);
+    authTests.push('Upload rejeita arquivo inválido: ' + imagem.type + '/' + imagem.size);
+}
+console.log(authTests.length + ' cenários totais aprovados; nenhuma chamada ao banco real.');
+
+
+for (const falha of [false, true]) {
+    const elementos = {};
+    let acao, chamadas = 0;
+    const info = { querySelector() { return elementos.status || null; }, appendChild(el) { if (el.type === 'button') acao = el.click; else elementos.status = el; }, prepend() {} };
+    const ctx = ambiente({
+        path: '/produto.html',
+        window: { location: { search: '?id=1' }, prompt: () => 'Gostaria de solicitar este equipamento.' },
+        URLSearchParams,
+        usuarioAtual: async () => ({ id: 'u1' }),
+        formatarPreco: () => '', escapeHtml: v => v, nomeEstado: {}, nomeTipo: {},
+        document: {
+            getElementById(id) { return elementos[id] ||= {}; },
+            querySelector() { return info; },
+            createElement() { return { dataset: {}, setAttribute() {}, addEventListener(_e, fn) { this.click = fn; } }; }
+        },
+        db: {
+            from() { return { select() { return this; }, eq() { return this; }, maybeSingle: async () => ({ data: { id: 1, usuario_id: 'v1', tipo_anuncio: 'doacao', status: 'ativo' } }) }; },
+            rpc: async (nome) => {
+                if (nome === 'listar_vendedores_publicos') return { data: [] };
+                assert.equal(nome, 'criar_solicitacao_com_mensagem');
+                chamadas++;
+                return falha ? { error: { message: 'Transação recusada' } } : { data: 1 };
+            }
+        }
+    });
+    new vm.Script(funcao('async function inicializarProduto(', 'async function inicializarBlog(')).runInContext(ctx);
+    await ctx.inicializarProduto();
+    assert.ok(acao);
+    await acao();
+    assert.equal(chamadas, 1);
+    assert.match(elementos.status.textContent, falha ? /recusada/ : /enviadas/);
+    authTests.push('Solicitação usa uma única transação: ' + (falha ? 'erro' : 'sucesso'));
+}
+
+for (const cenario of ['remover', 'publicado', 'consulta-falhou']) {
+    let enviar, remocoes = 0;
+    const status = { textContent: '', setAttribute() {} }, botao = { disabled: false };
+    const formulario = {
+        reportValidity: () => true, appendChild() {}, querySelectorAll: () => [],
+        querySelector: () => botao, addEventListener(_e, fn) { enviar = fn; }
+    };
+    const ctx = ambiente({
+        path: '/anunciar.html',
+        window: { location: {} }, crypto: { randomUUID: () => 'imagem-teste' },
+        usuarioAtual: async () => ({ id: 'u1' }),
+        document: {
+            getElementById(id) { return id === 'formulario-anuncio' ? formulario : { files: [{ type: 'image/png', size: 100 }] }; },
+            createElement() { return status; }
+        },
+        FormData: class { get(k) { return { modalidade: 'venda', categoria: 'computadores', nome: 'Notebook', descricao: 'Equipamento para estudo', estado: 'bom', preco: '100' }[k]; } },
+        db: {
+            from(tabela) { return {
+                select() { return this; }, eq() { return this; },
+                maybeSingle: async () => ({ data: { id: 1 } }),
+                insert() { return this; },
+                single: async () => ({ error: { message: 'Resposta da gravação interrompida' } }),
+                then(resolve) { resolve(cenario === 'consulta-falhou' ? { error: { message: 'Sem conexão' } } : { data: cenario === 'publicado' ? [{ id: 1 }] : [] }); }
+            }; },
+            storage: { from() { return {
+                upload: async () => ({ error: null }),
+                getPublicUrl: () => ({ data: { publicUrl: 'https://example.test/imagem.png' } }),
+                remove: async () => { remocoes++; return { error: null }; }
+            }; } }
+        }
+    });
+    new vm.Script(funcao('async function inicializarAnuncio(', 'function criarCard(')).runInContext(ctx);
+    await ctx.inicializarAnuncio();
+    await enviar({ preventDefault() {} });
+    assert.equal(remocoes, cenario === 'remover' ? 1 : 0);
+    assert.equal(botao.disabled, false);
+    if (cenario === 'publicado') assert.match(status.textContent, /foi publicado/);
+    if (cenario === 'consulta-falhou') assert.match(status.textContent, /limpeza/);
+    authTests.push('Limpeza de upload: ' + cenario);
+}
+console.log(authTests.length + ' cenários totais aprovados; nenhum dado real criado.');

@@ -47,22 +47,79 @@ select id, nome, foto_url, local
 from public.usuarios;
 grant select (id, nome, foto_url, local) on public.vendedores_publicos to anon, authenticated;
 
--- RPC segura: expõe apenas os campos públicos dos vendedores informados.
--- A função não retorna telefone, sobre, email ou outras colunas privadas.
-drop function if exists public.listar_vendedores_publicos(uuid[]);
-create function public.listar_vendedores_publicos(p_ids uuid[] default null)
+-- Correções de integração: somente funções e permissões, sem dados de teste.
+create schema if not exists retech_private;
+revoke all on schema retech_private from public;
+grant usage on schema retech_private to anon, authenticated;
+
+-- O acesso privilegiado fica fora do esquema exposto pela API.
+-- Retorna apenas campos públicos de vendedores com anúncios ativos.
+create or replace function retech_private.listar_vendedores_publicos(p_ids uuid[])
 returns table(id uuid, nome text, foto_url text, local text)
-language sql
-stable
-security definer
-set search_path = pg_catalog, public
+language sql stable security definer set search_path = ''
 as $$
   select u.id, u.nome, u.foto_url, u.local
   from public.usuarios u
-  where p_ids is null or u.id = any(p_ids);
+  where u.id = any(coalesce(p_ids, '{}'::uuid[]))
+    and exists (select 1 from public.anuncios a where a.usuario_id = u.id and a.status = 'ativo')
+  limit 100;
+$$;
+revoke all on function retech_private.listar_vendedores_publicos(uuid[]) from public;
+grant execute on function retech_private.listar_vendedores_publicos(uuid[]) to anon, authenticated;
+
+create or replace function public.listar_vendedores_publicos(p_ids uuid[] default null)
+returns table(id uuid, nome text, foto_url text, local text)
+language sql stable security invoker set search_path = ''
+as $$
+  select * from retech_private.listar_vendedores_publicos(p_ids);
 $$;
 revoke all on function public.listar_vendedores_publicos(uuid[]) from public;
 grant execute on function public.listar_vendedores_publicos(uuid[]) to anon, authenticated;
+
+-- As duas inserções respeitam as políticas RLS do usuário e são atômicas.
+create or replace function public.criar_solicitacao_com_mensagem(p_anuncio_id bigint, p_mensagem text)
+returns bigint
+language plpgsql security invoker set search_path = ''
+as $$
+declare
+  v_usuario uuid := auth.uid();
+  v_anuncio public.anuncios%rowtype;
+  v_id bigint;
+begin
+  if v_usuario is null then
+    raise exception 'Entre na sua conta para enviar uma solicitação.';
+  end if;
+  if p_mensagem is null or char_length(trim(p_mensagem)) not between 1 and 1000 then
+    raise exception 'A mensagem deve ter entre 1 e 1000 caracteres.';
+  end if;
+  select * into v_anuncio from public.anuncios
+    where id = p_anuncio_id and status = 'ativo' and tipo_anuncio in ('doacao', 'troca');
+  if not found or v_anuncio.usuario_id = v_usuario then
+    raise exception 'Anúncio indisponível para solicitação.';
+  end if;
+
+  -- Serializa o reenvio da mesma solicitação, sem bloquear outros usuários.
+  perform pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended(v_usuario::text || ':' || p_anuncio_id::text, 0));
+  select id into v_id from public.solicitacoes
+    where solicitante_id = v_usuario and anuncio_id = p_anuncio_id and status = 'pendente'
+    order by id limit 1;
+  if v_id is not null then
+    return v_id;
+  end if;
+  insert into public.solicitacoes(solicitante_id, anuncio_id, tipo, mensagem, status)
+    values(v_usuario, p_anuncio_id, v_anuncio.tipo_anuncio, trim(p_mensagem), 'pendente')
+    returning id into v_id;
+  insert into public.mensagens(remetente_id, destinatario_id, anuncio_id, conteudo)
+    values(v_usuario, v_anuncio.usuario_id, p_anuncio_id, trim(p_mensagem));
+  return v_id;
+end;
+$$;
+revoke all on function public.criar_solicitacao_com_mensagem(bigint, text) from public, anon;
+grant execute on function public.criar_solicitacao_com_mensagem(bigint, text) to authenticated;
+
+-- Função de event trigger não precisa ser executável pelos clientes da API.
+revoke execute on function public.rls_auto_enable() from public, anon, authenticated;
+
 
 -- Categorias publicas.
 drop policy if exists "categorias sao publicas" on public.categorias;
