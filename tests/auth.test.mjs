@@ -502,6 +502,7 @@ console.log(authTests.length + ' cenários totais aprovados, incluindo carrinho 
 
 for (const modo of ['visitante', 'comprador', 'proprietario']) {
     const botoes = [];
+    const caracteristicas = { insertAdjacentElement(posicao) { assert.equal(posicao, 'afterend'); } };
     let adicoes = 0, aberturas = 0;
     const info = { querySelector: () => ({ textContent: '' }), prepend() {}, appendChild() {} };
     const ctx = ambiente({
@@ -514,7 +515,7 @@ for (const modo of ['visitante', 'comprador', 'proprietario']) {
             }
         },
         document: {
-            getElementById: () => ({ insertAdjacentElement(posicao) { assert.equal(posicao, 'afterend'); } }), querySelector: () => info,
+            getElementById: id => id === 'produto-caracteristicas' ? caracteristicas : ({}), querySelector: () => info,
             createElement(tipo) {
                 const el = { dataset: {}, setAttribute() {}, appendChild() {}, addEventListener(_e, fn) { this.click = fn; } };
                 if (tipo === 'button') botoes.push(el);
@@ -531,6 +532,7 @@ for (const modo of ['visitante', 'comprador', 'proprietario']) {
     new vm.Script(funcao('async function inicializarProduto(', 'async function inicializarBlog(')).runInContext(ctx);
     await ctx.inicializarProduto();
     assert.equal(botoes.length, modo === 'proprietario' ? 0 : 2);
+    assert.equal(caracteristicas.innerHTML, modo === 'proprietario' ? '<li>Este anúncio é seu</li>' : '<li>Modalidade: venda</li>');
     if (modo !== 'proprietario') {
         assert.equal(botoes[0].textContent, 'Adicionar ao Carrinho');
         assert.equal(botoes[1].textContent, 'Comprar Agora');

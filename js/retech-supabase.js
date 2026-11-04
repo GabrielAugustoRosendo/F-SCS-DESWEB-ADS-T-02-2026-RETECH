@@ -675,6 +675,9 @@
         const usuario = await usuarioAtual();
         const informacoes = document.querySelector(".produto-informacoes");
         if (!informacoes) return;
+        if (data.usuario_id === usuario?.id) {
+            document.getElementById("produto-caracteristicas").innerHTML = "<li>Este anúncio é seu</li>";
+        }
         const statusAcao = statusDaAcao(informacoes);
 
         if (data.tipo_anuncio === "venda") {
