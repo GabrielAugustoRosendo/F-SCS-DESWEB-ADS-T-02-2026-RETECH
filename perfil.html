@@ -44,6 +44,15 @@
     </header>
 
     <main>
+        <aside id="perfil-aviso" class="perfil-aviso" aria-labelledby="perfil-aviso-titulo" hidden>
+            <div role="status" aria-live="polite">
+                <h2 id="perfil-aviso-titulo">Complete seu perfil</h2>
+                <p>Você ainda não preencheu estes dados opcionais:</p>
+                <ul id="perfil-pendencias"></ul>
+            </div>
+            <p>Preencha os campos em <strong>Editar dados</strong> e clique em <strong>Salvar alterações</strong>. Eles são opcionais.</p>
+            <button id="perfil-completar" type="button" class="botao botao-verde">Ir para Editar dados</button>
+        </aside>
         <section class="perfil-cabecalho">
             <div class="container perfil-cabecalho-conteudo">
                 <div class="perfil-identidade">

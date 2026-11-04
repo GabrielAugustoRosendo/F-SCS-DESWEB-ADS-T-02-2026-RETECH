@@ -219,6 +219,30 @@
         }
 
         const dados = perfil || { nome: usuario.email };
+        const camposOpcionais = [
+            { chave: "local", rotulo: "Localidade", campo: "campo-local" },
+            { chave: "telefone", rotulo: "Telefone", campo: "campo-telefone" },
+            { chave: "sobre", rotulo: "Sobre mim", campo: "campo-sobre" }
+        ];
+        function atualizarAvisoPerfil(valores) {
+            const aviso = document.getElementById("perfil-aviso");
+            const lista = document.getElementById("perfil-pendencias");
+            if (!aviso || !lista) return;
+            const pendencias = camposOpcionais.filter(({ chave }) => !String(valores[chave] ?? "").trim());
+            lista.replaceChildren(...pendencias.map(({ rotulo }) => {
+                const item = document.createElement("li");
+                item.textContent = rotulo;
+                return item;
+            }));
+            aviso.hidden = pendencias.length === 0;
+            document.body.classList.toggle("perfil-com-pendencias", pendencias.length > 0);
+        }
+        if (!erroPerfil) atualizarAvisoPerfil(dados);
+        document.getElementById("perfil-completar")?.addEventListener("click", () => {
+            document.getElementById("aba-dados").click();
+            const primeiro = camposOpcionais.find(({ chave }) => !String(dados[chave] ?? "").trim());
+            document.getElementById(primeiro?.campo || "campo-local").focus();
+        });
         document.getElementById("nome-perfil").textContent = dados.nome || "Usuário ReTech";
         document.getElementById("email-perfil").textContent = usuario.email || "";
         document.getElementById("local-perfil").textContent = dados.local || "";
@@ -265,22 +289,30 @@
 
             const botao = formulario.querySelector('button[type="submit"]');
             botao.disabled = true;
-            const { error } = await db.from("usuarios").upsert({
-                id: usuario.id,
-                ...atualizacao
-            }, { onConflict: "id" });
-            botao.disabled = false;
+            try {
+                const { data: perfilSalvo, error } = await db.from("usuarios").upsert({
+                    id: usuario.id,
+                    ...atualizacao
+                }, { onConflict: "id" }).select("id,nome,local,telefone,sobre").single();
 
-            if (error) {
-                mostrarMensagem(status, error.message);
-                return;
+                if (error || perfilSalvo?.id !== usuario.id) {
+                    mostrarMensagem(status, error?.message || "Não foi possível confirmar os dados salvos.");
+                    return;
+                }
+
+                Object.assign(dados, perfilSalvo);
+                atualizarAvisoPerfil(dados);
+
+                document.getElementById("nome-perfil").textContent = atualizacao.nome;
+                document.getElementById("local-perfil").textContent = atualizacao.local;
+                document.getElementById("telefone-perfil").textContent = atualizacao.telefone || "Não informado";
+                document.getElementById("sobre-perfil").textContent = atualizacao.sobre;
+                mostrarMensagem(status, "Dados atualizados com sucesso.", true);
+            } catch (erro) {
+                mostrarMensagem(status, erro.message || "Não foi possível salvar. Tente novamente.");
+            } finally {
+                botao.disabled = false;
             }
-
-            document.getElementById("nome-perfil").textContent = atualizacao.nome;
-            document.getElementById("local-perfil").textContent = atualizacao.local;
-            document.getElementById("telefone-perfil").textContent = atualizacao.telefone || "Não informado";
-            document.getElementById("sobre-perfil").textContent = atualizacao.sobre;
-            mostrarMensagem(status, "Dados atualizados com sucesso.", true);
         });
 
         const { data: anuncios, error: erroAnuncios } = await db
