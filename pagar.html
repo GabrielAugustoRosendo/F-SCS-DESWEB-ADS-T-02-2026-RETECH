@@ -75,12 +75,8 @@
                             <label><input type="radio" name="metodo" value="debito"><span><i class="fa-solid fa-credit-card" aria-hidden="true"></i>Débito<small>Cartão de débito</small></span></label>
                         </fieldset>
                         <div class="pagamento-dados">
-                            <label for="pagamento-nome">Nome do pagador ou titular</label>
-                            <input id="pagamento-nome" type="text" required minlength="2" maxlength="80" aria-describedby="pagamento-nome-ajuda">
-                            <small id="pagamento-nome-ajuda">De 2 a 80 caracteres. Use um nome fictício.</small>
                             <label for="pagamento-cpf">CPF do pagador</label>
-                            <input id="pagamento-cpf" type="text" inputmode="numeric" required minlength="11" maxlength="11" placeholder="00000000000" aria-describedby="pagamento-cpf-ajuda">
-                            <small id="pagamento-cpf-ajuda">11 caracteres, sem pontos ou traço. Não há verificação de CPF.</small>
+                            <input id="pagamento-cpf" type="text" inputmode="numeric" required minlength="11" maxlength="11" placeholder="00000000000">
                         </div>
                         <section id="pagamento-pix" class="pagamento-pix" aria-labelledby="pix-titulo">
                             <div class="pagamento-qr" aria-hidden="true"><i class="fa-solid fa-qrcode"></i><small>EXEMPLO VISUAL</small></div>
@@ -88,12 +84,13 @@
                         </section>
                         <fieldset id="pagamento-cartao" class="pagamento-cartao" hidden disabled>
                             <legend id="cartao-titulo">Dados do cartão de crédito</legend>
+                            <label for="pagamento-nome">Nome do Titular do Cartão</label>
+                            <input id="pagamento-nome" type="text" required minlength="2" maxlength="80">
                             <label for="pagamento-numero">Número do cartão</label>
-                            <input id="pagamento-numero" type="text" inputmode="numeric" minlength="16" maxlength="16" required placeholder="0000000000000000" aria-describedby="pagamento-numero-ajuda">
-                            <small id="pagamento-numero-ajuda">16 caracteres, sem espaços.</small>
+                            <input id="pagamento-numero" type="text" inputmode="numeric" minlength="16" maxlength="16" required placeholder="0000000000000000">
                             <div class="pagamento-duplo">
-                                <div><label for="pagamento-validade">Validade</label><input id="pagamento-validade" type="text" minlength="5" maxlength="5" required placeholder="MM/AA" aria-describedby="pagamento-validade-ajuda"><small id="pagamento-validade-ajuda">5 caracteres.</small></div>
-                                <div><label for="pagamento-cvv">Código de segurança</label><input id="pagamento-cvv" type="password" inputmode="numeric" minlength="3" maxlength="4" required placeholder="CVV" aria-describedby="pagamento-cvv-ajuda"><small id="pagamento-cvv-ajuda">3 ou 4 caracteres.</small></div>
+                                <div><label for="pagamento-validade">Validade</label><input id="pagamento-validade" type="text" inputmode="numeric" minlength="5" maxlength="5" required placeholder="MM/AA"></div>
+                                <div><label for="pagamento-cvv">Código de segurança</label><input id="pagamento-cvv" type="password" inputmode="numeric" minlength="3" maxlength="4" required placeholder="CVV"></div>
                             </div>
                         </fieldset>
                         <p id="pagamento-status" class="pagamento-status" role="status" aria-live="polite"></p>

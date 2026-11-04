@@ -8,6 +8,17 @@
     const metodos = { pix: "Pix", credito: "cartão de crédito", debito: "cartão de débito" };
     let metodo = "pix";
 
+    const validade = document.getElementById("pagamento-validade");
+    validade.addEventListener("input", (evento) => {
+        // Formata a digitação e a colagem, sem validar mês ou ano.
+        if (evento.inputType?.startsWith("delete")) return;
+        if (/^\d{2}/.test(validade.value) && validade.value[2] !== "/") {
+            const posicao = validade.selectionStart;
+            validade.value = validade.value.slice(0, 2) + "/" + validade.value.slice(2, 4);
+            if (posicao !== null) validade.setSelectionRange(posicao >= 2 ? posicao + 1 : posicao, posicao >= 2 ? posicao + 1 : posicao);
+        }
+    });
+
     formulario.querySelectorAll('input[name="metodo"]').forEach((opcao) => {
         opcao.addEventListener("change", () => {
             metodo = opcao.value;
@@ -25,8 +36,8 @@
     formulario.addEventListener("submit", (evento) => {
         evento.preventDefault();
         // Verifica exclusivamente o comprimento: sem CPF, Luhn, formato ou data.
-        const ids = ["pagamento-nome", "pagamento-cpf"];
-        if (metodo !== "pix") ids.push("pagamento-numero", "pagamento-validade", "pagamento-cvv");
+        const ids = ["pagamento-cpf"];
+        if (metodo !== "pix") ids.push("pagamento-nome", "pagamento-numero", "pagamento-validade", "pagamento-cvv");
         let primeiroInvalido = null;
         const erros = [];
         ids.forEach((id) => {

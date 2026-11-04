@@ -514,7 +514,7 @@ for (const modo of ['visitante', 'comprador', 'proprietario']) {
             }
         },
         document: {
-            getElementById: () => ({}), querySelector: () => info,
+            getElementById: () => ({ insertAdjacentElement(posicao) { assert.equal(posicao, 'afterend'); } }), querySelector: () => info,
             createElement(tipo) {
                 const el = { dataset: {}, setAttribute() {}, appendChild() {}, addEventListener(_e, fn) { this.click = fn; } };
                 if (tipo === 'button') botoes.push(el);
@@ -532,8 +532,8 @@ for (const modo of ['visitante', 'comprador', 'proprietario']) {
     await ctx.inicializarProduto();
     assert.equal(botoes.length, modo === 'proprietario' ? 0 : 2);
     if (modo !== 'proprietario') {
-        assert.equal(botoes[0].textContent, 'Adicionar ao carrinho');
-        assert.equal(botoes[1].textContent, 'Comprar agora');
+        assert.equal(botoes[0].textContent, 'Adicionar ao Carrinho');
+        assert.equal(botoes[1].textContent, 'Comprar Agora');
         await botoes[0].click();
         await botoes[1].click();
         assert.equal(adicoes, 2);

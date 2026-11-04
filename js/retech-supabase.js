@@ -685,7 +685,7 @@
                 const botao = document.createElement("button");
                 botao.type = "button";
                 botao.className = comprarAgora ? "botao botao-verde" : "botao botao-contorno";
-                botao.textContent = comprarAgora ? "Comprar agora" : "Adicionar ao carrinho";
+                botao.textContent = comprarAgora ? "Comprar Agora" : "Adicionar ao Carrinho";
                 botao.addEventListener("click", async () => {
                     await executarAcao(botao, statusAcao, async () => {
                         if (!window.retechCarrinho) throw new Error("O carrinho não carregou. Atualize a página.");
@@ -697,7 +697,7 @@
                 });
                 botoes.appendChild(botao);
             }
-            informacoes.appendChild(botoes);
+            document.getElementById("produto-caracteristicas").insertAdjacentElement("afterend", botoes);
         } else if (
             data.usuario_id !== usuario.id
             && data.status === "ativo"
