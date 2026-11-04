@@ -79,7 +79,7 @@ As dez páginas principais já estão presentes no repositório.
 | Anunciar | [anunciar.html](anunciar.html) | Formulário de publicação com categoria, descrição, condição, modalidade, preço e imagem. |
 | Login e cadastro | [login.html](login.html) | Criação de conta, entrada com e-mail e senha e tratamento de confirmação de e-mail. |
 | Doações e trocas | [doar-trocar.html](doar-trocar.html) | Listagem e filtros por modalidade e categoria. |
-| Meu perfil | [perfil.html](perfil.html) | Consulta e edição de dados, anúncios próprios, solicitações, carrinho e saída da conta. |
+| Meu perfil | [perfil.html](perfil.html) | Consulta e edição de dados, anúncios próprios, solicitações e saída da conta. |
 | Sobre | [sobre.html](sobre.html) | Missão, visão, valores, equipe, economia circular e impacto social pretendido. |
 | Blog | [blog.html](blog.html) | Conteúdo educativo, consulta de artigos publicados e inscrição em newsletter com consentimento. |
 | Contato e ajuda | [contato.html](contato.html) | Formulário validado, consentimento e informações de suporte. |
@@ -87,14 +87,16 @@ As dez páginas principais já estão presentes no repositório.
 ### Fluxos de interação
 
 - Usuários autenticados podem publicar anúncios e editar seus dados pessoais.
-- Produtos de venda podem ser adicionados ao carrinho, consultados no perfil e removidos.
+- O ícone ao lado de Anunciar produto abre e fecha o carrinho flutuante em todas as páginas, com contador, links dos produtos, total e exclusão com confirmação.
+- Adicionar ao carrinho salva o item; Comprar agora também abre o carrinho para revisão.
+- Finalizar compra registra pedidos pendentes por vendedor após confirmação. O servidor confere preços e disponibilidade, reserva os anúncios como pausados e remove os itens finalizados do carrinho em uma única transação.
 - Doações e trocas enviam solicitação e mensagem na mesma transação, pela função `criar_solicitacao_com_mensagem`. Reenvios para o mesmo anúncio reutilizam uma solicitação ainda pendente.
 - O perfil contém ações para cancelar solicitações pendentes ou aceitá-las e recusá-las, conforme o papel do usuário.
 - Contato e newsletter possuem integração para registrar os dados enviados.
 
 ### Limites atuais
 
-- A finalização de compra está explicitamente desabilitada no carrinho, aguardando validação segura de pedidos no servidor.
+- A finalização registra pedidos pendentes, sem cobrar pagamentos nem confirmar entregas. Acompanhamento e cancelamento de pedidos ainda precisam de interface própria.
 - Pagamento, entrega e conclusão integral de negociações não estão documentados como fluxos completos.
 - Favoritos aparecem na interface, mas a integração define seu contador como zero; a persistência permanece pendente.
 - O registro de mensagens nas solicitações não equivale a um chat completo.
@@ -140,6 +142,7 @@ ReTech/
 ├── js/
 │   ├── script.js
 │   ├── supabase.js
+│   ├── carrinho.js
 │   └── retech-supabase.js
 ├── supabase/
 │   ├── policies.sql
@@ -154,7 +157,8 @@ ReTech/
 
 - `js/script.js`: menus, filtros e interações gerais.
 - `js/supabase.js`: inicialização do cliente do Supabase.
-- `js/retech-supabase.js`: autenticação, perfil, anúncios, carrinho, solicitações, blog e contato.
+- `js/retech-supabase.js`: autenticação, perfil, anúncios, solicitações, blog e contato.
+- `js/carrinho.js`: janela compartilhada, contador, itens, total e finalização de pedidos.
 - `supabase/`: scripts de apoio à configuração do banco e das permissões.
 - `style.css`: estilos compartilhados pelas páginas.
 
@@ -176,7 +180,7 @@ Para utilizar outro ambiente, configurar a URL e a chave publicável corresponde
 
 ### Dependências do ambiente
 
-A integração consulta ou grava dados em `usuarios`, `anuncios`, `categorias`, `carrinho`, `solicitacoes`, `mensagens`, `artigos`, `newsletter` e `contatos`. Também utiliza as funções `listar_vendedores_publicos` e `criar_solicitacao_com_mensagem` e o bucket de imagens `anuncios`.
+A integração consulta ou grava dados em `usuarios`, `anuncios`, `categorias`, `carrinho`, `solicitacoes`, `mensagens`, `artigos`, `newsletter` e `contatos`. Também utiliza as funções `listar_vendedores_publicos`, `criar_solicitacao_com_mensagem` e `finalizar_carrinho` e o bucket de imagens `anuncios`. A finalização usa as tabelas existentes `pedidos` e `itens_pedido`; o navegador não recebe permissão de inserção direta nessas tabelas.
 
 A consulta de vendedores retorna somente ID, nome, foto e localidade de quem possui anúncio ativo. O acesso interno fica no esquema `retech_private`, que deve permanecer fora dos esquemas expostos na Data API. A função de solicitações exige autenticação, mantém a aplicação de RLS e desfaz ambas as inserções se houver falha. As definições estão em `supabase/policies.sql`.
 
@@ -238,7 +242,8 @@ Essas marcações indicam a existência dos arquivos e do código, sem substitui
 - [ ] Completar a documentação de provisionamento do banco e do armazenamento.
 - [ ] Implementar favoritos com persistência.
 - [ ] Ampliar edição e encerramento dos anúncios e confirmação de negociações concluídas.
-- [ ] Definir e implementar a finalização segura de pedidos, caso permaneça no escopo.
+- [x] Implementar finalização de pedidos pendentes no servidor, com validação de preços e disponibilidade.
+- [ ] Implementar acompanhamento e cancelamento de pedidos e definir o fluxo de pagamento e entrega.
 - [ ] Evoluir a comunicação entre usuários.
 - [ ] Implementar e validar filtros de daltonismo previstos no escopo inicial.
 - [ ] Ampliar conteúdos multimídia com acessibilidade.
@@ -248,7 +253,7 @@ Essas marcações indicam a existência dos arquivos e do código, sem substitui
 
 ## Validação
 
-O teste de regressão em `tests/auth.test.mjs` cobre 33 cenários simulados de cadastro, login, perfil, cabeçalho, filtros, contato, newsletter, solicitações e upload. Com Node.js instalado, executar:
+O teste de regressão em `tests/auth.test.mjs` cobre 47 cenários simulados de cadastro, login, perfil, cabeçalho, filtros, contato, newsletter, solicitações, upload, carrinho flutuante e botões de compra. Com Node.js instalado, executar:
 
 ```sh
 node tests/auth.test.mjs

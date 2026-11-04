@@ -92,9 +92,9 @@ Desenvolver um site acessível e responsivo que incentive a reutilização de el
 | Blog | Conteúdos educativos, consulta de artigos publicados e inscrição em newsletter com consentimento. | [blog.html](blog.html) |
 | Contato | Formulário validado, registro de consentimento e informações de ajuda. | [contato.html](contato.html) |
 
-O código de integração também contempla adição e remoção de itens do carrinho, solicitações de doação ou troca e registro de mensagens relacionadas a essas solicitações. A existência desses recursos não comprova um fluxo completo de pagamento, entrega ou conclusão de negociações.
+O carrinho é uma janela flutuante acessível pelo cabeçalho de todas as páginas, com contador, itens clicáveis, exclusão confirmada e total. A função `finalizar_carrinho` valida a seleção e os preços no servidor, registra pedidos pendentes por vendedor em `pedidos` e `itens_pedido`, reserva os anúncios como pausados e limpa os itens finalizados do carrinho na mesma transação. Nenhuma tabela nova é necessária. Comprar agora adiciona o produto e abre a janela para revisão; pagamento, entrega, acompanhamento e cancelamento dos pedidos ainda dependem de evolução.
 
-Solicitação e mensagem são enviadas em uma única transação pela função `criar_solicitacao_com_mensagem`, mantendo as permissões do usuário. A consulta `listar_vendedores_publicos` retorna apenas dados públicos de vendedores com anúncios ativos. O upload valida imagens JPEG, PNG e WebP de até 5 MB, e os filtros são reaplicados após a carga dos anúncios. O teste existente em `tests/auth.test.mjs` cobre 33 cenários simulados; gravações reais não foram utilizadas para essa validação.
+Solicitação e mensagem são enviadas em uma única transação pela função `criar_solicitacao_com_mensagem`, mantendo as permissões do usuário. A consulta `listar_vendedores_publicos` retorna apenas dados públicos de vendedores com anúncios ativos. O upload valida imagens JPEG, PNG e WebP de até 5 MB, e os filtros são reaplicados após a carga dos anúncios. O teste existente em `tests/auth.test.mjs` cobre 47 cenários simulados; gravações reais não foram utilizadas para essa validação.
 
 ### Limites do escopo atual
 
@@ -156,6 +156,7 @@ ReTech/
 ├── js/
 │   ├── script.js
 │   ├── supabase.js
+│   ├── carrinho.js
 │   └── retech-supabase.js
 ├── supabase/
 │   ├── policies.sql
@@ -172,6 +173,7 @@ ReTech/
 - `style.css`: estilos compartilhados pelas páginas.
 - `js/script.js`: interações gerais, menus e filtros locais.
 - `js/supabase.js`: inicialização do cliente de integração.
+- `js/carrinho.js`: carrinho flutuante compartilhado e finalização de pedidos.
 - `js/retech-supabase.js`: fluxos de autenticação, perfil, anúncios e demais operações de dados.
 - `supabase/`: scripts SQL de apoio à configuração do serviço.
 - `imagens/` e `vendor/`: recursos visuais e dependências locais.
@@ -192,7 +194,7 @@ Melhorias propostas para evolução do projeto, sujeitas à priorização da equ
 - [ ] Implementar favoritos com persistência por usuário.
 - [ ] Ampliar o gerenciamento dos anúncios, incluindo edição, encerramento e indicação de conclusão da negociação.
 - [ ] Evoluir a comunicação entre usuários e o acompanhamento das solicitações.
-- [ ] Definir o fluxo completo de negociação e o papel do carrinho na plataforma.
+- [ ] Ampliar o fluxo de negociação com acompanhamento, cancelamento, pagamento e entrega dos pedidos.
 - [ ] Implementar e validar filtros de daltonismo previstos no README.
 - [ ] Ampliar conteúdos multimídia educativos com recursos de acessibilidade.
 - [ ] Documentar os testes e os resultados de acessibilidade e responsividade.

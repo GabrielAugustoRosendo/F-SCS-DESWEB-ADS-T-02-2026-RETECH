@@ -97,7 +97,6 @@
                     <button type="button" class="perfil-aba ativa" role="tab" aria-selected="true" aria-controls="painel-anuncios" id="aba-anuncios" data-painel="painel-anuncios"><i class="fa-solid fa-box-open"></i> Meus anúncios</button>
                     <button type="button" class="perfil-aba" role="tab" aria-selected="false" aria-controls="painel-favoritos" id="aba-favoritos" data-painel="painel-favoritos"><i class="fa-solid fa-heart"></i> Favoritos</button>
                     <button type="button" class="perfil-aba" role="tab" aria-selected="false" aria-controls="painel-dados" id="aba-dados" data-painel="painel-dados"><i class="fa-solid fa-pen-to-square"></i> Editar dados</button>
-                    <button type="button" class="perfil-aba" role="tab" aria-selected="false" aria-controls="painel-carrinho" id="aba-carrinho" data-painel="painel-carrinho"><i class="fa-solid fa-cart-shopping"></i> Carrinho</button>
                     <button type="button" class="perfil-aba" role="tab" aria-selected="false" aria-controls="painel-solicitacoes" id="aba-solicitacoes" data-painel="painel-solicitacoes"><i class="fa-solid fa-handshake"></i> Solicitações</button>
                 </div>
 
@@ -133,12 +132,6 @@
                     </form>
                 </div>
 
-                <div class="perfil-painel" id="painel-carrinho" role="tabpanel" aria-labelledby="aba-carrinho" hidden>
-                    <h2>Carrinho</h2>
-                    <div id="perfil-carrinho"></div>
-                    <p id="carrinho-status" role="status" aria-live="polite"></p>
-                </div>
-
                 <div class="perfil-painel" id="painel-solicitacoes" role="tabpanel" aria-labelledby="aba-solicitacoes" hidden>
                     <h2>Solicitações</h2>
                     <div id="perfil-solicitacoes"></div>
@@ -153,6 +146,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <script src="js/supabase.js"></script>
     <script src="js/script.js"></script>
+    <script src="js/carrinho.js"></script>
     <script src="js/retech-supabase.js"></script>
 </body>
 </html>

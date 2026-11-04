@@ -460,54 +460,6 @@
         });
     }
 
-    async function inicializarCarrinho(usuario) {
-        const grade = document.getElementById("perfil-carrinho");
-        const status = document.getElementById("carrinho-status");
-        if (!grade) return;
-
-        const { data, error } = await db
-            .from("carrinho")
-            .select("id,anuncio_id,anuncios(id,nome_anuncio,preco_anuncio,imagem_url,tipo_anuncio,status,usuario_id)")
-            .eq("usuario_id", usuario.id)
-            .order("created_at", { ascending: false });
-
-        if (error) {
-            grade.textContent = error.message;
-            return;
-        }
-
-        const itens = (data || []).filter((item) =>
-            item.anuncios?.tipo_anuncio === "venda" && item.anuncios.status === "ativo"
-        );
-        if (!itens.length) {
-            grade.innerHTML = '<p>Seu carrinho está vazio.</p>';
-            return;
-        }
-
-        const total = itens.reduce((soma, item) => soma + Number(item.anuncios.preco_anuncio || 0), 0);
-        grade.innerHTML = itens.map((item) => `
-            <article class="perfil-anuncio">
-                <img src="${escapeHtml(item.anuncios.imagem_url || "imagens/vitrine.jpg")}" alt="${escapeHtml(item.anuncios.nome_anuncio)}">
-                <div><h3>${escapeHtml(item.anuncios.nome_anuncio)}</h3><strong>${formatarPreco(item.anuncios.preco_anuncio)}</strong></div>
-                <button type="button" class="botao botao-contorno" data-remover="${escapeHtml(item.anuncio_id)}">Remover</button>
-            </article>
-        `).join("") + `<p><strong>Total: ${formatarPreco(total)}</strong></p><button type="button" class="botao botao-contorno" disabled>Finalização de compra indisponível</button><p>A compra não será concluída enquanto a validação segura de pedidos não estiver implementada no servidor.</p>`;
-
-        grade.querySelectorAll("[data-remover]").forEach((botao) => {
-            botao.addEventListener("click", async () => {
-                await executarAcao(botao, status, async () => {
-                const { error: erroRemocao } = await db
-                    .from("carrinho")
-                    .delete()
-                    .eq("usuario_id", usuario.id)
-                    .eq("anuncio_id", botao.dataset.remover);
-                if (erroRemocao) throw erroRemocao;
-                window.location.reload();
-                });
-            });
-        });
-    }
-
     async function inicializarAnuncio() {
         if (!path.endsWith("anunciar.html")) return;
         const usuario = await usuarioAtual();
@@ -722,41 +674,30 @@
 
         const usuario = await usuarioAtual();
         const informacoes = document.querySelector(".produto-informacoes");
-        if (!informacoes || !usuario) return;
+        if (!informacoes) return;
         const statusAcao = statusDaAcao(informacoes);
 
         if (data.tipo_anuncio === "venda") {
-            if (data.usuario_id === usuario.id || data.status !== "ativo") return;
-            const botao = document.createElement("button");
-            botao.type = "button";
-            botao.className = "botao botao-contorno";
-            botao.textContent = "Adicionar ao carrinho";
-            botao.addEventListener("click", async () => {
-                await executarAcao(botao, statusAcao, async () => {
-                const { data: existente, error: erroConsulta } = await db
-                    .from("carrinho")
-                    .select("id")
-                    .eq("usuario_id", usuario.id)
-                    .eq("anuncio_id", data.id)
-                    .maybeSingle();
-                if (erroConsulta) throw erroConsulta;
-                if (existente) {
-                    statusAcao.textContent = "Já está no carrinho.";
-                    return;
-                }
-                const { error: erro } = await db.from("carrinho").insert({
-                    usuario_id: usuario.id,
-                    anuncio_id: data.id
+            if (data.usuario_id === usuario?.id || data.status !== "ativo") return;
+            const botoes = document.createElement("div");
+            botoes.className = "produto-acoes-compra";
+            for (const comprarAgora of [false, true]) {
+                const botao = document.createElement("button");
+                botao.type = "button";
+                botao.className = comprarAgora ? "botao botao-verde" : "botao botao-contorno";
+                botao.textContent = comprarAgora ? "Comprar agora" : "Adicionar ao carrinho";
+                botao.addEventListener("click", async () => {
+                    await executarAcao(botao, statusAcao, async () => {
+                        if (!window.retechCarrinho) throw new Error("O carrinho não carregou. Atualize a página.");
+                        if (await window.retechCarrinho.adicionar(data.id)) {
+                            statusAcao.textContent = "Produto disponível no seu carrinho.";
+                            if (comprarAgora) await window.retechCarrinho.abrir();
+                        }
+                    });
                 });
-                if (erro?.code === "23505") {
-                    statusAcao.textContent = "Já está no carrinho.";
-                } else {
-                    if (erro) throw erro;
-                    statusAcao.textContent = "Adicionado ao carrinho.";
-                }
-                });
-            });
-            informacoes.appendChild(botao);
+                botoes.appendChild(botao);
+            }
+            informacoes.appendChild(botoes);
         } else if (
             data.usuario_id !== usuario.id
             && data.status === "ativo"

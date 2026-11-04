@@ -338,3 +338,207 @@ for (const cenario of ['remover', 'publicado', 'consulta-falhou']) {
     authTests.push('Limpeza de upload: ' + cenario);
 }
 console.log(authTests.length + ' cenários totais aprovados; nenhum dado real criado.');
+
+
+async function testarCarrinhoFlutuante() {
+    const codigo = await readFile(new URL('../js/carrinho.js', import.meta.url), 'utf8');
+    const estado = {
+        usuario: { id: 'u1' }, confirmar: false, exclusoes: 0, compras: 0,
+        itens: [{ id: 1, anuncio_id: 10, anuncios: { id: 10, usuario_id: 'v1', nome_anuncio: 'Notebook', preco_anuncio: 100, status: 'ativo', tipo_anuncio: 'venda', imagem_url: '' } }]
+    };
+    function elemento() {
+        return {
+            listeners: {}, attrs: {}, dataset: {}, disabled: false, textContent: '',
+            setAttribute(k, v) { this.attrs[k] = v; },
+            addEventListener(k, fn) { this.listeners[k] = fn; },
+            appendChild() {}, focus() {}, contains(alvo) { return this === alvo; },
+            get innerHTML() { return this.html ?? this.textContent.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;'); },
+            set innerHTML(v) { this.html = v; }
+        };
+    }
+    const badge = elemento(), lista = elemento(), status = elemento(), total = elemento();
+    const finalizar = elemento(), fechar = elemento(), acoes = elemento(), janela = elemento(), botao = elemento();
+    janela.open = false;
+    janela.show = () => { janela.open = true; };
+    janela.close = () => { janela.open = false; janela.listeners.close(); };
+    janela.querySelector = s => ({
+        '.carrinho-itens': lista, '.carrinho-status': status, '.carrinho-finalizar': finalizar,
+        '.carrinho-fechar': fechar, '.carrinho-total': total
+    })[s];
+    botao.querySelector = () => badge;
+    let primeiroBotao = true;
+    const document = {
+        querySelector: () => acoes, listeners: {}, body: { appendChild() {} },
+        addEventListener(k, fn) { this.listeners[k] = fn; },
+        createElement(tipo) {
+            if (tipo === 'button' && primeiroBotao) { primeiroBotao = false; return botao; }
+            if (tipo === 'dialog') return janela;
+            return elemento();
+        }
+    };
+    const window = {
+        location: { href: '' }, listeners: {}, confirm: () => estado.confirmar,
+        setTimeout: fn => setTimeout(fn, 0), addEventListener(k, fn) { this.listeners[k] = fn; }
+    };
+    const db = {
+        auth: {
+            getUser: async () => ({ data: { user: estado.usuario } }),
+            onAuthStateChange(fn) { estado.authCallback = fn; }
+        },
+        from() {
+            let operacao = 'select', id;
+            return {
+                select() { return this; },
+                eq(col, valor) { if (col === 'id') id = valor; return this; },
+                order: async () => {
+                    if (estado.falhaLeitura) throw new Error('fetch failed');
+                    return { data: [...estado.itens] };
+                },
+                insert: async (item) => {
+                    if (estado.itens.some(i => i.anuncio_id === item.anuncio_id)) return { error: { code: '23505' } };
+                    estado.itens.push({ id: 2, anuncio_id: item.anuncio_id, anuncios: { id: item.anuncio_id, usuario_id: 'v1', nome_anuncio: 'Celular', preco_anuncio: 50, status: 'ativo', tipo_anuncio: 'venda' } });
+                    return { error: null };
+                },
+                delete() { operacao = 'delete'; return this; },
+                then(resolve) {
+                    if (operacao === 'delete') {
+                        estado.exclusoes++;
+                        estado.itens = estado.itens.filter(i => i.id !== id);
+                    }
+                    resolve({ error: null });
+                }
+            };
+        },
+        rpc: async (nome, args) => {
+            assert.equal(nome, 'finalizar_carrinho');
+            assert.equal(args.p_total_esperado, 150);
+            assert.equal(args.p_anuncio_ids.length, 2);
+            estado.compras++;
+            estado.itens = [];
+            return { data: [{ id: 99, total: 150 }] };
+        }
+    };
+    window.retechDB = db;
+    new vm.Script(codigo).runInContext(vm.createContext({ window, document }));
+    await new Promise(resolve => setImmediate(resolve));
+    assert.equal(badge.textContent, '1');
+    assert.match(total.textContent, /100,00/);
+    assert.ok(lista.innerHTML.includes('produto.html?id=10'));
+    assert.match(lista.innerHTML, /fa-trash-can/);
+    authTests.push('Carrinho global: contador, total e links');
+
+    await botao.listeners.click();
+    assert.equal(janela.open, true);
+    await botao.listeners.click();
+    assert.equal(janela.open, false);
+    authTests.push('Ícone alterna abertura e fechamento');
+
+    const eventoExcluir = { target: { closest: () => ({ dataset: { id: '1' } }) } };
+    await lista.listeners.click(eventoExcluir);
+    assert.equal(estado.exclusoes, 0);
+    authTests.push('Exclusão cancelada preserva o item');
+
+    estado.confirmar = true;
+    await lista.listeners.click(eventoExcluir);
+    assert.equal(estado.exclusoes, 1);
+    assert.equal(badge.textContent, '0');
+    assert.equal(finalizar.disabled, true);
+    authTests.push('Exclusão confirmada atualiza contador e total');
+
+    await window.retechCarrinho.adicionar(10);
+    await window.retechCarrinho.adicionar(10);
+    assert.equal(estado.itens.length, 1);
+    await window.retechCarrinho.adicionar(20);
+    assert.equal(badge.textContent, '2');
+    assert.match(total.textContent, /100,00/);
+    // As inserções simuladas custam R$ 50 cada.
+    estado.itens[0].anuncios.preco_anuncio = 100;
+    await window.retechCarrinho.atualizar();
+    assert.match(total.textContent, /150,00/);
+    authTests.push('Adicionar persiste e impede duplicidade');
+
+    estado.confirmar = false;
+    await finalizar.listeners.click();
+    assert.equal(estado.compras, 0);
+    authTests.push('Finalização cancelada não registra pedido');
+
+    estado.confirmar = true;
+    await finalizar.listeners.click();
+    assert.equal(estado.compras, 1);
+    assert.equal(badge.textContent, '0');
+    assert.match(status.textContent, /#99/);
+    assert.match(status.textContent, /pendente/);
+    authTests.push('Finalização usa total e IDs e esvazia carrinho');
+
+    estado.itens = [{ id: 3, anuncio_id: 30, anuncios: null }];
+    await window.retechCarrinho.atualizar();
+    assert.equal(badge.textContent, '1');
+    assert.equal(finalizar.disabled, true);
+    assert.match(lista.innerHTML, /Indisponível/);
+    authTests.push('Item indisponível permanece removível e bloqueia compra');
+
+    estado.falhaLeitura = true;
+    await assert.rejects(() => window.retechCarrinho.atualizar());
+    assert.equal(finalizar.disabled, true);
+    authTests.push('Falha ao atualizar impede finalização com dados antigos');
+    estado.falhaLeitura = false;
+
+    estado.usuario = null;
+    estado.authCallback('SIGNED_OUT', null);
+    assert.equal(badge.textContent, '0');
+    await window.retechCarrinho.abrir();
+    assert.match(lista.innerHTML, /login.html/);
+    assert.equal(await window.retechCarrinho.adicionar(50), false);
+    assert.equal(window.location.href, 'login.html');
+    authTests.push('Visitante recebe acesso ao login e não vê itens privados');
+
+    document.listeners.keydown({ key: 'Escape' });
+    assert.equal(janela.open, false);
+    authTests.push('Escape fecha a janela');
+}
+await testarCarrinhoFlutuante();
+console.log(authTests.length + ' cenários totais aprovados, incluindo carrinho flutuante.');
+
+
+for (const modo of ['visitante', 'comprador', 'proprietario']) {
+    const botoes = [];
+    let adicoes = 0, aberturas = 0;
+    const info = { querySelector: () => ({ textContent: '' }), prepend() {}, appendChild() {} };
+    const ctx = ambiente({
+        path: '/produto.html', URLSearchParams,
+        window: {
+            location: { search: '?id=1' },
+            retechCarrinho: {
+                adicionar: async id => { assert.equal(id, 1); adicoes++; return true; },
+                abrir: async () => { aberturas++; }
+            }
+        },
+        document: {
+            getElementById: () => ({}), querySelector: () => info,
+            createElement(tipo) {
+                const el = { dataset: {}, setAttribute() {}, appendChild() {}, addEventListener(_e, fn) { this.click = fn; } };
+                if (tipo === 'button') botoes.push(el);
+                return el;
+            }
+        },
+        usuarioAtual: async () => modo === 'visitante' ? null : { id: modo === 'proprietario' ? 'v1' : 'u1' },
+        db: {
+            from() { return { select() { return this; }, eq() { return this; }, maybeSingle: async () => ({ data: { id: 1, usuario_id: 'v1', tipo_anuncio: 'venda', status: 'ativo', preco_anuncio: 100 } }) }; },
+            rpc: async () => ({ data: [] })
+        },
+        nomeEstado: {}, nomeTipo: {}, escapeHtml: v => v, formatarPreco: () => ''
+    });
+    new vm.Script(funcao('async function inicializarProduto(', 'async function inicializarBlog(')).runInContext(ctx);
+    await ctx.inicializarProduto();
+    assert.equal(botoes.length, modo === 'proprietario' ? 0 : 2);
+    if (modo !== 'proprietario') {
+        assert.equal(botoes[0].textContent, 'Adicionar ao carrinho');
+        assert.equal(botoes[1].textContent, 'Comprar agora');
+        await botoes[0].click();
+        await botoes[1].click();
+        assert.equal(adicoes, 2);
+        assert.equal(aberturas, 1);
+    }
+    authTests.push('Botões de produto: ' + modo);
+}
+console.log(authTests.length + ' cenários totais aprovados.');

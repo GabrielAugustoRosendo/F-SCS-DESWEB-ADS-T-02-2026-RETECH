@@ -493,3 +493,83 @@ using (
   bucket_id = 'avatares'
   and auth.uid()::text = (storage.foldername(name))[1]
 );
+
+
+-- Finalização validada no servidor; utiliza somente tabelas existentes.
+create or replace function retech_private.finalizar_carrinho(p_anuncio_ids bigint[], p_total_esperado numeric)
+returns jsonb
+language plpgsql security definer set search_path = ''
+as $$
+declare
+  v_usuario uuid := auth.uid();
+  v_quantidade integer;
+  v_total numeric;
+  v_vendedor record;
+  v_pedido bigint;
+  v_resultado jsonb := '[]'::jsonb;
+begin
+  if v_usuario is null then raise exception 'Entre na sua conta para finalizar.'; end if;
+  if not exists(select 1 from public.usuarios where id = v_usuario) then
+    raise exception 'Complete o cadastro antes de finalizar.';
+  end if;
+  if p_anuncio_ids is null or cardinality(p_anuncio_ids) not between 1 and 100
+     or exists(select 1 from unnest(p_anuncio_ids) x where x is null)
+     or (select count(distinct x) from unnest(p_anuncio_ids) x) <> cardinality(p_anuncio_ids) then
+    raise exception 'Seleção de itens inválida.';
+  end if;
+  if p_total_esperado is null or p_total_esperado <= 0 then raise exception 'Total inválido.'; end if;
+
+  perform pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended('checkout:' || v_usuario::text, 0));
+  perform c.id from public.carrinho c
+    where c.usuario_id = v_usuario and c.anuncio_id = any(p_anuncio_ids)
+    order by c.id for update;
+  select count(*) into v_quantidade from public.carrinho c
+    where c.usuario_id = v_usuario and c.anuncio_id = any(p_anuncio_ids);
+  if v_quantidade <> cardinality(p_anuncio_ids) then
+    raise exception 'O carrinho mudou ou os pedidos já foram registrados. Atualize antes de repetir.';
+  end if;
+
+  perform a.id from public.anuncios a where a.id = any(p_anuncio_ids) order by a.id for update;
+  select count(*), sum(round(a.preco_anuncio, 2)) into v_quantidade, v_total
+    from public.anuncios a where a.id = any(p_anuncio_ids)
+      and a.status = 'ativo' and a.tipo_anuncio = 'venda'
+      and a.usuario_id <> v_usuario and a.preco_anuncio > 0;
+  if v_quantidade <> cardinality(p_anuncio_ids) then
+    raise exception 'Um produto ficou indisponível. Atualize o carrinho.';
+  end if;
+  if v_total <> p_total_esperado then
+    raise exception 'O preço mudou. Confira o novo total antes de confirmar.';
+  end if;
+  if exists(select 1 from public.itens_pedido i join public.pedidos p on p.id = i.pedido_id
+    where i.anuncio_id = any(p_anuncio_ids) and p.status in ('pendente', 'confirmado', 'concluido')) then
+    raise exception 'Um produto já está reservado em outro pedido.';
+  end if;
+
+  for v_vendedor in
+    select a.usuario_id, sum(round(a.preco_anuncio, 2)) as total
+    from public.anuncios a where a.id = any(p_anuncio_ids) group by a.usuario_id
+  loop
+    insert into public.pedidos(comprador_id, vendedor_id, total, status)
+      values(v_usuario, v_vendedor.usuario_id, v_vendedor.total, 'pendente')
+      returning id into v_pedido;
+    insert into public.itens_pedido(pedido_id, anuncio_id, preco_unitario)
+      select v_pedido, a.id, round(a.preco_anuncio, 2) from public.anuncios a
+      where a.id = any(p_anuncio_ids) and a.usuario_id = v_vendedor.usuario_id;
+    v_resultado := v_resultado || jsonb_build_array(jsonb_build_object('id', v_pedido, 'total', v_vendedor.total));
+  end loop;
+  -- Reserva os aparelhos, sem representar pagamento ou entrega concluídos.
+  update public.anuncios set status = 'pausado' where id = any(p_anuncio_ids);
+  delete from public.carrinho where usuario_id = v_usuario and anuncio_id = any(p_anuncio_ids);
+  return v_resultado;
+end;
+$$;
+revoke all on function retech_private.finalizar_carrinho(bigint[], numeric) from public, anon;
+grant execute on function retech_private.finalizar_carrinho(bigint[], numeric) to authenticated;
+
+create or replace function public.finalizar_carrinho(p_anuncio_ids bigint[], p_total_esperado numeric)
+returns jsonb language sql security invoker set search_path = ''
+as $$
+  select retech_private.finalizar_carrinho(p_anuncio_ids, p_total_esperado);
+$$;
+revoke all on function public.finalizar_carrinho(bigint[], numeric) from public, anon;
+grant execute on function public.finalizar_carrinho(bigint[], numeric) to authenticated;
