@@ -98,6 +98,8 @@ Solicitação e mensagem são enviadas em uma única transação pela função `
 
 ### Limites do escopo atual
 
+- A página adicional `pagar.html` é somente visual, com Pix, crédito e débito. `js/pagamento.js` alterna as opções e confere apenas a quantidade de caracteres dos campos. Não há envio ou armazenamento de dados de pagamento nem alteração de pedidos pela simulação.
+
 - A integração dinâmica depende de autenticação, banco de dados, armazenamento e permissões configurados no Supabase.
 - Favoritos aparecem no planejamento e na interface, mas o contador é definido como zero no código de integração; a persistência desse recurso permanece como melhoria.
 - A presença das dez páginas no repositório atualiza o cenário do README, que ainda classifica algumas páginas existentes como planejadas.

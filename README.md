@@ -71,6 +71,8 @@ O objetivo geral é desenvolver um site acessível e responsivo que promova a re
 
 As dez páginas principais já estão presentes no repositório.
 
+A página adicional [pagar.html](pagar.html) apresenta uma demonstração visual de Pix, cartão de crédito e cartão de débito. A validação se limita ao comprimento dos campos: nome de 2 a 80 caracteres, CPF com 11, número do cartão com 16, validade com 5 e código de segurança com 3 ou 4. Nenhum dado de pagamento é enviado ou armazenado, e a simulação não altera pedidos no banco.
+
 | Página | Arquivo | Recursos presentes no código |
 | --- | --- | --- |
 | Início | [index.html](index.html) | Apresentação, categorias, destaques e chamadas para reutilização. |

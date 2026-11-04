@@ -23,7 +23,7 @@ Estas regras orientam a implementação; não representam uma declaração de qu
 
 ### Stack atual
 
-- **HTML5:** dez páginas principais na raiz do repositório.
+- **HTML5:** dez páginas principais e a demonstração adicional `pagar.html` na raiz do repositório.
 - **CSS3:** estilos compartilhados em `style.css`.
 - **JavaScript puro:** interações e integração de dados em `js/`.
 - **Supabase:** integração existente de autenticação, banco de dados e armazenamento de imagens, com `supabase-js` versão 2 carregado por CDN.

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Conheça as opções de pagamento do ReTech: Pix, cartão de crédito e cartão de débito. Página demonstrativa.">
+    <title>Pagamento | ReTech</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
+</head>
+<body>
+    <header class="cabecalho">
+        <div class="cabecalho-conteudo">
+            <a href="index.html" class="logo" aria-label="ReTech - página inicial">
+                <span class="logo-simbolo">♻</span>
+                <span class="logo-texto">
+                    <strong>Re<span>Tech</span></strong>
+                    <small>TECNOLOGIA QUE REUTILIZA</small>
+                </span>
+            </a>
+
+            <form class="busca" action="catalogo.html" method="get" role="search">
+                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                <input type="search" name="busca" id="campo-busca" placeholder="Buscar celulares, notebooks, videogames..." aria-label="Buscar no catálogo">
+            </form>
+
+            <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu-principal" aria-label="Abrir menu">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
+            </button>
+
+            <nav class="menu" id="menu-principal" aria-label="Menu principal">
+                <a href="index.html">Início</a>
+                <a href="catalogo.html">Comprar</a>
+                <a href="doar-trocar.html">Doar/Trocar</a>
+                <div class="menu-mais">
+                    <button class="menu-mais-botao" type="button" aria-expanded="false" aria-haspopup="true">
+                        Mais <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                    </button>
+                    <div class="submenu-mais" role="menu">
+                        <a href="sobre.html" role="menuitem">Sobre o ReTech</a>
+                        <a href="blog.html" role="menuitem">Blog e sustentabilidade</a>
+                        <a href="contato.html" role="menuitem">Contato e ajuda</a>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="acoes-cabecalho">
+                <a href="login.html" class="entrar"><i class="fa-regular fa-user" aria-hidden="true"></i> Entrar</a>
+                <a href="anunciar.html" class="botao botao-verde anunciar-topo">
+                    <i class="fa-solid fa-plus" aria-hidden="true"></i> Anunciar produto
+                </a>
+            </div>
+        </div>
+    </header>
+
+
+    <main class="pagamento-pagina">
+        <div class="container pagamento-intro">
+            <a href="catalogo.html" class="voltar-catalogo">← Voltar ao catálogo</a>
+            <p class="etiqueta"><i class="fa-solid fa-leaf" aria-hidden="true"></i> MAIS UMA VIDA PARA A TECNOLOGIA</p>
+            <h1>Escolha como <span>pagar.</span></h1>
+            <p>Pix, crédito ou débito. Uma escolha simples para continuar sua próxima história.</p>
+        </div>
+        <div class="container pagamento-layout">
+            <section class="pagamento-card" aria-labelledby="pagamento-titulo">
+                <h2 id="pagamento-titulo">Forma de pagamento</h2>
+                <p class="pagamento-subtitulo">Selecione uma opção para visualizar os campos.</p>
+                <form id="formulario-pagamento" autocomplete="off" novalidate>
+                    <fieldset id="pagamento-campos" disabled>
+                        <legend class="pagamento-sr">Dados da demonstração de pagamento</legend>
+                        <fieldset class="pagamento-metodos">
+                            <legend class="pagamento-sr">Escolha a forma de pagamento</legend>
+                            <label><input type="radio" name="metodo" value="pix" checked><span><i class="fa-brands fa-pix" aria-hidden="true"></i>Pix<small>Pagamento instantâneo</small></span></label>
+                            <label><input type="radio" name="metodo" value="credito"><span><i class="fa-regular fa-credit-card" aria-hidden="true"></i>Crédito<small>Cartão de crédito</small></span></label>
+                            <label><input type="radio" name="metodo" value="debito"><span><i class="fa-solid fa-credit-card" aria-hidden="true"></i>Débito<small>Cartão de débito</small></span></label>
+                        </fieldset>
+                        <div class="pagamento-dados">
+                            <label for="pagamento-nome">Nome do pagador ou titular</label>
+                            <input id="pagamento-nome" type="text" required minlength="2" maxlength="80" aria-describedby="pagamento-nome-ajuda">
+                            <small id="pagamento-nome-ajuda">De 2 a 80 caracteres. Use um nome fictício.</small>
+                            <label for="pagamento-cpf">CPF do pagador</label>
+                            <input id="pagamento-cpf" type="text" inputmode="numeric" required minlength="11" maxlength="11" placeholder="00000000000" aria-describedby="pagamento-cpf-ajuda">
+                            <small id="pagamento-cpf-ajuda">11 caracteres, sem pontos ou traço. Não há verificação de CPF.</small>
+                        </div>
+                        <section id="pagamento-pix" class="pagamento-pix" aria-labelledby="pix-titulo">
+                            <div class="pagamento-qr" aria-hidden="true"><i class="fa-solid fa-qrcode"></i><small>EXEMPLO VISUAL</small></div>
+                            <div><h3 id="pix-titulo">Pague com Pix</h3><p>Em uma compra real, você escanearia o QR Code com o aplicativo do seu banco.</p><p class="pagamento-pix-nota">Este desenho não gera cobrança e não pode ser usado para pagar.</p></div>
+                        </section>
+                        <fieldset id="pagamento-cartao" class="pagamento-cartao" hidden disabled>
+                            <legend id="cartao-titulo">Dados do cartão de crédito</legend>
+                            <label for="pagamento-numero">Número do cartão</label>
+                            <input id="pagamento-numero" type="text" inputmode="numeric" minlength="16" maxlength="16" required placeholder="0000000000000000" aria-describedby="pagamento-numero-ajuda">
+                            <small id="pagamento-numero-ajuda">16 caracteres, sem espaços.</small>
+                            <div class="pagamento-duplo">
+                                <div><label for="pagamento-validade">Validade</label><input id="pagamento-validade" type="text" minlength="5" maxlength="5" required placeholder="MM/AA" aria-describedby="pagamento-validade-ajuda"><small id="pagamento-validade-ajuda">5 caracteres.</small></div>
+                                <div><label for="pagamento-cvv">Código de segurança</label><input id="pagamento-cvv" type="password" inputmode="numeric" minlength="3" maxlength="4" required placeholder="CVV" aria-describedby="pagamento-cvv-ajuda"><small id="pagamento-cvv-ajuda">3 ou 4 caracteres.</small></div>
+                            </div>
+                        </fieldset>
+                        <p id="pagamento-status" class="pagamento-status" role="status" aria-live="polite"></p>
+                        <button id="pagamento-simular" type="submit" class="botao botao-verde">Simular pagamento com Pix <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                    </fieldset>
+                </form>
+                <noscript><p>Ative o JavaScript para experimentar os campos desta demonstração.</p></noscript>
+            </section>
+            <aside class="pagamento-lateral" aria-labelledby="pagamento-demo-titulo">
+                <div class="pagamento-demo">
+                    <span class="pagamento-selo"><i class="fa-solid fa-palette" aria-hidden="true"></i> PRÉVIA DO PAGAMENTO</span>
+                    <h2 id="pagamento-demo-titulo">Uma nova vida começa com uma boa escolha.</h2>
+                    <p>Esta página demonstra as formas de pagamento do ReTech. Nenhum valor será cobrado.</p>
+                    <dl><div><dt>Forma selecionada</dt><dd id="pagamento-resumo-metodo">Pix</dd></div><div><dt>Ambiente</dt><dd>Demonstração</dd></div></dl>
+                </div>
+                <div class="pagamento-informacao"><i class="fa-solid fa-circle-info" aria-hidden="true"></i><p>Use apenas dados fictícios. Os campos são conferidos somente pela quantidade de caracteres. As informações não são enviadas ou armazenadas.</p></div>
+            </aside>
+        </div>
+    </main>
+    <footer><p>© 2026 ReTech — Tecnologia que reutiliza.</p></footer>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/carrinho.js"></script>
+    <script src="js/retech-supabase.js"></script>
+    <script src="js/pagamento.js"></script>
+</body>
+</html>
