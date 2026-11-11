@@ -75,7 +75,7 @@ A página adicional [pagar.html](pagar.html) apresenta uma demonstração visual
 
 | Página | Arquivo | Recursos presentes no código |
 | --- | --- | --- |
-| Início | [index.html](index.html) | Apresentação, categorias, destaques e chamadas para reutilização. |
+| Início | [index.html](index.html) | Categorias com contagens reais de vendas ativas, quatro vendas recentes, até três doações/trocas, orientações de uso, sustentabilidade e rodapé com navegação. |
 | Catálogo | [catalogo.html](catalogo.html) | Listagem, busca, filtros por categoria e conservação e ordenação. |
 | Detalhes do produto | [produto.html](produto.html) | Imagem, descrição, preço, condição, modalidade e informações públicas do anunciante. |
 | Anunciar | [anunciar.html](anunciar.html) | Formulário de publicação com categoria, descrição, condição, modalidade, preço e imagem. |
@@ -254,6 +254,22 @@ Essas marcações indicam a existência dos arquivos e do código, sem substitui
 - [ ] Organizar as evidências e a documentação acadêmica complementar.
 
 ## Validação
+
+### Página inicial
+
+A home usa a conexão existente do Supabase. `js/inicio.js` consulta somente anúncios ativos e campos públicos, com ordenação por data de criação e desempate por ID. Os cards reutilizam o componente de `js/retech-supabase.js`. As contagens das categorias consideram vendas ativas, correspondendo ao catálogo de compra.
+
+Os dados são atualizados a cada 30 segundos enquanto a aba está visível e ao retornar à página. A atualização não depende de habilitar Realtime no banco. Ausência de anúncios, configuração indisponível e falhas têm mensagens próprias; as listas não usam produtos nem preços fictícios. O marcador “Recém-anunciado” aparece em vendas criadas nos últimos sete dias.
+
+Os estilos do conteúdo da home ficam restritos à classe `pagina-inicio`. O cabeçalho usa a classe compartilhada `cabecalho-padrao` nas onze páginas, mantendo a mesma organização da home e a indicação da página atual. Para executar os testes simulados de consultas, estados, segurança dos cards, links e menus:
+
+```sh
+node tests/inicio.test.mjs
+```
+
+Esses testes e a consulta SQL de leitura com o papel `anon` não substituem a conferência visual e a validação HTTP no navegador.
+
+### Fluxos compartilhados
 
 O teste de regressão em `tests/auth.test.mjs` cobre 47 cenários simulados de cadastro, login, perfil, cabeçalho, filtros, contato, newsletter, solicitações, upload, carrinho flutuante e botões de compra. Com Node.js instalado, executar:
 

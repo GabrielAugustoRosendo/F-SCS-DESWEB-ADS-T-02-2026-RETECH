@@ -81,7 +81,7 @@ Desenvolver um site acessível e responsivo que incentive a reutilização de el
 
 | Área | Funcionalidades identificadas | Arquivo |
 | --- | --- | --- |
-| Início | Apresentação da plataforma, categorias e produtos em destaque. | [index.html](index.html) |
+| Início | Apresentação, categorias com contagens reais, quatro vendas ativas recentes, até três doações ou trocas ativas, orientações de uso e sustentabilidade. | [index.html](index.html) |
 | Catálogo | Listagem de anúncios, busca, filtros por categoria e conservação e ordenação. | [catalogo.html](catalogo.html) |
 | Produto | Consulta de descrição, imagem, preço, modalidade, condição e informações públicas do anunciante. | [produto.html](produto.html) |
 | Anúncios | Formulário para anunciar eletrônicos, selecionar modalidade e enviar imagem. | [anunciar.html](anunciar.html) |
@@ -97,6 +97,8 @@ O carrinho é uma janela flutuante acessível pelo cabeçalho de todas as págin
 Solicitação e mensagem são enviadas em uma única transação pela função `criar_solicitacao_com_mensagem`, mantendo as permissões do usuário. A consulta `listar_vendedores_publicos` retorna apenas dados públicos de vendedores com anúncios ativos. O upload valida imagens JPEG, PNG e WebP de até 5 MB, e os filtros são reaplicados após a carga dos anúncios. O teste existente em `tests/auth.test.mjs` cobre 47 cenários simulados; gravações reais não foram utilizadas para essa validação.
 
 ### Limites do escopo atual
+
+- A home consulta os campos públicos de `anuncios` e `categorias` com a conexão existente. As contagens indicam vendas ativas. As listas têm carregamento, estado vazio e tratamento de falhas; são atualizadas a cada 30 segundos na aba visível e ao retornar à página, sem exigir alterações de Realtime no banco.
 
 - A página adicional `pagar.html` é somente visual, com Pix, crédito e débito. `js/pagamento.js` alterna as opções e confere apenas a quantidade de caracteres dos campos. Não há envio ou armazenamento de dados de pagamento nem alteração de pedidos pela simulação.
 

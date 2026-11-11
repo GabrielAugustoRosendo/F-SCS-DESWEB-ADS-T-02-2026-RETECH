@@ -12,7 +12,7 @@
     function escapeHtml(valor) {
         const elemento = document.createElement("div");
         elemento.textContent = String(valor ?? "");
-        return elemento.innerHTML;
+        return elemento.innerHTML.replaceAll('"', "&quot;").replaceAll("'", "&#39;");
     }
 
     function mostrarMensagem(elemento, texto, sucesso = false) {
@@ -570,30 +570,44 @@
         });
     }
 
-    function criarCard(anuncio, vendedores = {}) {
+    function criarCard(anuncio, vendedores = {}, opcoes = {}) {
         const categoria = anuncio.categorias?.nome || "Produto";
         const categoriaSlug = anuncio.categorias?.slug || "";
         const vendedor = vendedores[anuncio.usuario_id];
         const artigo = document.createElement("article");
-        artigo.className = "produto produto-catalogo";
+        artigo.className = "produto produto-catalogo" + (opcoes.inicio ? " inicio-card" : "");
         artigo.dataset.modalidade = anuncio.tipo_anuncio;
         artigo.dataset.categoria = categoriaSlug;
         artigo.dataset.estado = anuncio.estado;
         artigo.dataset.preco = anuncio.tipo_anuncio === "venda" ? String(anuncio.preco_anuncio || 0) : "0";
         artigo.dataset.nome = anuncio.nome_anuncio;
+        const idade = Date.now() - new Date(anuncio.created_at).getTime();
+        const seloInicio = anuncio.tipo_anuncio === "venda"
+            ? (idade >= 0 && idade <= 7 * 24 * 60 * 60 * 1000 ? "Recém-anunciado" : "À venda")
+            : nomeTipo[anuncio.tipo_anuncio];
+        const destino = `produto.html?id=${encodeURIComponent(anuncio.id)}`;
         artigo.innerHTML = `
-            <span class="selo-produto ${anuncio.tipo_anuncio === "venda" ? "selo-neutro" : "selo-verde"}">${escapeHtml(nomeTipo[anuncio.tipo_anuncio] || nomeEstado[anuncio.estado] || "")}</span>
-            <img src="${escapeHtml(anuncio.imagem_url || "imagens/vitrine.jpg")}" alt="${escapeHtml(anuncio.nome_anuncio)}">
+            ${opcoes.inicio ? `<a class="inicio-card-link" href="${destino}">` : ""}
+            <span class="selo-produto ${anuncio.tipo_anuncio === "venda" ? "selo-neutro" : "selo-verde"}">${escapeHtml(opcoes.inicio ? seloInicio : nomeTipo[anuncio.tipo_anuncio] || nomeEstado[anuncio.estado] || "")}</span>
+            <img src="${escapeHtml(anuncio.imagem_url || "imagens/vitrine.jpg")}" alt="${escapeHtml(anuncio.nome_anuncio)}" ${opcoes.inicio ? 'loading="lazy" width="400" height="280"' : ""}>
             <div class="produto-info">
                 <p class="produto-categoria">${escapeHtml(categoria)}</p>
                 <h3>${escapeHtml(anuncio.nome_anuncio)}</h3>
+                ${opcoes.inicio && anuncio.estado ? `<p class="inicio-card-estado">${escapeHtml(nomeEstado[anuncio.estado] || anuncio.estado)}</p>` : ""}
                 <p>${escapeHtml(anuncio.descricao_anuncio || "")}</p>
                 ${vendedor ? `<p class="produto-vendedor">Vendedor: ${escapeHtml(vendedor.nome || "Usuário")}${vendedor.local ? ` - ${escapeHtml(vendedor.local)}` : ""}</p>` : ""}
-                <strong>${anuncio.tipo_anuncio === "venda" ? formatarPreco(anuncio.preco_anuncio) : anuncio.tipo_anuncio === "doacao" ? "Grátis" : "Para trocar"}</strong>
-                <a href="produto.html?id=${encodeURIComponent(anuncio.id)}" class="link-produto">Ver detalhes <i class="fa-solid fa-arrow-right"></i></a>
-            </div>`;
+                <strong>${anuncio.tipo_anuncio === "venda" ? (opcoes.inicio && (anuncio.preco_anuncio == null || !Number.isFinite(Number(anuncio.preco_anuncio))) ? "Preço não informado" : formatarPreco(anuncio.preco_anuncio)) : anuncio.tipo_anuncio === "doacao" ? "Grátis" : "Para trocar"}</strong>
+                ${opcoes.inicio ? '<span class="link-produto">Ver detalhes <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>' : `<a href="${destino}" class="link-produto">Ver detalhes <i class="fa-solid fa-arrow-right"></i></a>`}
+            </div>${opcoes.inicio ? "</a>" : ""}`;
+        if (opcoes.inicio) {
+            const imagem = artigo.querySelector("img");
+            imagem.addEventListener("error", () => { imagem.src = "imagens/vitrine.jpg"; }, { once: true });
+        }
         return artigo;
     }
+
+    // A home reutiliza o mesmo componente, sem criar outra conexão de dados.
+    window.retechCriarCard = criarCard;
 
     async function inicializarCatalogo() {
         const grade = document.getElementById("grade-catalogo");

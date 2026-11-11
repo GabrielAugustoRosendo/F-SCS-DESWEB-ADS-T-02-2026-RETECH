@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Compre, venda, doe e troque eletrônicos usados no ReTech. Dê uma nova vida à tecnologia e participe da economia circular.">
     <title>ReTech | Tecnologia que ganha uma nova vida</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 </head>
-<body>
-    <!-- CABEÇALHO -->
-    <header class="cabecalho">
+<body class="pagina-inicio">
+    <a class="inicio-pular" href="#inicio">Pular para o conteúdo</a>
+    <header class="cabecalho cabecalho-padrao">
         <div class="cabecalho-conteudo">
             <a href="index.html" class="logo" aria-label="ReTech - início">
                 <span class="logo-simbolo">♻</span>
@@ -18,23 +19,23 @@
                     <small>TECNOLOGIA QUE REUTILIZA</small>
                 </span>
             </a>
-    <form class="busca" action="catalogo.html" method="get">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input
-            type="search"
-            name="busca"
-            id="campo-busca"
-            placeholder="Buscar celulares, computadores, games..."
-            aria-label="Buscar catalogo"
-        >
-    </form>
-            <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu-principal" aria-label="Abrir menu"><i class="fa-solid fa-bars"></i></button>
+            <form role="search" class="busca" action="catalogo.html" method="get">
+                <i aria-hidden="true" class="fa-solid fa-magnifying-glass"></i>
+                <input
+                    type="search"
+                    name="busca"
+                    id="campo-busca"
+                    placeholder="Buscar celulares, computadores, games..."
+                    aria-label="Buscar no catálogo"
+                >
+            </form>
+            <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu-principal" aria-label="Abrir menu"><i aria-hidden="true" class="fa-solid fa-bars"></i></button>
             <nav class="menu" id="menu-principal" aria-label="Menu principal">
                 <a href="index.html" class="ativo" aria-current="page">Início</a>
                 <a href="catalogo.html">Comprar</a>
                 <a href="doar-trocar.html">Doar/Trocar</a>
                 <div class="menu-mais">
-                    <button class="menu-mais-botao" type="button" aria-expanded="false" aria-haspopup="true">Mais <i class="fa-solid fa-chevron-down"></i></button>
+                    <button class="menu-mais-botao" type="button" aria-expanded="false" aria-haspopup="true">Mais <i aria-hidden="true" class="fa-solid fa-chevron-down"></i></button>
                     <div class="submenu-mais" role="menu">
                         <a href="sobre.html" role="menuitem">Sobre o ReTech</a>
                         <a href="blog.html" role="menuitem">Blog e sustentabilidade</a>
@@ -44,159 +45,130 @@
             </nav>
 
             <div class="acoes-cabecalho">
-                <a href="login.html" class="entrar"><i class="fa-regular fa-user"></i> Entrar</a>
+                <a href="login.html" class="entrar"><i aria-hidden="true" class="fa-regular fa-user"></i> Entrar</a>
                 <a href="anunciar.html" class="botao botao-verde anunciar-topo">
-                    <i class="fa-solid fa-plus"></i> Anunciar produto
+                    <i aria-hidden="true" class="fa-solid fa-plus"></i> Anunciar produto
                 </a>
             </div>
         </div>
     </header>
 
+
     <main id="inicio">
-        <!-- BANNER PRINCIPAL -->
-        <section class="banner">
+        <section class="banner inicio-banner" aria-labelledby="inicio-titulo">
             <div class="container banner-conteudo">
                 <div class="banner-texto">
-                    <div class="etiqueta"><i class="fa-solid fa-leaf"></i> ELETRÔNICOS USADOS <span></span></div>
-                    <h1>Tecnologia que ganha<br>uma <em>nova vida.</em></h1>
-                    <p>Compre, venda, doe e troque eletrônicos usados com mais consciência e faça parte de uma economia mais circular e sustentável.</p>
+                    <p class="etiqueta"><i class="fa-solid fa-leaf" aria-hidden="true"></i> TECNOLOGIA COM MAIS POSSIBILIDADES</p>
+                    <h1 id="inicio-titulo">Tecnologia que ganha uma <em>nova vida.</em></h1>
+                    <p>Encontre seu próximo eletrônico. Dê um novo destino ao que você já tem. Compre, venda, doe ou troque com mais consciência.</p>
                     <div class="banner-botoes">
-                        <a class="botao botao-verde" href="catalogo.html"><i class="fa-solid fa-magnifying-glass"></i> Explorar catalogo</a>
-                        <a class="botao botao-contorno" href="anunciar.html"><i class="fa-solid fa-arrow-up-from-bracket"></i> Anunciar agora</a>
+                        <a class="botao botao-verde" href="catalogo.html">Explorar catálogo <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                        <a class="botao botao-contorno" href="anunciar.html">Anunciar agora</a>
                     </div>
+                    <p class="inicio-banner-nota"><i class="fa-solid fa-recycle" aria-hidden="true"></i> Bom para você. Melhor para o ciclo da tecnologia.</p>
                 </div>
                 <div class="banner-imagem">
-                    <img src="imagens/vitrine.jpg" alt="Eletrônicos reutilizados: celular, notebook, videogame e câmera">
+                    <img src="imagens/vitrine.jpg" width="1306" height="460" fetchpriority="high" alt="Celular, notebook, videogame e câmera que podem ganhar uma nova vida">
+                    <span class="inicio-imagem-legenda"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i> Reutilizar é seguir em frente.</span>
                 </div>
             </div>
         </section>
 
-        
-<!-- CATEGORIAS -->
-<section class="container categorias" aria-label="Categorias de catalogo">
-    <a href="catalogo.html?categoria=celulares" class="categoria">
-        <i class="fa-solid fa-mobile-screen-button"></i>
-        <span>Celulares</span>
-        <i class="fa-solid fa-chevron-right seta"></i>
-    </a>
-
-    <a href="catalogo.html?categoria=computadores" class="categoria">
-        <i class="fa-solid fa-laptop"></i>
-        <span>Computadores</span>
-        <i class="fa-solid fa-chevron-right seta"></i>
-    </a>
-
-    <a href="catalogo.html?categoria=games" class="categoria">
-        <i class="fa-solid fa-gamepad"></i>
-        <span>Games</span>
-        <i class="fa-solid fa-chevron-right seta"></i>
-    </a>
-
-    <a href="catalogo.html?categoria=cameras" class="categoria">
-        <i class="fa-solid fa-camera"></i>
-        <span>Câmeras</span>
-        <i class="fa-solid fa-chevron-right seta"></i>
-    </a>
-
-    <a href="catalogo.html?categoria=outros" class="categoria">
-        <i class="fa-solid fa-ellipsis"></i>
-        <span>Outros</span>
-        <i class="fa-solid fa-chevron-right seta"></i>
-    </a>
-</section>
-
-
-<!-- CATALOGO -->
-<section class="container catalogo" id="catalogo">
-    <div class="titulo-secao">
-        <h2><i class="fa-solid fa-leaf"></i> Destaques da semana</h2>
-        <a href="catalogo.html">
-            Ver todos os catalogo
-            <i class="fa-solid fa-chevron-right"></i>
-        </a>
-    </div>
-
-    <div class="grade-catalogo">
-        <article class="produto">
-            <a href="produto.html?id=iphone" class="produto-link">
-                <img src="imagens/iphone.jpg" alt="iPhone 17 laranja">
-                <div class="produto-info">
-                    <h3>iPhone 17 128 GB</h3>
-                    <p>6,3” · iOS · Câmera dupla de 48 MP</p>
-                    <strong>R$ 4.699</strong>
-                    <span class="produto-detalhes">Ver detalhes</span>
-                </div>
-            </a>
-        </article>
-
-        <article class="produto">
-            <a href="produto.html?id=notebook" class="produto-link">
-                <img src="imagens/notebook.jpg" alt="Notebook ASUS E510MA preto">
-                <div class="produto-info">
-                    <h3>Notebook ASUS E510MA</h3>
-                    <p>Intel Celeron Dual Core · 4 GB RAM · 128 GB SSD</p>
-                    <strong>R$ 1.150</strong>
-                    <span class="produto-detalhes">Ver detalhes</span>
-                </div>
-            </a>
-        </article>
-
-        <article class="produto">
-            <a href="produto.html?id=switch" class="produto-link">
-                <img src="imagens/switch.jpg" alt="Nintendo Switch 2">
-                <div class="produto-info">
-                    <h3>Nintendo Switch 2</h3>
-                    <p>256 GB · Tela 7,9” · Full HD</p>
-                    <strong>R$ 2.800</strong>
-                    <span class="produto-detalhes">Ver detalhes</span>
-                </div>
-            </a>
-        </article>
-
-        <article class="produto">
-            <a href="produto.html?id=camera" class="produto-link">
-                <img src="imagens/camera.jpg" alt="Câmera Canon EOS 6D Mark II">
-                <div class="produto-info">
-                    <h3>Canon EOS 6D Mark II</h3>
-                    <p>26,2 MP · Full HD · Lente 24-105mm</p>
-                    <strong>R$ 3.000</strong>
-                    <span class="produto-detalhes">Ver detalhes</span>
-                </div>
-            </a>
-        </article>
-    </div>
-</section>
-        <!-- VANTAGENS -->
-        <section class="container vantagens" aria-label="Benefícios de reutilizar">
-            <div class="vantagem">
-                <div class="vantagem-icone"><i class="fa-solid fa-leaf"></i></div>
-                <div><h3>Compra consciente</h3><p>Você economiza e faz a diferença.</p></div>
+        <section class="container inicio-secao inicio-categorias" aria-labelledby="inicio-categorias-titulo">
+            <div class="inicio-secao-topo">
+                <div><p class="inicio-sobrelinha">ENCONTRE O QUE COMBINA COM VOCÊ</p><h2 id="inicio-categorias-titulo">Explore por categoria</h2></div>
             </div>
-            <div class="vantagem">
-                <div class="vantagem-icone"><i class="fa-solid fa-recycle"></i></div>
-                <div><h3>Catalogo reutilizados</h3><p>Menos lixo eletrônico, mais vida útil.</p></div>
-            </div>
-            <div class="vantagem">
-                <div class="vantagem-icone"><i class="fa-solid fa-earth-americas"></i></div>
-                <div><h3>Economia circular</h3><p>Tecnologia em movimento, um futuro melhor.</p></div>
+            <div class="categorias">
+                <a href="catalogo.html?categoria=celulares" class="categoria">
+                    <span class="inicio-categoria-icone"><i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i></span>
+                    <span class="inicio-categoria-texto"><strong>Celulares</strong><small data-categoria-contagem="celulares">Consultar anúncios</small></span>
+                    <i class="fa-solid fa-arrow-right inicio-categoria-seta" aria-hidden="true"></i>
+                </a>
+                <a href="catalogo.html?categoria=computadores" class="categoria">
+                    <span class="inicio-categoria-icone"><i class="fa-solid fa-laptop" aria-hidden="true"></i></span>
+                    <span class="inicio-categoria-texto"><strong>Computadores</strong><small data-categoria-contagem="computadores">Consultar anúncios</small></span>
+                    <i class="fa-solid fa-arrow-right inicio-categoria-seta" aria-hidden="true"></i>
+                </a>
+                <a href="catalogo.html?categoria=games" class="categoria">
+                    <span class="inicio-categoria-icone"><i class="fa-solid fa-gamepad" aria-hidden="true"></i></span>
+                    <span class="inicio-categoria-texto"><strong>Games</strong><small data-categoria-contagem="games">Consultar anúncios</small></span>
+                    <i class="fa-solid fa-arrow-right inicio-categoria-seta" aria-hidden="true"></i>
+                </a>
+                <a href="catalogo.html?categoria=cameras" class="categoria">
+                    <span class="inicio-categoria-icone"><i class="fa-solid fa-camera" aria-hidden="true"></i></span>
+                    <span class="inicio-categoria-texto"><strong>Câmeras</strong><small data-categoria-contagem="cameras">Consultar anúncios</small></span>
+                    <i class="fa-solid fa-arrow-right inicio-categoria-seta" aria-hidden="true"></i>
+                </a>
+                <a href="catalogo.html?categoria=outros" class="categoria">
+                    <span class="inicio-categoria-icone"><i class="fa-solid fa-ellipsis" aria-hidden="true"></i></span>
+                    <span class="inicio-categoria-texto"><strong>Outros</strong><small data-categoria-contagem="outros">Consultar anúncios</small></span>
+                    <i class="fa-solid fa-arrow-right inicio-categoria-seta" aria-hidden="true"></i>
+                </a>
             </div>
         </section>
 
-        <section class="chamada-final" id="anunciar">
-            <h2>Tem um eletrônico parado em casa?</h2>
-            <p>Dê uma nova vida a ele e ajude a reduzir o lixo eletrônico.</p>
-            <a href="anunciar.html" class="botao botao-verde">Quero anunciar</a>
+        <section class="container inicio-secao" id="catalogo" aria-labelledby="inicio-recentes-titulo">
+            <div class="inicio-secao-topo">
+                <div><p class="inicio-sobrelinha">NOVAS OPORTUNIDADES</p><h2 id="inicio-recentes-titulo">Anúncios recentes</h2><p>Eletrônicos usados, novas possibilidades.</p></div>
+                <a class="inicio-link" href="catalogo.html">Ver todos os produtos <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+            </div>
+            <p id="inicio-vendas-status" class="inicio-status" role="status" aria-live="polite">Carregando anúncios recentes…</p>
+            <div id="inicio-vendas" class="inicio-grade" aria-busy="true" aria-describedby="inicio-vendas-status"></div>
+            <noscript><p>Ative o JavaScript para carregar os anúncios. Você também pode <a href="catalogo.html">abrir o catálogo</a>.</p></noscript>
+        </section>
+
+        <section class="inicio-circular" aria-labelledby="inicio-circular-titulo">
+            <div class="container inicio-secao">
+                <div class="inicio-secao-topo">
+                    <div><p class="inicio-sobrelinha"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i> MAIS REUTILIZAÇÃO, MAIS CONEXÕES</p><h2 id="inicio-circular-titulo">Doe, troque e faça a tecnologia circular</h2><p>O aparelho que está parado pode abrir novas possibilidades para outra pessoa. Doe ou encontre uma boa troca.</p></div>
+                    <a href="doar-trocar.html" class="botao botao-contorno">Explorar doações e trocas <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                </div>
+                <p id="inicio-circular-status" class="inicio-status" role="status" aria-live="polite">Carregando doações e trocas…</p>
+                <div id="inicio-reutilizacao" class="inicio-grade inicio-grade-tres" aria-busy="true" aria-describedby="inicio-circular-status"></div>
+                <noscript><p>Ative o JavaScript ou <a href="doar-trocar.html">explore doações e trocas</a>.</p></noscript>
+            </div>
+        </section>
+
+        <section class="container inicio-secao inicio-como" aria-labelledby="inicio-como-titulo">
+            <div class="inicio-secao-topo"><div><p class="inicio-sobrelinha">SIMPLES DO PRIMEIRO AO PRÓXIMO PASSO</p><h2 id="inicio-como-titulo">Como funciona o ReTech?</h2></div><a href="login.html#cadastro" class="inicio-link">Faça parte da comunidade <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div>
+            <ol class="inicio-passos">
+                <li><div class="inicio-passo-topo"><span class="inicio-icone"><i class="fa-solid fa-user-plus" aria-hidden="true"></i></span><span class="inicio-passo-numero" aria-hidden="true">01</span></div><h3>Crie sua conta</h3><p>Cadastre-se gratuitamente e comece a fazer parte da comunidade ReTech.</p></li>
+                <li><div class="inicio-passo-topo"><span class="inicio-icone"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></span><span class="inicio-passo-numero" aria-hidden="true">02</span></div><h3>Encontre ou anuncie</h3><p>Explore eletrônicos usados ou anuncie aqueles que você não utiliza mais.</p></li>
+                <li><div class="inicio-passo-topo"><span class="inicio-icone"><i class="fa-solid fa-recycle" aria-hidden="true"></i></span><span class="inicio-passo-numero" aria-hidden="true">03</span></div><h3>Dê uma nova vida</h3><p>Compre, venda, doe ou troque e contribua para reduzir o lixo eletrônico.</p></li>
+            </ol>
+        </section>
+
+        <section class="inicio-beneficios" aria-labelledby="inicio-beneficios-titulo">
+            <div class="container inicio-secao">
+                <div class="inicio-secao-topo"><div><p class="inicio-sobrelinha">ESCOLHAS QUE CONTINUAM FAZENDO SENTIDO</p><h2 id="inicio-beneficios-titulo">Eletrônicos reutilizados. Benefícios renovados.</h2><p>Antes de descartar, imagine o que ainda pode acontecer.</p></div></div>
+                <div class="inicio-beneficios-grade">
+                    <article><span class="inicio-icone"><i class="fa-solid fa-piggy-bank" aria-hidden="true"></i></span><h3>Economize comprando usados</h3><p>Encontre tecnologia por preços mais acessíveis e aproveite produtos que ainda têm muito a oferecer.</p></article>
+                    <article><span class="inicio-icone"><i class="fa-solid fa-leaf" aria-hidden="true"></i></span><h3>Reduza o lixo eletrônico</h3><p>Prolongue a vida útil dos aparelhos e contribua para diminuir o descarte de eletrônicos.</p></article>
+                    <article><span class="inicio-icone"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i></span><h3>Participe da economia circular</h3><p>Ajude a manter produtos em circulação por meio da compra, venda, doação e troca.</p></article>
+                </div>
+            </div>
+        </section>
+
+        <section class="container inicio-convite" id="anunciar" aria-labelledby="inicio-convite-titulo">
+            <div><p class="inicio-sobrelinha">A PRÓXIMA HISTÓRIA PODE COMEÇAR COM VOCÊ</p><h2 id="inicio-convite-titulo">Seu eletrônico pode ter uma nova história.</h2><p>Aquele aparelho que você não usa mais pode ser exatamente o que outra pessoa procura. Venda, doe ou troque pelo ReTech.</p></div>
+            <a href="anunciar.html" class="botao botao-verde">Anunciar meu produto <i class="fa-solid fa-plus" aria-hidden="true"></i></a>
         </section>
     </main>
 
-    <footer id="entrar">
-        <p>© 2026 ReTech — Tecnologia que reutiliza.</p>
+    <footer class="inicio-rodape">
+        <div class="container inicio-rodape-grade">
+            <div class="inicio-rodape-marca"><a href="index.html" class="logo" aria-label="ReTech — início"><span class="logo-simbolo" aria-hidden="true">♻</span><span class="logo-texto"><strong>Re<span>Tech</span></strong><small>TECNOLOGIA QUE REUTILIZA</small></span></a><p>Conectando pessoas e eletrônicos a novas possibilidades. Um marketplace de usados com foco em reutilização e economia circular.</p></div>
+            <nav aria-label="Explore o marketplace"><h2>Explore</h2><a href="index.html">Início</a><a href="catalogo.html">Comprar</a><a href="doar-trocar.html">Doar/Trocar</a></nav>
+            <nav aria-label="Conheça o projeto"><h2>Conheça o ReTech</h2><a href="sobre.html">Sobre o ReTech</a><a href="blog.html">Blog e sustentabilidade</a><a href="contato.html">Contato e ajuda</a></nav>
+            <div class="inicio-rodape-proposito"><span class="inicio-icone"><i class="fa-solid fa-seedling" aria-hidden="true"></i></span><h2>Tecnologia em circulação</h2><p>Comprar, vender, doar e trocar: quatro formas de dar mais vida aos aparelhos.</p></div>
+        </div>
+        <div class="container inicio-copyright"><p>© 2026 ReTech — Tecnologia que reutiliza.</p><a href="#inicio">Voltar ao início <i class="fa-solid fa-arrow-up" aria-hidden="true"></i></a></div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <script src="js/supabase.js"></script>
     <script src="js/script.js"></script>
     <script src="js/carrinho.js"></script>
     <script src="js/retech-supabase.js"></script>
-
+    <script src="js/inicio.js"></script>
 </body>
 </html>
