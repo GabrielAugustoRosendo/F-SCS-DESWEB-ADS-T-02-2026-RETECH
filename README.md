@@ -255,6 +255,22 @@ Essas marcações indicam a existência dos arquivos e do código, sem substitui
 
 ## Validação
 
+### Fontes e alto contraste
+
+O ícone de acessibilidade no cabeçalho das onze páginas abre os controles **A+**, **A−** e **Restaurar**. O tamanho varia de 90% a 125%, em passos de 5%, e volta a 100% ao restaurar. A escolha é salva no `localStorage` da mesma origem, permanecendo ao navegar ou atualizar o site. Se o navegador bloquear o armazenamento, o ajuste continua funcionando na página e informa que a preferência não foi salva.
+
+No mesmo menu, **Alto contraste** ativa ou desativa uma paleta de preto, branco e amarelo. Links, botões, bordas e foco recebem destaque, e as imagens dos produtos mantêm suas cores, sem filtros. A preferência é salva separadamente na chave `retech-alto-contraste` e sincronizada entre abas. Desativar o modo restaura as cores originais; restaurar o tamanho da fonte não altera o contraste. As duas opções podem ser usadas juntas.
+
+O controle fica em `js/script.js`, já compartilhado por todas as páginas. Os tamanhos tipográficos em `style.css` usam `rem`, com uma variável na raiz para alcançar também conteúdo dinâmico, sem aplicar zoom ou ampliar imagens. A base de 100% preserva as medidas anteriores com a configuração padrão de 16px do navegador e respeita a fonte padrão configurada pelo usuário.
+
+O menu usa botões nativos, indicação acessível do percentual e estado expandido. Pode ser operado por Tab, Enter e Espaço; setas navegam entre opções, e Escape fecha e devolve o foco ao botão. O cabeçalho reorganiza os controles em telas menores e com fontes ampliadas. A posição da janela é limitada à área visível.
+
+```sh
+node tests/acessibilidade.test.mjs
+```
+
+Os nove grupos de testes simulados cobrem persistência, limites, restauração, teclado, posicionamento, armazenamento indisponível, integração das onze páginas e combinação de contraste com fontes ampliadas. Também calculam o contraste da paleta básica e verificam a exclusão das imagens das substituições de cor. Isso não equivale a uma auditoria completa de acessibilidade. A conferência visual real em diferentes dispositivos continua necessária.
+
 ### Página inicial
 
 A home usa a conexão existente do Supabase. `js/inicio.js` consulta somente anúncios ativos e campos públicos, com ordenação por data de criação e desempate por ID. Os cards reutilizam o componente de `js/retech-supabase.js`. As contagens das categorias consideram vendas ativas, correspondendo ao catálogo de compra.

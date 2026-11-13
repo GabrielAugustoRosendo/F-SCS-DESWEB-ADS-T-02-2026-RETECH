@@ -79,6 +79,10 @@ Desenvolver um site acessível e responsivo que incentive a reutilização de el
 
 ### Recursos presentes no código
 
+O cabeçalho compartilhado oferece um menu de acessibilidade para aumentar, diminuir e restaurar as fontes. A escala vai de 90% a 125%, em passos de 5%, com preferência mantida no navegador. O JavaScript e o CSS existentes aplicam a escala também aos elementos dinâmicos. O menu tem suporte a teclado e posicionamento adaptável; sua validação automatizada é simulada, sem substituir conferência visual em dispositivos reais.
+
+O mesmo menu permite ativar e desativar **Alto contraste**, com fundo preto, textos brancos e destaques amarelos, sem filtros nas imagens dos produtos. Essa preferência é independente da escala de fonte e persiste no `localStorage` da mesma origem. As cores originais retornam quando a opção é desativada.
+
 | Área | Funcionalidades identificadas | Arquivo |
 | --- | --- | --- |
 | Início | Apresentação, categorias com contagens reais, quatro vendas ativas recentes, até três doações ou trocas ativas, orientações de uso e sustentabilidade. | [index.html](index.html) |
