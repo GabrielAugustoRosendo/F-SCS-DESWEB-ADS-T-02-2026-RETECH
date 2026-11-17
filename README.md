@@ -71,7 +71,7 @@ O objetivo geral é desenvolver um site acessível e responsivo que promova a re
 
 As dez páginas principais já estão presentes no repositório.
 
-A página adicional [pagar.html](pagar.html) apresenta uma demonstração visual de Pix, cartão de crédito e cartão de débito. A validação se limita ao comprimento dos campos: CPF com 11 caracteres para Pix e cartões; nos cartões, nome do titular de 2 a 80, número com 16, validade com 5 e código de segurança com 3 ou 4. A validade insere a barra automaticamente após os dois primeiros dígitos. Nenhum dado de pagamento é enviado ou armazenado, e a simulação não altera pedidos no banco.
+A página adicional [pagar.html](pagar.html) apresenta uma compra simulada com Pix, cartão de crédito e cartão de débito. A validação se limita ao comprimento dos campos: CPF com 11 caracteres para Pix e cartões; nos cartões, nome do titular de 2 a 80, número com 16, validade com 5 e código de segurança com 3 ou 4. A validade insere a barra automaticamente após os dois primeiros dígitos. Nenhum dado de pagamento é enviado ou armazenado, e a confirmação registra pedidos pendentes no banco, sem cobrança real.
 
 | Página | Arquivo | Recursos presentes no código |
 | --- | --- | --- |
@@ -98,7 +98,7 @@ A página adicional [pagar.html](pagar.html) apresenta uma demonstração visual
 
 ### Limites atuais
 
-- A finalização registra pedidos pendentes, sem cobrar pagamentos nem confirmar entregas. Acompanhamento e cancelamento de pedidos ainda precisam de interface própria.
+- A finalização registra pedidos pendentes, sem cobrar pagamentos nem confirmar entregas. O histórico está em Meus pedidos; cancelamento e entrega ainda precisam de implementação.
 - Pagamento, entrega e conclusão integral de negociações não estão documentados como fluxos completos.
 - Favoritos aparecem na interface, mas a integração define seu contador como zero; a persistência permanece pendente.
 - O registro de mensagens nas solicitações não equivale a um chat completo.
@@ -319,3 +319,15 @@ As métricas propostas estão no [contexto.md](contexto.md#11-métricas). Anúnc
 Antes de contribuir, consultar as regras e os arquivos relacionados à alteração. Preservar os padrões existentes, manter mudanças focadas e informar o que foi verificado.
 
 A pasta `docs/` permanece prevista para diário de bordo, evidências de testes, registros de acessibilidade e orçamento de hospedagem e domínio. O planejamento acadêmico inclui comparação de três opções de hospedagem, incluindo Railway, e três opções de domínio, com justificativa da escolha; isso não altera a stack atual.
+
+
+### Revisão da compra e histórico
+
+O carrinho direciona para pagar.html?itens=IDs. Comprar Agora usa o mesmo fluxo para o produto escolhido. Apenas IDs seguem na URL; preços e total são consultados no Supabase. A confirmação usa finalizar_carrinho, que valida preços e disponibilidade, registra pedidos pendentes por vendedor e remove os itens comprados atomicamente. Não há cobrança real nem envio de CPF ou cartão.
+
+Sucesso direciona para perfil.html#meus-pedidos. Falhas mantêm a página e solicitam consulta ao histórico antes de repetir, seguida de atualização dos produtos. Meus pedidos filtra comprador_id e exibe itens, preços registrados, total, data, status e detalhes, sob RLS.
+
+**SQL pendente, não executado:** [historico-pedidos.sql](supabase/historico-pedidos.sql). A política atual oculta anúncios pausados do comprador; o ajuste permite consultar esses produtos somente aos participantes do pedido. Sem ele, nome e imagem podem ficar indisponíveis no histórico. O mesmo SQL inclui listar_vendedores_pedidos, que retorna apenas ID e nome dos vendedores de pedidos do comprador autenticado, sem liberar perfis privados. Nenhuma tabela é criada. O modelo atual guarda o preço da compra, mas o nome e a imagem refletem o anúncio disponível, sem cópia histórica.
+
+
+O histórico destaca o nome real de cada produto, data e horário, vendedor, imagem e preço registrado. Não exibe números de pedido ou produto como identificação. O status interno pendente é apresentado como **Pedido registrado**, preservando os registros existentes. Caso as permissões necessárias ainda não estejam aplicadas, exibe uma falha de consulta explícita, sem inventar nomes ou imagens. A disponibilidade dos dados de produtos reservados e dos nomes dos vendedores depende da aplicação autorizada do SQL acima.

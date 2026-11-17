@@ -96,7 +96,7 @@ O mesmo menu permite ativar e desativar **Alto contraste**, com fundo preto, tex
 | Blog | Conteúdos educativos, consulta de artigos publicados e inscrição em newsletter com consentimento. | [blog.html](blog.html) |
 | Contato | Formulário validado, registro de consentimento e informações de ajuda. | [contato.html](contato.html) |
 
-O carrinho é uma janela flutuante acessível pelo cabeçalho de todas as páginas, com contador, itens clicáveis, exclusão confirmada e total. A função `finalizar_carrinho` valida a seleção e os preços no servidor, registra pedidos pendentes por vendedor em `pedidos` e `itens_pedido`, reserva os anúncios como pausados e limpa os itens finalizados do carrinho na mesma transação. Nenhuma tabela nova é necessária. Comprar agora adiciona o produto e abre a janela para revisão; pagamento, entrega, acompanhamento e cancelamento dos pedidos ainda dependem de evolução.
+O carrinho é uma janela flutuante acessível pelo cabeçalho de todas as páginas, com contador, itens clicáveis, exclusão confirmada e total. A função `finalizar_carrinho` valida a seleção e os preços no servidor, registra pedidos pendentes por vendedor em `pedidos` e `itens_pedido`, reserva os anúncios como pausados e limpa os itens finalizados do carrinho na mesma transação. Nenhuma tabela nova é necessária. Comprar agora adiciona o produto e abre pagar.html para revisar esse item. O carrinho usa a mesma página. A confirmação simulada segue para Meus pedidos; cobrança real, entrega e cancelamento ainda dependem de evolução.
 
 Solicitação e mensagem são enviadas em uma única transação pela função `criar_solicitacao_com_mensagem`, mantendo as permissões do usuário. A consulta `listar_vendedores_publicos` retorna apenas dados públicos de vendedores com anúncios ativos. O upload valida imagens JPEG, PNG e WebP de até 5 MB, e os filtros são reaplicados após a carga dos anúncios. O teste existente em `tests/auth.test.mjs` cobre 47 cenários simulados; gravações reais não foram utilizadas para essa validação.
 
@@ -104,7 +104,7 @@ Solicitação e mensagem são enviadas em uma única transação pela função `
 
 - A home consulta os campos públicos de `anuncios` e `categorias` com a conexão existente. As contagens indicam vendas ativas. As listas têm carregamento, estado vazio e tratamento de falhas; são atualizadas a cada 30 segundos na aba visível e ao retornar à página, sem exigir alterações de Realtime no banco.
 
-- A página adicional `pagar.html` é somente visual, com Pix, crédito e débito. `js/pagamento.js` alterna as opções e confere apenas a quantidade de caracteres dos campos. Não há envio ou armazenamento de dados de pagamento nem alteração de pedidos pela simulação.
+- A página adicional `pagar.html` oferece compra simulada, com Pix, crédito e débito. `js/pagamento.js` alterna as opções e confere apenas a quantidade de caracteres dos campos. Não há envio ou armazenamento de dados de pagamento; a confirmação simulada registra pedidos pendentes.
 
 - A integração dinâmica depende de autenticação, banco de dados, armazenamento e permissões configurados no Supabase.
 - Favoritos aparecem no planejamento e na interface, mas o contador é definido como zero no código de integração; a persistência desse recurso permanece como melhoria.
@@ -227,3 +227,15 @@ Os indicadores abaixo são uma proposta de acompanhamento. Não foram fornecidos
 | Conteúdo e suporte | Inscrições na newsletter e contatos recebidos | Acompanhar totais por período, respeitando consentimento e privacidade. |
 
 Estimativas de lixo eletrônico evitado exigem dados sobre equipamentos efetivamente reutilizados e uma metodologia documentada. Até essa definição, o impacto ambiental deve ser apresentado como objetivo do projeto.
+
+
+### Revisão da compra e histórico
+
+O carrinho direciona para pagar.html?itens=IDs. Comprar Agora usa o mesmo fluxo para o produto escolhido. Apenas IDs seguem na URL; preços e total são consultados no Supabase. A confirmação usa finalizar_carrinho, que valida preços e disponibilidade, registra pedidos pendentes por vendedor e remove os itens comprados atomicamente. Não há cobrança real nem envio de CPF ou cartão.
+
+Sucesso direciona para perfil.html#meus-pedidos. Falhas mantêm a página e solicitam consulta ao histórico antes de repetir, seguida de atualização dos produtos. Meus pedidos filtra comprador_id e exibe itens, preços registrados, total, data, status e detalhes, sob RLS.
+
+**SQL pendente, não executado:** [historico-pedidos.sql](supabase/historico-pedidos.sql). A política atual oculta anúncios pausados do comprador; o ajuste permite consultar esses produtos somente aos participantes do pedido. Sem ele, nome e imagem podem ficar indisponíveis no histórico. O mesmo SQL inclui listar_vendedores_pedidos, que retorna apenas ID e nome dos vendedores de pedidos do comprador autenticado, sem liberar perfis privados. Nenhuma tabela é criada. O modelo atual guarda o preço da compra, mas o nome e a imagem refletem o anúncio disponível, sem cópia histórica.
+
+
+O histórico destaca o nome real de cada produto, data e horário, vendedor, imagem e preço registrado. Não exibe números de pedido ou produto como identificação. O status interno pendente é apresentado como **Pedido registrado**, preservando os registros existentes. Caso as permissões necessárias ainda não estejam aplicadas, exibe uma falha de consulta explícita, sem inventar nomes ou imagens. A disponibilidade dos dados de produtos reservados e dos nomes dos vendedores depende da aplicação autorizada do SQL acima.

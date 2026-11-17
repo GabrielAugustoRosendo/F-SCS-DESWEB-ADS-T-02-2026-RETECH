@@ -93,16 +93,24 @@
                             </div>
                         </fieldset>
                         <p id="pagamento-status" class="pagamento-status" role="status" aria-live="polite"></p>
-                        <button id="pagamento-simular" type="submit" class="botao botao-verde">Simular pagamento com Pix <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                        <button id="pagamento-simular" type="submit" class="botao botao-verde">Confirmar compra simulada com Pix <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
                     </fieldset>
                 </form>
                 <noscript><p>Ative o JavaScript para experimentar os campos desta demonstração.</p></noscript>
             </section>
             <aside class="pagamento-lateral" aria-labelledby="pagamento-demo-titulo">
+                <section class="pagamento-card pagamento-resumo" aria-labelledby="compra-titulo">
+                    <h2 id="compra-titulo">Resumo da compra</h2>
+                    <div id="pagamento-itens"></div>
+                    <p>Total <strong id="pagamento-total">—</strong></p>
+                    <p id="pagamento-carregamento" role="status" aria-live="polite">Carregando produtos...</p>
+                    <button type="button" id="pagamento-atualizar" class="botao botao-contorno">Atualizar produtos</button>
+                    <a href="perfil.html#meus-pedidos">Consultar meus pedidos</a>
+                </section>
                 <div class="pagamento-demo">
                     <span class="pagamento-selo"><i class="fa-solid fa-palette" aria-hidden="true"></i> PRÉVIA DO PAGAMENTO</span>
                     <h2 id="pagamento-demo-titulo">Uma nova vida começa com uma boa escolha.</h2>
-                    <p>Esta página demonstra as formas de pagamento do ReTech. Nenhum valor será cobrado.</p>
+                    <p>A confirmação registra pedidos pendentes e reserva os produtos. Nenhum valor será cobrado.</p>
                     <dl><div><dt>Forma selecionada</dt><dd id="pagamento-resumo-metodo">Pix</dd></div><div><dt>Ambiente</dt><dd>Demonstração</dd></div></dl>
                 </div>
                 <div class="pagamento-informacao"><i class="fa-solid fa-circle-info" aria-hidden="true"></i><p>Use apenas dados fictícios. Os campos são conferidos somente pela quantidade de caracteres. As informações não são enviadas ou armazenadas.</p></div>

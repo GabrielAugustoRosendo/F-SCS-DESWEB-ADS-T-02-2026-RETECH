@@ -2925,3 +2925,31 @@ html[data-alto-contraste] button:disabled * {
     opacity: 1 !important; color: #bfbfbf !important; cursor: not-allowed;
 }
 html[data-alto-contraste] ::selection { background: #ffe66d !important; color: #000 !important; }
+/* Componentes do fluxo de compra e histórico. */
+.pagamento-lateral .pagamento-resumo { margin-bottom: 22px; }
+.pagamento-resumo > p { margin: 18px 0; }
+.pagamento-resumo > a { display: block; margin-top: 16px; }
+.compra-item { display: flex; align-items: center; gap: 14px; padding: 16px 0; border-bottom: 1px solid #dce7df; color: inherit; min-width: 0; }
+.compra-item img { width: 72px; height: 72px; object-fit: contain; border-radius: 8px; background: #fff; flex-shrink: 0; }
+.compra-item > span, .compra-item > div { min-width: 0; overflow-wrap: anywhere; }
+.compra-item span > span { display: block; margin-top: 8px; }
+.pedido-card { padding: 22px; margin-top: 18px; border: 1px solid #dce7df; border-radius: 12px; background: #fff; }
+.pedido-card > header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.pedido-card > header span { font-weight: bold; color: #16813d; }
+.pedido-total { margin: 18px 0; }
+.pedido-card summary { cursor: pointer; color: #16813d; text-decoration: underline; padding: 8px 0; }
+.pedido-card details p { margin: 10px 0; line-height: 1.6; }
+.perfil-abas { flex-wrap: wrap; }
+@media (max-width: 540px) {
+    .pedido-card { padding: 16px; }
+    .compra-item img { width: 56px; height: 56px; }
+}
+/* Hierarquia dos produtos no histórico de compras. */
+.pedido-cabecalho { display: flex; justify-content: flex-end; margin-bottom: 4px; }
+.pedido-status { display: inline-block; padding: 5px 10px; border: 1px solid #b8d7c1; border-radius: 20px; background: #eef7ee; color: #146d35; font-size: 0.8125rem; font-weight: bold; }
+.pedido-produto { align-items: flex-start; }
+.pedido-produto h3 { margin: 0 0 8px; font-size: 1.125rem; line-height: 1.4; overflow-wrap: anywhere; }
+.pedido-metadados { font-size: 0.875rem; color: #506370; line-height: 1.5; margin: 4px 0; }
+.pedido-preco { margin-top: 10px; }
+.pedido-sem-imagem { display: grid; place-items: center; width: 72px; height: 72px; flex-shrink: 0; background: #eef7ee; border-radius: 8px; color: #506370; }
+@media (max-width: 540px) { .pedido-sem-imagem { width: 56px; height: 56px; } }

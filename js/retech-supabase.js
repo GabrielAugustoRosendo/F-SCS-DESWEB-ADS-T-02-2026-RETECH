@@ -199,6 +199,61 @@
         });
     }
 
+    async function carregarPedidos(usuario) {
+        const lista = document.getElementById("perfil-pedidos");
+        const status = document.getElementById("pedidos-status");
+        const atualizar = document.getElementById("pedidos-atualizar");
+        if (!lista || atualizar.disabled) return;
+        atualizar.disabled = true;
+        status.textContent = "Carregando seus pedidos...";
+        lista.replaceChildren();
+        try {
+            const { data, error } = await db.from("pedidos")
+                .select("id,vendedor_id,total,status,created_at,itens_pedido(id,anuncio_id,preco_unitario,anuncios(nome_anuncio,imagem_url))")
+                .eq("comprador_id", usuario.id).order("created_at", { ascending: false });
+            if (error) throw error;
+            let vendedores = {};
+            let avisoVendedores = "";
+            if (data?.length) {
+                try {
+                    const { data: nomes, error: erroNomes } = await db.rpc("listar_vendedores_pedidos");
+                    if (erroNomes) throw erroNomes;
+                    vendedores = Object.fromEntries((nomes || []).map((vendedor) => [vendedor.id, vendedor.nome]));
+                } catch {
+                    avisoVendedores = "Não foi possível consultar os vendedores. Tente atualizar o histórico.";
+                }
+            }
+            const rotulos = { pendente: "Pedido registrado", confirmado: "Confirmado", concluido: "Concluído", cancelado: "Cancelado" };
+            lista.innerHTML = !data?.length
+                ? '<div class="perfil-vazio"><h3>Você ainda não possui pedidos</h3><p>Explore os eletrônicos disponíveis no ReTech.</p><a href="catalogo.html" class="botao botao-verde">Explorar catálogo</a></div>'
+                : data.map((pedido) => {
+                    const itens = pedido.itens_pedido || [];
+                    const vendedor = vendedores[pedido.vendedor_id];
+                    return `<article class="pedido-card">
+                        <div class="pedido-cabecalho"><span class="pedido-status">${escapeHtml(rotulos[pedido.status] || pedido.status)}</span></div>
+                        ${itens.map((item) => {
+                            const nome = item.anuncios?.nome_anuncio;
+                            return `<div class="compra-item pedido-produto">
+                                ${item.anuncios?.imagem_url ? `<img src="${escapeHtml(item.anuncios.imagem_url)}" alt="">` : '<span class="pedido-sem-imagem" aria-label="Imagem não disponível"><i class="fa-regular fa-image" aria-hidden="true"></i></span>'}
+                                <div><h3>${escapeHtml(nome || "Não foi possível carregar o nome deste produto")}</h3>
+                                    <p class="pedido-metadados"><time datetime="${escapeHtml(pedido.created_at)}">${escapeHtml(new Date(pedido.created_at).toLocaleString("pt-BR"))}</time></p>
+                                    <p class="pedido-metadados">Vendedor: ${escapeHtml(vendedor || "Nome não disponível para consulta")}</p>
+                                    <p class="pedido-preco">Preço: <strong>${formatarPreco(item.preco_unitario)}</strong></p>
+                                </div></div>`;
+                        }).join("")}
+                        <p class="pedido-total">Total da compra: <strong>${formatarPreco(pedido.total)}</strong></p>
+                        <details><summary>Ver detalhes da compra</summary>
+                            <p>Compra simulada, sem cobrança real. O registro não comprova pagamento nem entrega.</p>
+                        </details></article>`;
+                }).join("");
+            status.textContent = avisoVendedores || (data?.some((pedido) => pedido.itens_pedido?.some((item) => !item.anuncios?.nome_anuncio)) ? "Não foi possível consultar os produtos reservados. Atualize o histórico; se o problema persistir, entre em contato com o suporte." : "");
+        } catch (erro) {
+            status.textContent = "Não foi possível carregar seus pedidos. " + (erro.message || "Tente novamente.");
+        } finally {
+            atualizar.disabled = false;
+        }
+    }
+
     async function inicializarPerfil() {
         if (!path.endsWith("perfil.html")) return;
         const usuario = await usuarioAtual();
@@ -240,6 +295,14 @@
                 painel.classList.add("ativo");
             });
         });
+
+        function abrirPedidosPeloHash() {
+            if (window.location.hash === "#meus-pedidos") document.getElementById("aba-pedidos")?.click();
+        }
+        abrirPedidosPeloHash();
+        window.addEventListener("hashchange", abrirPedidosPeloHash);
+        carregarPedidos(usuario);
+        document.getElementById("pedidos-atualizar")?.addEventListener("click", () => carregarPedidos(usuario));
 
         const { data: perfil, error: erroPerfil } = await db
             .from("usuarios")
@@ -708,7 +771,7 @@
                         if (!window.retechCarrinho) throw new Error("O carrinho não carregou. Atualize a página.");
                         if (await window.retechCarrinho.adicionar(data.id)) {
                             statusAcao.textContent = "Produto disponível no seu carrinho.";
-                            if (comprarAgora) await window.retechCarrinho.abrir();
+                            if (comprarAgora) window.location.href = "pagar.html?itens=" + encodeURIComponent(data.id);
                         }
                     });
                 });

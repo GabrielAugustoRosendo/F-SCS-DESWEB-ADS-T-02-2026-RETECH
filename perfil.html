@@ -107,6 +107,7 @@
                     <button type="button" class="perfil-aba" role="tab" aria-selected="false" aria-controls="painel-favoritos" id="aba-favoritos" data-painel="painel-favoritos"><i class="fa-solid fa-heart"></i> Favoritos</button>
                     <button type="button" class="perfil-aba" role="tab" aria-selected="false" aria-controls="painel-dados" id="aba-dados" data-painel="painel-dados"><i class="fa-solid fa-pen-to-square"></i> Editar dados</button>
                     <button type="button" class="perfil-aba" role="tab" aria-selected="false" aria-controls="painel-solicitacoes" id="aba-solicitacoes" data-painel="painel-solicitacoes"><i class="fa-solid fa-handshake"></i> Solicitações</button>
+                    <button type="button" class="perfil-aba" role="tab" aria-selected="false" aria-controls="painel-pedidos" id="aba-pedidos" data-painel="painel-pedidos"><i class="fa-solid fa-bag-shopping" aria-hidden="true"></i> Meus pedidos</button>
                 </div>
 
                 <div class="perfil-painel ativo" id="painel-anuncios" role="tabpanel" aria-labelledby="aba-anuncios">
@@ -115,6 +116,12 @@
                         <a href="anunciar.html" class="botao botao-contorno"><i class="fa-solid fa-plus"></i> Adicionar</a>
                     </div>
                     <div id="perfil-anuncios" class="perfil-anuncios"></div>
+                </div>
+
+                <div class="perfil-painel" id="painel-pedidos" role="tabpanel" aria-labelledby="aba-pedidos" hidden>
+                    <div class="perfil-painel-topo"><h2>Meus pedidos</h2><button type="button" class="botao botao-contorno" id="pedidos-atualizar">Atualizar</button></div>
+                    <p id="pedidos-status" role="status" aria-live="polite"></p>
+                    <div id="perfil-pedidos"></div>
                 </div>
 
                 <div class="perfil-painel" id="painel-favoritos" role="tabpanel" aria-labelledby="aba-favoritos" hidden>

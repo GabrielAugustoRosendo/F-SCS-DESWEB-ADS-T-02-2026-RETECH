@@ -213,7 +213,8 @@ for (const falha of [false, true]) {
     elementos['formulario-perfil'] = { reportValidity: () => true, addEventListener(_e, fn) { salvar = fn; }, querySelector() { return botao; } };
     const ctx = ambiente({
         path: '/perfil.html',
-        window: { addEventListener() {} },
+        window: { location: { hash: "" }, addEventListener() {} },
+        carregarPedidos: async () => {},
         document: {
             getElementById(id) { return elementos[id] || null; },
             querySelectorAll() { return []; }
@@ -460,15 +461,9 @@ async function testarCarrinhoFlutuante() {
     estado.confirmar = false;
     await finalizar.listeners.click();
     assert.equal(estado.compras, 0);
-    authTests.push('Finalização cancelada não registra pedido');
-
-    estado.confirmar = true;
-    await finalizar.listeners.click();
-    assert.equal(estado.compras, 1);
-    assert.equal(badge.textContent, '0');
-    assert.match(status.textContent, /#99/);
-    assert.match(status.textContent, /pendente/);
-    authTests.push('Finalização usa total e IDs e esvazia carrinho');
+    assert.equal(window.location.href, "pagar.html?itens=10%2C20");
+    assert.equal(badge.textContent, "2");
+    authTests.push("Finalização abre pagamento sem confirmação nativa nem pedido antecipado");
 
     estado.itens = [{ id: 3, anuncio_id: 30, anuncios: null }];
     await window.retechCarrinho.atualizar();
@@ -539,7 +534,8 @@ for (const modo of ['visitante', 'comprador', 'proprietario']) {
         await botoes[0].click();
         await botoes[1].click();
         assert.equal(adicoes, 2);
-        assert.equal(aberturas, 1);
+        assert.equal(aberturas, 0);
+        assert.equal(ctx.window.location.href, "pagar.html?itens=1");
     }
     authTests.push('Botões de produto: ' + modo);
 }

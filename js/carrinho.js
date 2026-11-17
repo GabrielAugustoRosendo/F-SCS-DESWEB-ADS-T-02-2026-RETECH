@@ -7,7 +7,7 @@
     function escapar(valor) {
         const elemento = document.createElement("span");
         elemento.textContent = String(valor ?? "");
-        return elemento.innerHTML;
+        return elemento.innerHTML.replaceAll('"', "&quot;").replaceAll("'", "&#39;");
     }
 
     const botao = document.createElement("button");
@@ -31,7 +31,7 @@
         <p class="carrinho-status" role="status" aria-live="polite"></p>
         <div class="carrinho-resumo"><p>Total <strong class="carrinho-total">R$ 0,00</strong></p>
             <button type="button" class="botao botao-verde carrinho-finalizar" disabled>Finalizar compra</button>
-            <small>A finalização registra pedidos pendentes. Nenhum pagamento será cobrado pelo site.</small></div>`;
+            <small>Revise os produtos na página de pagamento. A compra é uma simulação, sem cobrança.</small></div>`;
     document.body.appendChild(janela);
 
     const lista = janela.querySelector(".carrinho-itens");
@@ -140,28 +140,9 @@
         }
     });
 
-    finalizar.addEventListener("click", async () => {
+    finalizar.addEventListener("click", () => {
         if (finalizar.disabled || ocupado) return;
-        if (!window.confirm(`Confirmar pedidos no total de ${formatar(totalCentavos() / 100)}? Nenhum pagamento será cobrado pelo site.`)) return;
-        ocupado = true;
-        renderizar();
-        status.textContent = "Registrando pedidos...";
-        try {
-            const { data, error } = await db.rpc("finalizar_carrinho", {
-                p_anuncio_ids: itens.map((item) => item.anuncio_id),
-                p_total_esperado: totalCentavos() / 100
-            });
-            if (error) throw error;
-            if (!data?.length) throw new Error("O servidor não confirmou os pedidos.");
-            await carregar();
-            status.textContent = `Pedidos registrados: ${data.map((pedido) => "#" + pedido.id).join(", ")}. Status: pendente. Nenhum pagamento foi cobrado.`;
-        } catch (erro) {
-            try { await carregar(); } catch { /* Mantém a mensagem da operação. */ }
-            status.textContent = "Não foi possível confirmar a finalização. " + (erro.message || "Tente novamente.") + " Confira seu carrinho antes de repetir.";
-        } finally {
-            ocupado = false;
-            renderizar();
-        }
+        window.location.href = "pagar.html?itens=" + encodeURIComponent(itens.map((item) => item.anuncio_id).join(","));
     });
 
     async function adicionar(anuncioId) {
