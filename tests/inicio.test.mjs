@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 
 const inicio = await readFile(new URL('../js/inicio.js', import.meta.url), 'utf8');
 const integracao = await readFile(new URL('../js/retech-supabase.js', import.meta.url), 'utf8');
-const componente = integracao.slice(integracao.indexOf('    function criarCard('), integracao.indexOf('    async function inicializarCatalogo('));
+const componente = integracao.slice(integracao.indexOf('    function criarCard('), integracao.indexOf('    const paginaComFavoritos'));
 const tratamentoTexto = integracao.slice(integracao.indexOf('    function escapeHtml('), integracao.indexOf('    function mostrarMensagem('));
 const resultados = [];
 
@@ -94,6 +94,7 @@ async function ambiente(opcoes = {}) {
         nomeTipo: { venda: 'Venda', doacao: 'Doação', troca: 'Troca' },
         formatarPreco: valor => Number(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
     });
+    ctx.criarControleFavorito = () => new Elemento('div');
     new vm.Script(tratamentoTexto + componente).runInContext(ctx);
     new vm.Script(inicio).runInContext(ctx);
     await new Promise(resolve => setImmediate(resolve));

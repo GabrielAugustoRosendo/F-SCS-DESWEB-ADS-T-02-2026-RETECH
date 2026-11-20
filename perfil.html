@@ -97,7 +97,7 @@
                 <section class="perfil-card perfil-estatisticas" aria-label="Estatísticas">
                     <div><strong id="total-anuncios">0</strong><span>Anúncios ativos</span></div>
                     <div><strong id="total-vendidos">0</strong><span>Itens reutilizados</span></div>
-                    <div><strong id="total-favoritos">0</strong><span>Favoritos</span></div>
+                    <div><strong id="total-favoritos">—</strong><span>Favoritos</span></div>
                 </section>
             </aside>
 
@@ -126,8 +126,11 @@
 
                 <div class="perfil-painel" id="painel-favoritos" role="tabpanel" aria-labelledby="aba-favoritos" hidden>
                     <h2>Produtos favoritos</h2>
-                    <div class="perfil-favoritos">
-                        <p>Os favoritos serão exibidos quando a funcionalidade estiver disponível.</p>
+                    <p id="favoritos-status" role="status">Carregando favoritos...</p>
+                    <div id="perfil-favoritos" class="grade-catalogo"></div>
+                    <div id="favoritos-vazio" class="perfil-vazio" hidden>
+                        <p>Você ainda não adicionou nenhum produto aos favoritos.</p>
+                        <a href="catalogo.html" class="botao botao-verde">Explorar catálogo</a>
                     </div>
                 </div>
 

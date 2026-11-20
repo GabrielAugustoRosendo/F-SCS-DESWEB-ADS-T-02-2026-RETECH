@@ -79,9 +79,6 @@
         document.querySelectorAll(".submenu-mais a[href='perfil.html']").forEach((link) => link.remove());
     }
 
-    // Não chamar métodos Auth dentro do callback: usar a sessão recebida.
-    db.auth.onAuthStateChange((_evento, sessao) => atualizarCabecalho(sessao?.user || null));
-
     async function garantirPerfil(usuario, nome) {
         const { data: existente, error: erroConsulta } = await db.from("usuarios")
             .select("id").eq("id", usuario.id).maybeSingle();
@@ -436,7 +433,6 @@
         document.getElementById("total-vendidos").textContent = String(
             (anuncios || []).filter((item) => item.status === "vendido").length
         );
-        document.getElementById("total-favoritos").textContent = "0";
 
         if (!anuncios?.length) {
             grade.innerHTML = '<div class="perfil-vazio"><i class="fa-solid fa-box-open"></i><h3>Você ainda não publicou anúncios</h3><p>Coloque um aparelho em circulação novamente.</p><a href="anunciar.html" class="botao botao-verde">Criar anúncio</a></div>';
@@ -656,21 +652,173 @@
             <div class="produto-info">
                 <p class="produto-categoria">${escapeHtml(categoria)}</p>
                 <h3>${escapeHtml(anuncio.nome_anuncio)}</h3>
-                ${opcoes.inicio && anuncio.estado ? `<p class="inicio-card-estado">${escapeHtml(nomeEstado[anuncio.estado] || anuncio.estado)}</p>` : ""}
+                ${(opcoes.inicio || opcoes.favoritos) && anuncio.estado ? `<p class="inicio-card-estado">${escapeHtml(nomeEstado[anuncio.estado] || anuncio.estado)}</p>` : ""}
                 <p>${escapeHtml(anuncio.descricao_anuncio || "")}</p>
                 ${vendedor ? `<p class="produto-vendedor">Vendedor: ${escapeHtml(vendedor.nome || "Usuário")}${vendedor.local ? ` - ${escapeHtml(vendedor.local)}` : ""}</p>` : ""}
                 <strong>${anuncio.tipo_anuncio === "venda" ? (opcoes.inicio && (anuncio.preco_anuncio == null || !Number.isFinite(Number(anuncio.preco_anuncio))) ? "Preço não informado" : formatarPreco(anuncio.preco_anuncio)) : anuncio.tipo_anuncio === "doacao" ? "Grátis" : "Para trocar"}</strong>
                 ${opcoes.inicio ? '<span class="link-produto">Ver detalhes <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>' : `<a href="${destino}" class="link-produto">Ver detalhes <i class="fa-solid fa-arrow-right"></i></a>`}
             </div>${opcoes.inicio ? "</a>" : ""}`;
-        if (opcoes.inicio) {
+        if (opcoes.inicio || opcoes.favoritos) {
             const imagem = artigo.querySelector("img");
             imagem.addEventListener("error", () => { imagem.src = "imagens/vitrine.jpg"; }, { once: true });
         }
+        artigo.appendChild(criarControleFavorito(anuncio.id));
         return artigo;
     }
 
     // A home reutiliza o mesmo componente, sem criar outra conexão de dados.
     window.retechCriarCard = criarCard;
+
+    const paginaComFavoritos = path === "/" || /\/(index|catalogo|doar-trocar|produto|perfil)\.html$/.test(path);
+    const gradeFavoritos = document.getElementById("perfil-favoritos");
+    let usuarioFavoritos;
+    let favoritos = null;
+    let consultaFavoritos;
+    let alterandoFavoritos = false;
+    let versaoFavoritos = 0;
+    let listaRenderizada;
+
+    function atualizarCoracao(botao) {
+        const salvo = favoritos?.has(botao.dataset.favorito) ?? false;
+        const rotulo = salvo ? "Remover dos favoritos" : "Adicionar aos favoritos";
+        botao.setAttribute("aria-pressed", String(salvo));
+        botao.setAttribute("aria-label", rotulo);
+        botao.title = rotulo;
+        botao.innerHTML = `<i class="${salvo ? "fa-solid" : "fa-regular"} fa-heart" aria-hidden="true"></i>`;
+    }
+
+    function renderizarFavoritos(mensagem = "") {
+        document.querySelectorAll("[data-favorito]").forEach(atualizarCoracao);
+        if (!gradeFavoritos) return;
+        document.getElementById("total-favoritos").textContent = favoritos?.size ?? "—";
+        const status = document.getElementById("favoritos-status");
+        status.textContent = mensagem;
+        status.hidden = !mensagem;
+        const vazio = document.getElementById("favoritos-vazio");
+        vazio.hidden = favoritos?.size !== 0;
+        const itens = favoritos ? [...favoritos] : [];
+        const assinatura = JSON.stringify(itens);
+        if (listaRenderizada === assinatura) return;
+        listaRenderizada = assinatura;
+        gradeFavoritos.replaceChildren(...itens.map(([id, anuncio]) => {
+            if (anuncio?.status === "ativo") return criarCard(anuncio, {}, { favoritos: true });
+            const card = document.createElement("article");
+            card.className = "produto produto-catalogo";
+            card.innerHTML = '<div class="produto-info"><h3>Anúncio indisponível</h3><p>Este anúncio não está disponível no momento.</p></div>';
+            card.appendChild(criarControleFavorito(id));
+            return card;
+        }));
+    }
+
+    function atualizarSessaoFavoritos(sessao) {
+        if (!paginaComFavoritos) return;
+        const id = sessao?.user?.id ?? null;
+        if (id === usuarioFavoritos) return;
+        usuarioFavoritos = id;
+        favoritos = null;
+        consultaFavoritos = null;
+        versaoFavoritos++;
+        renderizarFavoritos(id ? "Carregando favoritos..." : "");
+        if (id) setTimeout(carregarFavoritos, 0);
+    }
+
+    function carregarFavoritos() {
+        if (!usuarioFavoritos || alterandoFavoritos) return;
+        if (consultaFavoritos) return consultaFavoritos;
+        const versao = versaoFavoritos;
+        const dono = usuarioFavoritos;
+        consultaFavoritos = (async () => {
+            try {
+                const campos = gradeFavoritos
+                    ? "anuncio_id,anuncios(id,nome_anuncio,descricao_anuncio,estado,tipo_anuncio,preco_anuncio,imagem_url,status,created_at,categorias(nome,slug))"
+                    : "anuncio_id";
+                const itens = new Map();
+                const tamanhoPagina = 500;
+                for (let inicio = 0; ; inicio += tamanhoPagina) {
+                    const { data, error } = await db.from("favoritos").select(campos)
+                        .eq("usuario_id", dono).order("created_at", { ascending: false })
+                        .order("anuncio_id").range(inicio, inicio + tamanhoPagina - 1);
+                    if (versao !== versaoFavoritos) return;
+                    if (error) throw error;
+                    for (const item of data) itens.set(String(item.anuncio_id), item.anuncios || null);
+                    if (data.length < tamanhoPagina) break;
+                }
+                favoritos = itens;
+                renderizarFavoritos();
+            } catch {
+                if (versao === versaoFavoritos) {
+                    renderizarFavoritos("Não foi possível carregar os favoritos. Tente atualizar a página.");
+                }
+            } finally {
+                if (versao === versaoFavoritos) consultaFavoritos = null;
+            }
+        })();
+        return consultaFavoritos;
+    }
+
+    function criarControleFavorito(id) {
+        const controle = document.createElement("div");
+        controle.className = "favorito-controle";
+        const botao = document.createElement("button");
+        botao.type = "button";
+        botao.className = "favorito-botao";
+        botao.dataset.favorito = String(id);
+        atualizarCoracao(botao);
+        const status = statusDaAcao(controle);
+        controle.prepend(botao);
+        botao.addEventListener("click", async () => {
+            if (alterandoFavoritos) return;
+            const estavaFocado = document.activeElement === botao;
+            await executarAcao(botao, status, async () => {
+                if (usuarioFavoritos === undefined) {
+                    const { data, error } = await db.auth.getSession();
+                    if (error) throw new Error("Não foi possível consultar sua sessão. Tente novamente.");
+                    atualizarSessaoFavoritos(data?.session);
+                }
+                const dono = usuarioFavoritos;
+                const versao = versaoFavoritos;
+                if (!dono) throw new Error("Entre na sua conta para favoritar produtos.");
+                if (consultaFavoritos || !favoritos) await carregarFavoritos();
+                if (versao !== versaoFavoritos || alterandoFavoritos) return;
+                if (!favoritos) throw new Error("Não foi possível carregar os favoritos. Tente novamente.");
+                alterandoFavoritos = true;
+                try {
+                    const chave = String(id);
+                    const remover = favoritos.has(chave);
+                    const tabela = db.from("favoritos");
+                    const { error } = remover
+                        ? await tabela.delete().eq("usuario_id", dono).eq("anuncio_id", id)
+                        : await tabela.insert({ usuario_id: dono, anuncio_id: id });
+                    if (versao !== versaoFavoritos) return;
+                    if (error && (remover || error.code !== "23505")) {
+                        throw new Error("Não foi possível alterar os favoritos. Tente novamente.");
+                    }
+                    const removendoDoPerfil = remover && gradeFavoritos?.contains(botao);
+                    if (remover) favoritos.delete(chave);
+                    else favoritos.set(chave, null);
+                    renderizarFavoritos(removendoDoPerfil ? "Removido dos favoritos." : "");
+                    if (removendoDoPerfil && estavaFocado) {
+                        (gradeFavoritos.querySelector("[data-favorito]") ||
+                            document.querySelector("#favoritos-vazio a"))?.focus();
+                    }
+                    status.textContent = remover ? "Removido dos favoritos." : "Adicionado aos favoritos.";
+                } finally {
+                    alterandoFavoritos = false;
+                    if (versao !== versaoFavoritos) carregarFavoritos();
+                }
+            });
+            if (estavaFocado && botao.isConnected && document.activeElement === document.body) botao.focus();
+        });
+        return controle;
+    }
+
+    if (paginaComFavoritos) {
+        document.getElementById("aba-favoritos")?.addEventListener("click", carregarFavoritos);
+        window.addEventListener("focus", carregarFavoritos);
+        window.addEventListener("pageshow", (evento) => {
+            if (evento.persisted) carregarFavoritos();
+        });
+    }
 
     async function inicializarCatalogo() {
         const grade = document.getElementById("grade-catalogo");
@@ -735,6 +883,7 @@
         document.getElementById("produto-imagem").alt = data.nome_anuncio;
         document.getElementById("produto-caracteristicas").innerHTML =
             `<li>Modalidade: ${escapeHtml(nomeTipo[data.tipo_anuncio] || data.tipo_anuncio)}</li>`;
+        document.getElementById("produto-favorito").appendChild(criarControleFavorito(data.id));
 
         const { data: vendedoresVetor, error: erroVendedor } = await db
             .rpc("listar_vendedores_publicos", { p_ids: [data.usuario_id] });
@@ -779,7 +928,7 @@
             }
             document.getElementById("produto-caracteristicas").insertAdjacentElement("afterend", botoes);
         } else if (
-            data.usuario_id !== usuario.id
+            usuario && data.usuario_id !== usuario.id
             && data.status === "ativo"
             && (data.tipo_anuncio === "doacao" || data.tipo_anuncio === "troca")
         ) {
@@ -925,8 +1074,16 @@
         });
     }
 
+    // Não chamar métodos Auth dentro do callback: usar a sessão recebida.
+    db.auth.onAuthStateChange((_evento, sessao) => {
+        atualizarCabecalho(sessao?.user || null);
+        atualizarSessaoFavoritos(sessao);
+    });
     db.auth.getSession().then(({ data, error }) => {
-        if (!error) atualizarCabecalho(data?.session?.user || null);
+        if (!error) {
+            atualizarCabecalho(data?.session?.user || null);
+            if (usuarioFavoritos === undefined) atualizarSessaoFavoritos(data?.session);
+        }
     }).catch(() => {});
     iniciar(inicializarLogin);
     iniciar(inicializarPerfil);

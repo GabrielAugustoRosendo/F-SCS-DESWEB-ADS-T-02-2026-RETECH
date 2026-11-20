@@ -107,7 +107,7 @@ Solicitação e mensagem são enviadas em uma única transação pela função `
 - A página adicional `pagar.html` oferece compra simulada, com Pix, crédito e débito. `js/pagamento.js` alterna as opções e confere apenas a quantidade de caracteres dos campos. Não há envio ou armazenamento de dados de pagamento; a confirmação simulada registra pedidos pendentes.
 
 - A integração dinâmica depende de autenticação, banco de dados, armazenamento e permissões configurados no Supabase.
-- Favoritos aparecem no planejamento e na interface, mas o contador é definido como zero no código de integração; a persistência desse recurso permanece como melhoria.
+- A home, o catálogo, as doações e trocas e os detalhes compartilham o estado do coração. O perfil lista os produtos salvos e atualiza o contador. Anúncios pausados aparecem sem link, com opção de remoção, e o banco remove automaticamente as referências a anúncios excluídos. A persistência depende da aplicação autorizada de [favoritos.sql](supabase/favoritos.sql).
 - A presença das dez páginas no repositório atualiza o cenário do README, que ainda classifica algumas páginas existentes como planejadas.
 
 ## 7. Stack técnica
@@ -199,7 +199,7 @@ A pasta `docs/` é prevista no README para evidências de testes, registros de a
 
 Melhorias propostas para evolução do projeto, sujeitas à priorização da equipe:
 
-- [ ] Implementar favoritos com persistência por usuário.
+- [x] Implementar favoritos no site e preparar a estrutura de persistência por usuário.
 - [ ] Ampliar o gerenciamento dos anúncios, incluindo edição, encerramento e indicação de conclusão da negociação.
 - [ ] Evoluir a comunicação entre usuários e o acompanhamento das solicitações.
 - [ ] Ampliar o fluxo de negociação com acompanhamento, cancelamento, pagamento e entrega dos pedidos.

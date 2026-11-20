@@ -36,7 +36,7 @@ async function testarAuth(caso) {
   querySelector() {return null;},
   getElementById(id) {return ['email','senha'].includes(id)?{value:'',focus(){}}:null;}
  };
- const context = vm.createContext({window:{retechDB:db,location:loc},document,URLSearchParams,
+ const context = vm.createContext({window:{retechDB:db,location:loc,addEventListener() {}},document,URLSearchParams,setTimeout: () => {},
   FormData:class{get(key){return {nome:'Teste',email:user.email,senha:'senha123','confirmar-senha':caso.senhasDiferentes?'outra':'senha123'}[key];}}
  });
  new vm.Script(source).runInContext(context);
@@ -148,7 +148,7 @@ for (const area of ['contato', 'newsletter']) {
         });
         const nome = area === 'contato' ? 'inicializarContato' : 'inicializarBlog';
         const trecho = area === 'contato'
-            ? source.slice(source.indexOf('    async function inicializarContato('), source.indexOf('    db.auth.getSession()'))
+            ? source.slice(source.indexOf('    async function inicializarContato('), source.indexOf('    // Não chamar métodos Auth'))
             : funcao('async function inicializarBlog(', 'async function inicializarContato(');
         new vm.Script(trecho).runInContext(ctx);
         await ctx[nome]();
@@ -273,9 +273,10 @@ for (const falha of [false, true]) {
         window: { location: { search: '?id=1' }, prompt: () => 'Gostaria de solicitar este equipamento.' },
         URLSearchParams,
         usuarioAtual: async () => ({ id: 'u1' }),
+        criarControleFavorito: () => ({}),
         formatarPreco: () => '', escapeHtml: v => v, nomeEstado: {}, nomeTipo: {},
         document: {
-            getElementById(id) { return elementos[id] ||= {}; },
+            getElementById(id) { return elementos[id] ||= { appendChild() {} }; },
             querySelector() { return info; },
             createElement() { return { dataset: {}, setAttribute() {}, addEventListener(_e, fn) { this.click = fn; } }; }
         },
@@ -510,7 +511,7 @@ for (const modo of ['visitante', 'comprador', 'proprietario']) {
             }
         },
         document: {
-            getElementById: id => id === 'produto-caracteristicas' ? caracteristicas : ({}), querySelector: () => info,
+            getElementById: id => id === 'produto-caracteristicas' ? caracteristicas : { appendChild() {} }, querySelector: () => info,
             createElement(tipo) {
                 const el = { dataset: {}, setAttribute() {}, appendChild() {}, addEventListener(_e, fn) { this.click = fn; } };
                 if (tipo === 'button') botoes.push(el);
@@ -522,6 +523,7 @@ for (const modo of ['visitante', 'comprador', 'proprietario']) {
             from() { return { select() { return this; }, eq() { return this; }, maybeSingle: async () => ({ data: { id: 1, usuario_id: 'v1', tipo_anuncio: 'venda', status: 'ativo', preco_anuncio: 100 } }) }; },
             rpc: async () => ({ data: [] })
         },
+        criarControleFavorito: () => ({}),
         nomeEstado: {}, nomeTipo: {}, escapeHtml: v => v, formatarPreco: () => ''
     });
     new vm.Script(funcao('async function inicializarProduto(', 'async function inicializarBlog(')).runInContext(ctx);

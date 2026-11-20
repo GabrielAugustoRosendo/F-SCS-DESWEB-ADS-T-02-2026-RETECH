@@ -100,7 +100,7 @@ A página adicional [pagar.html](pagar.html) apresenta uma compra simulada com P
 
 - A finalização registra pedidos pendentes, sem cobrar pagamentos nem confirmar entregas. O histórico está em Meus pedidos; cancelamento e entrega ainda precisam de implementação.
 - Pagamento, entrega e conclusão integral de negociações não estão documentados como fluxos completos.
-- Favoritos aparecem na interface, mas a integração define seu contador como zero; a persistência permanece pendente.
+- Favoritos usam a conta do usuário e aparecem no perfil, com contador e remoção imediata. Para habilitar a persistência, execute [favoritos.sql](supabase/favoritos.sql) uma vez no SQL Editor do projeto ReTech após autorização.
 - O registro de mensagens nas solicitações não equivale a um chat completo.
 - A presença da interface e da integração não garante que os serviços remotos estejam configurados ou que todos os cenários tenham sido testados.
 
@@ -242,7 +242,7 @@ Essas marcações indicam a existência dos arquivos e do código, sem substitui
 
 - [ ] Validar os fluxos integrados e as permissões com diferentes usuários.
 - [ ] Completar a documentação de provisionamento do banco e do armazenamento.
-- [ ] Implementar favoritos com persistência.
+- [x] Implementar favoritos na interface e preparar o SQL para persistência por conta.
 - [ ] Ampliar edição e encerramento dos anúncios e confirmação de negociações concluídas.
 - [x] Implementar finalização de pedidos pendentes no servidor, com validação de preços e disponibilidade.
 - [ ] Implementar acompanhamento e cancelamento de pedidos e definir o fluxo de pagamento e entrega.
