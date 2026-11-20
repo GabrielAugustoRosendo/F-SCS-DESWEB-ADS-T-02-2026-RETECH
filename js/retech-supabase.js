@@ -955,31 +955,6 @@
 
     async function inicializarBlog() {
         if (!path.endsWith("blog.html")) return;
-        const grade = document.querySelector(".blog-grade");
-        if (grade) {
-            try {
-                const { data, error } = await db
-                    .from("artigos")
-                    .select("id,titulo,slug,categoria,resumo,conteudo,imagem_url,tempo_leitura,destaque,publicado,created_at")
-                    .eq("publicado", true)
-                    .order("created_at", { ascending: false });
-                if (error) throw error;
-                if (data?.length) {
-                    grade.innerHTML = data.map((artigo) => `
-                        <article class="blog-card">
-                            <img src="${escapeHtml(artigo.imagem_url || "imagens/vitrine.jpg")}" alt="${escapeHtml(artigo.titulo || "Artigo ReTech")}">
-                            <div class="blog-card-conteudo">
-                                <p class="blog-meta"><span>${escapeHtml(artigo.categoria || "ReTech")}</span>${artigo.tempo_leitura ? ` ${escapeHtml(artigo.tempo_leitura)} min` : ""}</p>
-                                <h3>${escapeHtml(artigo.titulo || "")}</h3>
-                                <p>${escapeHtml(artigo.resumo || "")}</p>
-                            </div>
-                        </article>`).join("");
-                }
-            } catch {
-                statusDaAcao(grade.parentElement).textContent = "Não foi possível carregar os artigos atualizados. Os conteúdos de exemplo continuam disponíveis.";
-            }
-        }
-
         const formulario = document.querySelector(".blog-newsletter form");
         formulario?.addEventListener("submit", async (evento) => {
             evento.preventDefault();

@@ -66,91 +66,61 @@
             </div>
         </section>
 
-        <nav class="container blog-categorias" aria-label="Categorias do blog">
-            <a href="#artigos" class="ativo">Todos</a>
-            <a href="#artigos">Reutilização</a>
-            <a href="#artigos">Reciclagem</a>
-            <a href="#artigos">Consumo consciente</a>
-            <a href="#artigos">Dicas práticas</a>
+        <nav class="container blog-categorias" aria-label="Nesta página">
+            <a href="#artigo-compra">Compra de usados</a>
+            <a href="#artigo-cuidados">Cuidados com os aparelhos</a>
+            <a href="#artigo-descarte">Descarte e reciclagem</a>
         </nav>
-
-        <section class="container blog-destaque" aria-labelledby="titulo-destaque">
-            <article>
-                <figure>
-                    <img src="imagens/vitrine.jpg" alt="Eletrônicos usados preparados para ganhar uma nova vida">
-                </figure>
-                <div class="blog-destaque-conteudo">
-                    <p class="blog-meta"><span>Economia circular</span> 7 min de leitura</p>
-                    <h2 id="titulo-destaque">Como prolongar a vida útil dos eletrônicos</h2>
-                    <p>Reparar, reutilizar, vender, trocar e doar são atitudes que reduzem o lixo eletrônico, economizam recursos naturais e facilitam o acesso à tecnologia.</p>
-                    <a href="#economia-circular" class="blog-link">Ler artigo <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
-                </div>
-            </article>
-        </section>
 
         <section class="container blog-listagem" id="artigos" aria-labelledby="titulo-artigos">
             <div class="titulo-secao">
-                <h2 id="titulo-artigos"><i class="fa-solid fa-newspaper" aria-hidden="true"></i> Artigos recentes</h2>
+                <h2 id="titulo-artigos"><i class="fa-solid fa-newspaper" aria-hidden="true"></i> Artigos</h2>
             </div>
 
-            <div class="blog-grade">
-                <article class="blog-card">
-                    <img src="imagens/iphone.jpg" alt="Smartphone usado">
-                    <div class="blog-card-conteudo">
-                        <p class="blog-meta"><span>Reutilização</span> 5 min</p>
-                        <h3>O que verificar antes de comprar um celular usado</h3>
-                        <p>Confira bateria, tela, câmeras, sistema de identificação, estado geral e histórico do aparelho.</p>
-                        <a href="#comprar-celular" class="blog-link">Ler mais <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+            <div class="blog-artigos">
+                <article class="blog-artigo" id="artigo-compra" aria-labelledby="titulo-artigo-compra">
+                    <img src="imagens/iphone.jpg" alt="" loading="lazy">
+                    <div class="blog-artigo-conteudo">
+                        <h3 id="titulo-artigo-compra">O que verificar antes de comprar um eletrônico usado</h3>
+                        <p>Comprar usado pode manter um aparelho em circulação por mais tempo. Comece pelo modelo exato e pelo que você precisa fazer com ele. Confira se ainda recebe atualizações e se os acessórios de que você precisa estão incluídos. Compare o preço total, somando o custo de itens ausentes e de reparos previsíveis.</p>
+                        <p><strong>Teste as funções que você vai usar.</strong> Ligue o aparelho e procure trincas, folgas e sinais de mau contato. Em um celular, teste a tela sensível ao toque, a câmera, o áudio e a entrada de carregamento. Em um notebook, confira o teclado, a tela, o Wi-Fi e as portas. Se o sistema mostrar a saúde da bateria, consulte esse indicador e pergunte se a bateria ou outras peças já foram trocadas.</p>
+                        <p><strong>Confira a procedência e o acesso.</strong> Peça o comprovante de compra, quando disponível. No celular, confira se o IMEI exibido no aparelho corresponde ao informado e consulte se há restrições pelo serviço indicado pela Anatel. Em aparelhos vinculados a contas, peça ao vendedor que remova a conta dele e confirme que você consegue iniciar a configuração antes de pagar.</p>
+                        <h4>Fontes de pesquisa</h4>
+                        <ul>
+                            <li><a class="blog-link" href="https://www.gov.br/pf/pt-br/assuntos/combate-a-crimes-ciberneticos/cartilhas-de-seguranca-da-informacao/fasciculo-celulares-e-tablets-digital-policiafederal.pdf/%40%40download/file" target="_blank" rel="noopener noreferrer">Polícia Federal — Cartilha de segurança para celulares e tablets (PDF)</a></li>
+                            <li><a class="blog-link" href="https://support.apple.com/pt-br/104999" target="_blank" rel="noopener noreferrer">Suporte da Apple — Se você quiser comprar um iPhone usado</a></li>
+                        </ul>
                     </div>
                 </article>
 
-                <article class="blog-card">
-                    <img src="imagens/notebook.jpg" alt="Notebook reutilizado">
-                    <div class="blog-card-conteudo">
-                        <p class="blog-meta"><span>Consumo consciente</span> 4 min</p>
-                        <h3>Como aumentar a vida útil do seu notebook</h3>
-                        <p>Limpeza, manutenção, atualização do sistema e armazenamento adequado ajudam a evitar trocas desnecessárias.</p>
-                        <a href="#artigos" class="blog-link">Ler mais <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+                <article class="blog-artigo" id="artigo-cuidados" aria-labelledby="titulo-artigo-cuidados">
+                    <img src="imagens/notebook.jpg" alt="" loading="lazy">
+                    <div class="blog-artigo-conteudo">
+                        <h3 id="titulo-artigo-cuidados">Como aumentar a vida útil dos aparelhos eletrônicos</h3>
+                        <p><strong>Proteja o aparelho do calor e da umidade.</strong> Evite deixá-lo ao sol ou dentro de um carro quente. Ao usar um notebook, mantenha as saídas de ar livres. Consulte o manual do modelo para saber como limpar o aparelho e quais carregadores são compatíveis.</p>
+                        <p><strong>Cuide da bateria e do sistema.</strong> Se houver um recurso de carregamento otimizado, use-o para reduzir o tempo que a bateria fica totalmente carregada. Para guardar o aparelho por um período longo, siga a orientação do fabricante sobre a carga e escolha um lugar fresco e seco. Instale as atualizações de segurança enquanto o modelo tiver suporte e faça cópias dos arquivos importantes.</p>
+                        <p><strong>Avalie o conserto antes de trocar.</strong> Se o aparelho ainda atende às suas necessidades, peça um diagnóstico e compare o orçamento com o custo de uma substituição. Uma troca de bateria pode devolver a autonomia a um equipamento que continua funcionando bem. Se decidir trocar e o aparelho estiver funcional, a venda ou a doação pode mantê-lo em uso.</p>
+                        <h4>Fontes de pesquisa</h4>
+                        <ul>
+                            <li><a class="blog-link" href="https://www.apple.com/br/batteries/maximizing-performance/" target="_blank" rel="noopener noreferrer">Apple — Baterias: aumentando o desempenho</a></li>
+                            <li><a class="blog-link" href="https://www.samsung.com/br/support/mobile-devices/dicas-para-melhor-desempenho-de-bateria-do-seu-samsung-galaxy/" target="_blank" rel="noopener noreferrer">Samsung — Dicas para melhorar o desempenho da bateria do Galaxy</a></li>
+                        </ul>
                     </div>
                 </article>
 
-                <article class="blog-card">
-                    <img src="imagens/camera.jpg" alt="Câmera fotográfica usada">
-                    <div class="blog-card-conteudo">
-                        <p class="blog-meta"><span>Reciclagem</span> 6 min</p>
-                        <h3>Para onde vai um eletrônico que não tem conserto?</h3>
-                        <p>Componentes e materiais podem ser reaproveitados por pontos de coleta especializados em resíduos eletrônicos.</p>
-                        <a href="#reciclagem" class="blog-link">Ler mais <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
-                    </div>
-                </article>
-
-                <article class="blog-card">
-                    <img src="imagens/switch.jpg" alt="Videogame usado">
-                    <div class="blog-card-conteudo">
-                        <p class="blog-meta"><span>Troca segura</span> 3 min</p>
-                        <h3>Como preparar seu aparelho antes da venda ou troca</h3>
-                        <p>Faça backup, remova contas pessoais, restaure o sistema e documente o estado real do equipamento.</p>
-                        <a href="#artigos" class="blog-link">Ler mais <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
-                    </div>
-                </article>
-
-                <article class="blog-card">
-                    <img src="imagens/vitrine.jpg" alt="Eletrônicos organizados para reutilização">
-                    <div class="blog-card-conteudo">
-                        <p class="blog-meta"><span>Dicas práticas</span> 7 min</p>
-                        <h3>Guia básico para vender um eletrônico usado</h3>
-                        <p>Use fotos reais, informe marcas de uso, descreva acessórios e seja transparente sobre defeitos conhecidos.</p>
-                        <a href="#artigos" class="blog-link">Ler mais <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
-                    </div>
-                </article>
-
-                <article class="blog-card">
-                    <img src="imagens/perfil.png" alt="Comunidade ReTech">
-                    <div class="blog-card-conteudo">
-                        <p class="blog-meta"><span>Inclusão digital</span> 5 min</p>
-                        <h3>Como eletrônicos acessíveis ampliam oportunidades</h3>
-                        <p>A reutilização pode facilitar o acesso à educação, trabalho, comunicação e participação digital.</p>
-                        <a href="#artigos" class="blog-link">Ler mais <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+                <article class="blog-artigo" id="artigo-descarte" aria-labelledby="titulo-artigo-descarte">
+                    <img src="imagens/camera.jpg" alt="" loading="lazy">
+                    <div class="blog-artigo-conteudo">
+                        <h3 id="titulo-artigo-descarte">A importância do descarte correto e da reciclagem de eletrônicos</h3>
+                        <p>Quando um aparelho chega ao fim da vida útil, jogar o equipamento no lixo comum dificulta a recuperação de materiais e pode causar danos ao ambiente. Em um sistema de logística reversa, os aparelhos entregues em pontos de coleta passam por triagem e seguem para tratamento. Materiais recuperados, como metais e plásticos, podem voltar à fabricação de novos produtos.</p>
+                        <p><strong>Prepare o equipamento para a entrega.</strong> Antes de descartar, avalie se o aparelho pode ser reparado. Se estiver em condições de uso, considere vender ou doar. Caso vá descartá-lo e ainda tenha acesso ao sistema, faça uma cópia dos arquivos, remova as contas e apague os dados conforme as instruções do fabricante. Leve o aparelho inteiro, sem desmontá-lo para retirar a bateria interna.</p>
+                        <p><strong>Escolha um ponto de recebimento.</strong> Consulte os localizadores indicados pelo SINIR e confira os tipos de equipamento aceitos antes de sair de casa. Pilhas e baterias portáteis podem ter coletores próprios. A entrega no ponto correto permite que os resíduos sigam para operadores preparados para tratar cada material.</p>
+                        <h4>Fontes de pesquisa</h4>
+                        <ul>
+                            <li><a class="blog-link" href="https://www.sinir.gov.br/perfis/logistica-reversa/logistica-reversa/eletroeletronicos/" target="_blank" rel="noopener noreferrer">SINIR — Logística reversa de eletroeletrônicos</a></li>
+                            <li><a class="blog-link" href="https://greeneletron.org.br/perguntas-frequentes/" target="_blank" rel="noopener noreferrer">Green Eletron — Perguntas frequentes sobre descarte</a></li>
+                            <li><a class="blog-link" href="https://support.apple.com/pt-br/109511" target="_blank" rel="noopener noreferrer">Suporte da Apple — Como preparar um iPhone ou iPad para repasse</a></li>
+                        </ul>
                     </div>
                 </article>
             </div>
@@ -177,6 +147,51 @@
                     <p>Não descarte pilhas ou eletrônicos junto com lixo comum. Procure pontos de coleta ou programas especializados.</p>
                 </article>
             </div>
+
+            <section class="blog-videos" aria-labelledby="titulo-videos">
+                <h3 id="titulo-videos">Aprenda mais com vídeos</h3>
+                <div class="blog-temas-grade">
+                    <article class="blog-video">
+                        <iframe src="https://www.youtube-nocookie.com/embed/kApTDJnEdAI?playsinline=1"
+                            width="560" height="315" title="Vídeo: O que é economia circular? | Indústria de A a Z (Ep. #38)"
+                            loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
+                            allow="encrypted-media; picture-in-picture" allowfullscreen></iframe>
+                        <div class="blog-card-conteudo">
+                            <h4 id="video-economia-circular">O que é economia circular? | Indústria de A a Z (Ep. #38)</h4>
+                            <p class="blog-meta">Confederação Nacional da Indústria</p>
+                            <p>Entenda como o reparo, o reúso e a reciclagem prolongam a vida dos produtos, reduzem o desperdício e ajudam a conservar recursos naturais.</p>
+                            <a id="youtube-economia-circular" class="blog-link" href="https://www.youtube.com/watch?v=kApTDJnEdAI"
+                                aria-labelledby="youtube-economia-circular video-economia-circular">Assistir no YouTube</a>
+                        </div>
+                    </article>
+                    <article class="blog-video">
+                        <iframe src="https://www.youtube-nocookie.com/embed/Qky8NVaAfK8?playsinline=1"
+                            width="560" height="315" title="Vídeo: Sustentabilidade - Enraizando #6"
+                            loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
+                            allow="encrypted-media; picture-in-picture" allowfullscreen></iframe>
+                        <div class="blog-card-conteudo">
+                            <h4 id="video-sustentabilidade">Sustentabilidade - Enraizando #6</h4>
+                            <p class="blog-meta">Enraizando</p>
+                            <p>Entenda como os modos de produção e consumo afetam os recursos naturais e o que podemos fazer para reduzir esses impactos.</p>
+                            <a id="youtube-sustentabilidade" class="blog-link" href="https://www.youtube.com/watch?v=Qky8NVaAfK8"
+                                aria-labelledby="youtube-sustentabilidade video-sustentabilidade">Assistir no YouTube</a>
+                        </div>
+                    </article>
+                    <article class="blog-video">
+                        <iframe src="https://www.youtube-nocookie.com/embed/hmEckuX4f1Y?playsinline=1"
+                            width="560" height="315" title="Vídeo: A importância da logística reversa do lixo eletrônico - Green Eletron"
+                            loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
+                            allow="encrypted-media; picture-in-picture" allowfullscreen></iframe>
+                        <div class="blog-card-conteudo">
+                            <h4 id="video-lixo-eletronico">A importância da logística reversa do lixo eletrônico - Green Eletron</h4>
+                            <p class="blog-meta">Green Eletron</p>
+                            <p>Entenda por que eletrônicos precisam de coleta específica e como a logística reversa leva aparelhos, pilhas e baterias à reciclagem.</p>
+                            <a id="youtube-lixo-eletronico" class="blog-link" href="https://www.youtube.com/watch?v=hmEckuX4f1Y"
+                                aria-labelledby="youtube-lixo-eletronico video-lixo-eletronico">Assistir no YouTube</a>
+                        </div>
+                    </article>
+                </div>
+            </section>
         </section>
 
         <section class="container blog-newsletter" aria-labelledby="titulo-newsletter">

@@ -83,7 +83,7 @@ A página adicional [pagar.html](pagar.html) apresenta uma compra simulada com P
 | Doações e trocas | [doar-trocar.html](doar-trocar.html) | Listagem e filtros por modalidade e categoria. |
 | Meu perfil | [perfil.html](perfil.html) | Consulta e edição de dados, anúncios próprios, solicitações e saída da conta. |
 | Sobre | [sobre.html](sobre.html) | Missão, visão, valores, equipe, economia circular e impacto social pretendido. |
-| Blog | [blog.html](blog.html) | Conteúdo educativo, consulta de artigos publicados e inscrição em newsletter com consentimento. |
+| Blog | [blog.html](blog.html) | Três artigos completos com fontes sobre compra, conservação e descarte de eletrônicos, vídeos educativos do YouTube e inscrição em newsletter com consentimento. |
 | Contato e ajuda | [contato.html](contato.html) | Formulário validado, consentimento e informações de suporte. |
 
 ### Fluxos de interação

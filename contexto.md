@@ -93,7 +93,7 @@ O mesmo menu permite ativar e desativar **Alto contraste**, com fundo preto, tex
 | Doações e trocas | Listagem e filtros de anúncios dessas modalidades. | [doar-trocar.html](doar-trocar.html) |
 | Perfil | Consulta e edição de dados pessoais, listagem dos próprios anúncios e saída da conta. | [perfil.html](perfil.html) |
 | Sobre | Apresentação da missão, visão, valores, equipe e impacto social pretendido. | [sobre.html](sobre.html) |
-| Blog | Conteúdos educativos, consulta de artigos publicados e inscrição em newsletter com consentimento. | [blog.html](blog.html) |
+| Blog | Três artigos completos com fontes no HTML, três vídeos educativos do YouTube com carregamento sob demanda e inscrição em newsletter com consentimento. | [blog.html](blog.html) |
 | Contato | Formulário validado, registro de consentimento e informações de ajuda. | [contato.html](contato.html) |
 
 O carrinho é uma janela flutuante acessível pelo cabeçalho de todas as páginas, com contador, itens clicáveis, exclusão confirmada e total. A função `finalizar_carrinho` valida a seleção e os preços no servidor, registra pedidos pendentes por vendedor em `pedidos` e `itens_pedido`, reserva os anúncios como pausados e limpa os itens finalizados do carrinho na mesma transação. Nenhuma tabela nova é necessária. Comprar agora adiciona o produto e abre pagar.html para revisar esse item. O carrinho usa a mesma página. A confirmação simulada segue para Meus pedidos; cobrança real, entrega e cancelamento ainda dependem de evolução.
