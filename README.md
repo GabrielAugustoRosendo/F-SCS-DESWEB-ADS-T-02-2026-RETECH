@@ -2,129 +2,69 @@
 
 **Tecnologia que ganha uma nova vida.**
 
-Plataforma web acadêmica para compra, venda, doação e troca de eletrônicos usados. O ReTech incentiva a reutilização de equipamentos, a economia circular e a inclusão digital, combinando anúncios com conteúdos educativos sobre sustentabilidade.
+O ReTech é uma plataforma web acadêmica para divulgar, encontrar e reaproveitar eletrônicos usados. O catálogo reúne ofertas de venda, doação e troca. O blog complementa a experiência com orientações sobre compra de usados, conservação dos aparelhos e descarte de resíduos eletrônicos.
 
-> Projeto em desenvolvimento. As funcionalidades descritas foram identificadas nos arquivos do repositório; a validação completa dos fluxos depende da configuração dos serviços e de testes em ambiente integrado.
+O projeto busca manter equipamentos em circulação por mais tempo, facilitar o acesso à tecnologia e incentivar o consumo consciente. Foi desenvolvido em 2026 na disciplina de Desenvolvimento Web do curso de Análise e Desenvolvimento de Sistemas, sob orientação do professor Paulo Fratta.
+
+**Equipe:** André Carvalho, Gabriel Augusto e Pedro Victor.
 
 ## Sumário
 
-- [Identificação e equipe](#identificação-e-equipe)
-- [Contexto e objetivos](#contexto-e-objetivos)
-- [Público-alvo](#público-alvo)
-- [Páginas e funcionalidades](#páginas-e-funcionalidades)
+- [Funcionalidades](#funcionalidades)
+- [Páginas](#páginas)
 - [Tecnologias](#tecnologias)
 - [Estrutura do projeto](#estrutura-do-projeto)
 - [Execução local](#execução-local)
-- [Integração de dados](#integração-de-dados)
-- [Identidade visual e qualidade](#identidade-visual-e-qualidade)
-- [Situação atual e próximos passos](#situação-atual-e-próximos-passos)
-- [Validação](#validação)
-- [Documentação e colaboração](#documentação-e-colaboração)
+- [Integração com o Supabase](#integração-com-o-supabase)
+- [Testes](#testes)
 
-## Identificação e equipe
+## Funcionalidades
 
-| Item | Informação |
+| Recurso | Comportamento |
 | --- | --- |
-| Projeto | ReTech |
-| Tema | Sustentabilidade e Impacto Social |
-| Curso | Análise e Desenvolvimento de Sistemas |
-| Disciplina | Desenvolvimento Web |
-| Professor | Paulo Fratta |
-| Ano | 2026 |
-| Repositório | F-SCS-DESWEB-ADS-T-02-2026-RETECH |
+| Cadastro e login | Criação de conta e entrada por e-mail e senha com Supabase Auth. O login verifica o perfil da conta na tabela de usuários, cria o registro se necessário e abre a área pessoal. |
+| Perfil | Consulta e edição de nome, localidade, telefone e apresentação pessoal. Reúne anúncios próprios, favoritos, solicitações, pedidos e saída da conta. |
+| Anúncios | Usuários autenticados podem publicar ofertas de venda, doação ou troca e consultar seus anúncios no perfil. O formulário registra categoria, conservação, descrição e imagem. O preço é exigido para venda. |
+| Upload | A publicação envia uma imagem JPEG, PNG ou WebP de até 5 MB ao Supabase Storage e associa sua URL ao anúncio. |
+| Busca e filtros | O catálogo de vendas tem busca por nome ou categoria, filtros por categoria e conservação e ordenação por preço ou nome. A listagem de doações e trocas tem filtros por modalidade e categoria. |
+| Carrinho | Janela disponível pelo cabeçalho, com contador, links para os produtos, total e remoção de itens. O carrinho direciona para a revisão da compra. |
+| Compra simulada | A revisão oferece Pix, cartão de crédito e débito como opções de demonstração. A confirmação registra pedidos por vendedor e reserva os anúncios. Não há cobrança, e CPF e dados do cartão permanecem no formulário. |
+| Favoritos | O coração nos cards e nos detalhes permite salvar ou remover anúncios. A lista fica associada à conta e pode ser consultada na aba **Favoritos**, com contador e opção de remoção. |
+| Meus pedidos | O comprador consulta itens, preços registrados, total, data, status e informações do vendedor. Pedidos com status interno `pendente` aparecem como **Pedido registrado**. |
+| Solicitações | Em anúncios de doação ou troca, o usuário envia uma solicitação acompanhada de mensagem. O solicitante pode cancelar uma solicitação pendente, e o anunciante pode aceitar ou recusar. |
+| Blog, newsletter e contato | O blog tem três artigos completos com fontes, três vídeos do YouTube e um formulário de newsletter. A página de contato registra mensagens. Os dois formulários registram consentimento. |
+| Acessibilidade | O menu do cabeçalho permite ajustar a fonte de 90% a 125%, restaurar o padrão e alternar o alto contraste. Os controles podem ser usados pelo teclado, e as preferências são armazenadas no navegador. |
 
-### Integrantes
+As políticas de `anuncios` definidas no SQL autorizam atualização e exclusão pelo proprietário. Na interface desta versão, **Meus anúncios** lista os registros e oferece acesso à publicação e aos detalhes.
 
-- André Carvalho.
-- Gabriel Augusto.
-- Pedro Victor.
+## Páginas
 
-A página [Sobre o ReTech](sobre.html) apresenta André com atuação em formulários e funcionalidades, Gabriel em desenvolvimento e navegação e Pedro em conteúdo e sustentabilidade. As atividades podem ser ajustadas pela equipe durante o desenvolvimento.
-
-## Contexto e objetivos
-
-Eletrônicos que ainda podem ser utilizados são descartados ou permanecem sem uso, enquanto outras pessoas precisam de equipamentos acessíveis para estudar, trabalhar e se comunicar. O ReTech aproxima esses públicos e incentiva o reaproveitamento antes do descarte.
-
-O objetivo geral é desenvolver um site acessível e responsivo que promova a reutilização de eletrônicos e o consumo consciente.
-
-### Objetivos específicos
-
-- Manter dez páginas HTML interligadas.
-- Oferecer catálogo com pelo menos quatro produtos, conforme a meta do escopo acadêmico.
-- Permitir anúncios de venda, doação e troca.
-- Facilitar busca, filtragem e consulta aos equipamentos.
-- Disponibilizar cadastro, login e área pessoal.
-- Oferecer contato com validação de formulário.
-- Publicar conteúdos educativos sobre sustentabilidade e descarte correto.
-- Atender computadores, tablets e smartphones, com recursos de acessibilidade.
-
-## Público-alvo
-
-- Pessoas que procuram eletrônicos usados por preços mais acessíveis.
-- Vendedores que desejam divulgar equipamentos sem uso.
-- Doadores e pessoas interessadas em trocas.
-- Estudantes, famílias e comunidades que precisam de acesso à tecnologia.
-- Pessoas com deficiência que necessitam de navegação acessível.
-- Empresas e iniciativas sociais interessadas em reutilização e consumo consciente.
-
-## Páginas e funcionalidades
-
-As dez páginas principais já estão presentes no repositório.
-
-A página adicional [pagar.html](pagar.html) apresenta uma compra simulada com Pix, cartão de crédito e cartão de débito. A validação se limita ao comprimento dos campos: CPF com 11 caracteres para Pix e cartões; nos cartões, nome do titular de 2 a 80, número com 16, validade com 5 e código de segurança com 3 ou 4. A validade insere a barra automaticamente após os dois primeiros dígitos. Nenhum dado de pagamento é enviado ou armazenado, e a confirmação registra pedidos pendentes no banco, sem cobrança real.
-
-| Página | Arquivo | Recursos presentes no código |
-| --- | --- | --- |
-| Início | [index.html](index.html) | Categorias com contagens reais de vendas ativas, quatro vendas recentes, até três doações/trocas, orientações de uso, sustentabilidade e rodapé com navegação. |
-| Catálogo | [catalogo.html](catalogo.html) | Listagem, busca, filtros por categoria e conservação e ordenação. |
-| Detalhes do produto | [produto.html](produto.html) | Imagem, descrição, preço, condição, modalidade e informações públicas do anunciante. |
-| Anunciar | [anunciar.html](anunciar.html) | Formulário de publicação com categoria, descrição, condição, modalidade, preço e imagem. |
-| Login e cadastro | [login.html](login.html) | Criação de conta, entrada com e-mail e senha e tratamento de confirmação de e-mail. |
-| Doações e trocas | [doar-trocar.html](doar-trocar.html) | Listagem e filtros por modalidade e categoria. |
-| Meu perfil | [perfil.html](perfil.html) | Consulta e edição de dados, anúncios próprios, solicitações e saída da conta. |
-| Sobre | [sobre.html](sobre.html) | Missão, visão, valores, equipe, economia circular e impacto social pretendido. |
-| Blog | [blog.html](blog.html) | Três artigos completos com fontes sobre compra, conservação e descarte de eletrônicos, vídeos educativos do YouTube e inscrição em newsletter com consentimento. |
-| Contato e ajuda | [contato.html](contato.html) | Formulário validado, consentimento e informações de suporte. |
-
-### Fluxos de interação
-
-- Usuários autenticados podem publicar anúncios e editar seus dados pessoais.
-- O ícone ao lado de Anunciar produto abre e fecha o carrinho flutuante em todas as páginas, com contador, links dos produtos, total e exclusão com confirmação.
-- Adicionar ao carrinho salva o item; Comprar agora também abre o carrinho para revisão.
-- Finalizar compra registra pedidos pendentes por vendedor após confirmação. O servidor confere preços e disponibilidade, reserva os anúncios como pausados e remove os itens finalizados do carrinho em uma única transação.
-- Doações e trocas enviam solicitação e mensagem na mesma transação, pela função `criar_solicitacao_com_mensagem`. Reenvios para o mesmo anúncio reutilizam uma solicitação ainda pendente.
-- O perfil contém ações para cancelar solicitações pendentes ou aceitá-las e recusá-las, conforme o papel do usuário.
-- Contato e newsletter possuem integração para registrar os dados enviados.
-
-### Limites atuais
-
-- A finalização registra pedidos pendentes, sem cobrar pagamentos nem confirmar entregas. O histórico está em Meus pedidos; cancelamento e entrega ainda precisam de implementação.
-- Pagamento, entrega e conclusão integral de negociações não estão documentados como fluxos completos.
-- Favoritos usam a conta do usuário e aparecem no perfil, com contador e remoção imediata. Para habilitar a persistência, execute [favoritos.sql](supabase/favoritos.sql) uma vez no SQL Editor do projeto ReTech após autorização.
-- O registro de mensagens nas solicitações não equivale a um chat completo.
-- A presença da interface e da integração não garante que os serviços remotos estejam configurados ou que todos os cenários tenham sido testados.
+| Página | Conteúdo |
+| --- | --- |
+| [Início](index.html) | Apresentação, contagens de vendas ativas por categoria, até quatro vendas recentes e até três ofertas de doação ou troca. |
+| [Catálogo](catalogo.html) | Listagem de vendas, busca, filtros e ordenação. |
+| [Detalhes do produto](produto.html) | Imagem, descrição, conservação, modalidade, anunciante e ações conforme o tipo de oferta. |
+| [Anunciar](anunciar.html) | Formulário de publicação com envio de imagem. |
+| [Doações e trocas](doar-trocar.html) | Listagem de ofertas com filtros por modalidade e categoria. |
+| [Entrar e criar conta](login.html) | Formulários de login e cadastro. |
+| [Perfil](perfil.html) | Dados pessoais, anúncios próprios, favoritos, solicitações e histórico de compras. |
+| [Revisar compra](pagar.html) | Itens, total e confirmação da compra simulada. Acessada pelo carrinho ou por **Comprar agora**. |
+| [Blog](blog.html) | Artigos sobre compra, vida útil e descarte de eletrônicos, cards educativos, vídeos e inscrição na newsletter. |
+| [Sobre](sobre.html) | Missão, visão, valores e equipe do ReTech. |
+| [Contato](contato.html) | Informações de suporte e formulário de mensagem. |
 
 ## Tecnologias
 
 | Tecnologia | Uso |
 | --- | --- |
-| HTML5 | Estrutura semântica, páginas e formulários. |
-| CSS3 | Layout, identidade visual e responsividade. |
-| JavaScript puro | Interações, filtros, validações e integração de dados. |
-| Supabase Auth | Cadastro, login, sessão e saída da conta. |
-| Supabase / PostgreSQL | Persistência e consulta de dados da aplicação. |
-| Supabase Storage | Armazenamento de imagens de anúncios. |
-| `supabase-js` versão 2 | Cliente carregado por CDN. |
-| Font Awesome | Ícones disponibilizados localmente em `vendor/`. |
+| HTML5 e CSS3 | Páginas estáticas, formulários e layout responsivo. |
+| JavaScript puro | Interações, filtros, validações, acessibilidade e comunicação com o Supabase. |
+| Supabase Auth, PostgreSQL e Storage | Autenticação, persistência, autorização por RLS e armazenamento de imagens. |
+| `supabase-js` v2 | Cliente do Supabase carregado pelo jsDelivr e inicializado em `js/supabase.js`. |
+| Font Awesome Free | Ícones e fontes WOFF2 distribuídos localmente. |
+| YouTube | Players incorporados no blog, com carregamento sob demanda. |
+| Node.js | Execução das suítes automatizadas. |
 | Git e GitHub | Versionamento e colaboração. |
-
-O front-end atual não possui `package.json` nem etapa de compilação. Visual Studio Code e DevTools apoiam o desenvolvimento; W3C Validator e Lighthouse são ferramentas previstas para validação.
-
-### Hospedagem
-
-A hospedagem definitiva deve ser confirmada pela equipe. O cadastro atual permanece na página de login para permitir testar o botão Entrar após a criação da conta.
-
-PHP, MySQL, MySQLi e Railway faziam parte do planejamento anterior. A integração presente no repositório utiliza Supabase; a configuração definitiva de hospedagem deve ser documentada pela equipe.
 
 ## Estrutura do projeto
 
@@ -134,200 +74,93 @@ ReTech/
 ├── catalogo.html
 ├── produto.html
 ├── anunciar.html
-├── login.html
 ├── doar-trocar.html
+├── login.html
 ├── perfil.html
-├── sobre.html
+├── pagar.html
 ├── blog.html
+├── sobre.html
 ├── contato.html
 ├── style.css
+├── imagens/
 ├── js/
 │   ├── script.js
 │   ├── supabase.js
+│   ├── retech-supabase.js
 │   ├── carrinho.js
-│   └── retech-supabase.js
+│   ├── inicio.js
+│   └── pagamento.js
 ├── supabase/
 │   ├── policies.sql
-│   └── create-profile-trigger.sql
-├── imagens/
+│   ├── create-profile-trigger.sql
+│   ├── favoritos.sql
+│   └── historico-pedidos.sql
+├── tests/
+│   ├── acessibilidade.test.mjs
+│   ├── auth.test.mjs
+│   ├── compras.test.mjs
+│   ├── favoritos.test.mjs
+│   └── inicio.test.mjs
 ├── vendor/
 │   └── fontawesome/
+│       ├── css/
+│       └── webfonts/
 ├── README.md
 ├── contexto.md
 └── rules.md
 ```
 
-- `js/script.js`: menus, filtros e interações gerais.
-- `js/supabase.js`: inicialização do cliente do Supabase.
-- `js/retech-supabase.js`: autenticação, perfil, anúncios, solicitações, blog e contato.
-- `js/carrinho.js`: janela compartilhada, contador, itens, total e finalização de pedidos.
-- `supabase/`: scripts de apoio à configuração do banco e das permissões.
-- `style.css`: estilos compartilhados pelas páginas.
+`script.js` reúne navegação, acessibilidade e filtros. `retech-supabase.js` reúne os fluxos de conta, perfil, catálogo, anúncios, favoritos, pedidos, solicitações e formulários. `carrinho.js` controla a janela compartilhada, `inicio.js` carrega os anúncios e as contagens da home e `pagamento.js` controla a revisão da compra.
 
 ## Execução local
 
-1. Clone ou abra este repositório no Visual Studio Code.
-2. Sirva a pasta raiz por um servidor HTTP local, por exemplo com a extensão Live Server do VS Code.
-3. Abra `index.html` pelo endereço HTTP fornecido pelo servidor.
-4. Mantenha conexão com a internet para carregar o cliente por CDN e acessar os serviços do Supabase.
-5. Para testar cadastro, login, anúncios e demais operações de dados, confira a configuração descrita abaixo.
+1. Clone o repositório ou abra a pasta do projeto.
+2. Sirva a raiz por HTTP local, por exemplo, com a extensão Live Server do VS Code.
+3. Abra `index.html` pela URL do servidor. Mantenha a conexão com a internet para carregar a biblioteca por CDN, acessar o Supabase e assistir aos vídeos incorporados.
+4. Para conectar outro ambiente, configure a URL do projeto e a chave **publicável** em [js/supabase.js](js/supabase.js) e use um banco com o esquema e os objetos descritos abaixo.
 
-Não é necessário executar `npm install` ou um comando de build na estrutura atual.
+O front-end é servido diretamente, sem `npm install` ou compilação. O Supabase Auth controla a exigência de confirmação de e-mail. Quando o cadastro retorna uma sessão, a aplicação confirma o perfil e volta ao formulário **Entrar**.
 
-## Integração de dados
+## Integração com o Supabase
 
-A inicialização está em [js/supabase.js](js/supabase.js), e os fluxos estão em [js/retech-supabase.js](js/retech-supabase.js).
+### Modelo de dados
 
-Para utilizar outro ambiente, configurar a URL e a chave publicável correspondentes no cliente. Chaves administrativas, como `service_role`, não devem ser inseridas no front-end.
-
-### Dependências do ambiente
-
-A integração consulta ou grava dados em `usuarios`, `anuncios`, `categorias`, `carrinho`, `solicitacoes`, `mensagens`, `artigos`, `newsletter` e `contatos`. Também utiliza as funções `listar_vendedores_publicos`, `criar_solicitacao_com_mensagem` e `finalizar_carrinho` e o bucket de imagens `anuncios`. A finalização usa as tabelas existentes `pedidos` e `itens_pedido`; o navegador não recebe permissão de inserção direta nessas tabelas.
-
-A consulta de vendedores retorna somente ID, nome, foto e localidade de quem possui anúncio ativo. O acesso interno fica no esquema `retech_private`, que deve permanecer fora dos esquemas expostos na Data API. A função de solicitações exige autenticação, mantém a aplicação de RLS e desfaz ambas as inserções se houver falha. As definições estão em `supabase/policies.sql`.
-
-O envio de imagens aceita JPEG, PNG e WebP de até 5 MB. Se a publicação falhar, o cliente consulta se o anúncio foi gravado antes de tentar remover a imagem enviada, evitando apagar imagens de publicações concluídas cuja resposta tenha sido interrompida.
-
-Os scripts disponíveis têm finalidades específicas:
-
-| Script | Finalidade e pré-requisitos |
+| Tabelas | Papel no sistema |
 | --- | --- |
-| [policies.sql](supabase/policies.sql) | Configura políticas RLS, permissões e regras de Storage para um banco existente. Depende de tabelas, colunas e buckets previamente criados; também referencia `pedidos` e `itens_pedido`. |
-| [create-profile-trigger.sql](supabase/create-profile-trigger.sql) | Define a criação automática do perfil a partir de uma nova conta, conforme a necessidade indicada no próprio script. Depende da tabela `usuarios`. |
+| `auth.users` e `public.usuarios` | Contas autenticadas e perfis da aplicação, relacionados pelo ID da conta. |
+| `categorias` e `anuncios` | Categorias e ofertas vinculadas a uma categoria e ao anunciante. |
+| `carrinho` e `favoritos` | Relações entre o usuário e os anúncios que adicionou ao carrinho ou salvou. Favoritos usam chave primária composta por `usuario_id` e `anuncio_id`. |
+| `pedidos` e `itens_pedido` | Pedidos vinculados a comprador e vendedor, com itens relacionados aos anúncios e preço unitário registrado na compra. |
+| `solicitacoes` e `mensagens` | Solicitações de doação ou troca e mensagens associadas à negociação. |
+| `newsletter` e `contatos` | Inscrições e mensagens enviadas pelos formulários, com registro de consentimento. |
 
-O repositório não contém um script completo de criação do esquema e dos buckets. Portanto, esses dois arquivos não são suficientes para reproduzir o ambiente do zero. Revisar os scripts e sua compatibilidade com o banco de destino antes de aplicá-los; esta documentação não implica sua execução.
+O catálogo público consulta anúncios ativos. As políticas de segurança em nível de linha (**RLS**) restringem dados privados e operações de escrita conforme o usuário. O bucket `anuncios` armazena as imagens de publicação em caminhos iniciados pelo ID do anunciante.
 
-Para testar novas contas sem confirmação de e-mail, desativar **Confirm Email** nas configurações de Authentication do Supabase. Essa exigência é controlada pelo serviço e não pode ser desabilitada apenas no HTML ou no JavaScript do navegador. Após criar a conta e salvar o perfil, o fluxo encerra a sessão automática e mantém o e-mail preenchido no formulário Entrar para testar o login separadamente.
+### Scripts do repositório
 
-## Identidade visual e qualidade
-
-### Identidade visual
-
-- **Fonte:** Arial, com alternativa `sans-serif`.
-- **Verde:** `#16813D`.
-- **Azul-escuro:** `#142C3E`.
-- **Verde-claro:** `#EEF7EE`.
-- **Branco:** `#FFFFFF`.
-- **Mensagem:** “Tecnologia que ganha uma nova vida.”
-
-A comunicação deve manter o foco em reutilização, sustentabilidade e inclusão digital. Imagens devem possuir autorização de uso ou identificação das fontes, quando aplicável.
-
-### Requisitos de qualidade
-
-- HTML semântico, rótulos nos formulários, textos alternativos e atributos ARIA quando necessários.
-- Navegação por teclado, foco visível e contraste legível.
-- Layout adaptável a computadores, tablets e smartphones.
-- Validação de entradas, mensagens claras e tratamento de estados vazios e erros.
-- Controle de acesso aos dados no serviço, além das verificações de interface.
-- Proteção de dados pessoais e consentimento nos fluxos aplicáveis.
-- Imagens otimizadas, títulos e descrições coerentes e código organizado.
-
-Esses itens são requisitos a verificar. Não há declaração de conformidade integral de acessibilidade ou LGPD, nem resultados medidos de desempenho neste README.
-
-## Situação atual e próximos passos
-
-### Presente no repositório
-
-- [x] Dez páginas HTML principais.
-- [x] Identidade visual e estilos com regras responsivas.
-- [x] Busca, filtros e menus em JavaScript.
-- [x] Integração de autenticação, perfil e publicação de anúncios.
-- [x] Integração de carrinho e solicitações de doação e troca.
-- [x] Páginas institucionais, blog e contato.
-- [x] Documentos de contexto e regras de desenvolvimento.
-
-Essas marcações indicam a existência dos arquivos e do código, sem substituir a validação funcional.
-
-### Pendências e melhorias
-
-- [ ] Validar os fluxos integrados e as permissões com diferentes usuários.
-- [ ] Completar a documentação de provisionamento do banco e do armazenamento.
-- [x] Implementar favoritos na interface e preparar o SQL para persistência por conta.
-- [ ] Ampliar edição e encerramento dos anúncios e confirmação de negociações concluídas.
-- [x] Implementar finalização de pedidos pendentes no servidor, com validação de preços e disponibilidade.
-- [ ] Implementar acompanhamento e cancelamento de pedidos e definir o fluxo de pagamento e entrega.
-- [ ] Evoluir a comunicação entre usuários.
-- [ ] Implementar e validar filtros de daltonismo previstos no escopo inicial.
-- [ ] Ampliar conteúdos multimídia com acessibilidade.
-- [ ] Registrar testes de responsividade, acessibilidade, desempenho e SEO.
-- [ ] Consolidar a configuração e a documentação de publicação.
-- [ ] Organizar as evidências e a documentação acadêmica complementar.
-
-## Validação
-
-### Fontes e alto contraste
-
-O ícone de acessibilidade no cabeçalho das onze páginas abre os controles **A+**, **A−** e **Restaurar**. O tamanho varia de 90% a 125%, em passos de 5%, e volta a 100% ao restaurar. A escolha é salva no `localStorage` da mesma origem, permanecendo ao navegar ou atualizar o site. Se o navegador bloquear o armazenamento, o ajuste continua funcionando na página e informa que a preferência não foi salva.
-
-No mesmo menu, **Alto contraste** ativa ou desativa uma paleta de preto, branco e amarelo. Links, botões, bordas e foco recebem destaque, e as imagens dos produtos mantêm suas cores, sem filtros. A preferência é salva separadamente na chave `retech-alto-contraste` e sincronizada entre abas. Desativar o modo restaura as cores originais; restaurar o tamanho da fonte não altera o contraste. As duas opções podem ser usadas juntas.
-
-O controle fica em `js/script.js`, já compartilhado por todas as páginas. Os tamanhos tipográficos em `style.css` usam `rem`, com uma variável na raiz para alcançar também conteúdo dinâmico, sem aplicar zoom ou ampliar imagens. A base de 100% preserva as medidas anteriores com a configuração padrão de 16px do navegador e respeita a fonte padrão configurada pelo usuário.
-
-O menu usa botões nativos, indicação acessível do percentual e estado expandido. Pode ser operado por Tab, Enter e Espaço; setas navegam entre opções, e Escape fecha e devolve o foco ao botão. O cabeçalho reorganiza os controles em telas menores e com fontes ampliadas. A posição da janela é limitada à área visível.
-
-```sh
-node tests/acessibilidade.test.mjs
-```
-
-Os nove grupos de testes simulados cobrem persistência, limites, restauração, teclado, posicionamento, armazenamento indisponível, integração das onze páginas e combinação de contraste com fontes ampliadas. Também calculam o contraste da paleta básica e verificam a exclusão das imagens das substituições de cor. Isso não equivale a uma auditoria completa de acessibilidade. A conferência visual real em diferentes dispositivos continua necessária.
-
-### Página inicial
-
-A home usa a conexão existente do Supabase. `js/inicio.js` consulta somente anúncios ativos e campos públicos, com ordenação por data de criação e desempate por ID. Os cards reutilizam o componente de `js/retech-supabase.js`. As contagens das categorias consideram vendas ativas, correspondendo ao catálogo de compra.
-
-Os dados são atualizados a cada 30 segundos enquanto a aba está visível e ao retornar à página. A atualização não depende de habilitar Realtime no banco. Ausência de anúncios, configuração indisponível e falhas têm mensagens próprias; as listas não usam produtos nem preços fictícios. O marcador “Recém-anunciado” aparece em vendas criadas nos últimos sete dias.
-
-Os estilos do conteúdo da home ficam restritos à classe `pagina-inicio`. O cabeçalho usa a classe compartilhada `cabecalho-padrao` nas onze páginas, mantendo a mesma organização da home e a indicação da página atual. Para executar os testes simulados de consultas, estados, segurança dos cards, links e menus:
-
-```sh
-node tests/inicio.test.mjs
-```
-
-Esses testes e a consulta SQL de leitura com o papel `anon` não substituem a conferência visual e a validação HTTP no navegador.
-
-### Fluxos compartilhados
-
-O teste de regressão em `tests/auth.test.mjs` cobre 47 cenários simulados de cadastro, login, perfil, cabeçalho, filtros, contato, newsletter, solicitações, upload, carrinho flutuante e botões de compra. Com Node.js instalado, executar:
-
-```sh
-node tests/auth.test.mjs
-```
-
-Esses testes usam respostas simuladas e não substituem a validação com o Supabase. Não há `package.json` nem instalação de dependências necessária para esse teste. O cadastro verifica a sessão e a gravação do perfil antes de exibir sucesso; o login tenta recuperar perfis ausentes e apresenta falhas de persistência sem redirecionar.
-
-Para validar uma entrega:
-
-1. Conferir links, recursos e navegação entre as dez páginas.
-2. Verificar busca, filtros, ordenação e ausência de resultados.
-3. Testar cadastro, confirmação de e-mail, login, edição de perfil e saída da conta.
-4. Testar publicação e upload, carrinho e solicitações em ambiente apropriado.
-5. Conferir o acesso como visitante, usuário autenticado e usuário sem permissão sobre registros de outra pessoa.
-6. Verificar formulários com entradas válidas e inválidas e respostas de falha do serviço.
-7. Avaliar telas de celular, tablet e computador e navegação por teclado.
-8. Registrar verificações com W3C Validator, Lighthouse e leitor de tela quando realizadas.
-
-As métricas propostas estão no [contexto.md](contexto.md#11-métricas). Anúncios publicados não devem ser contabilizados como equipamentos efetivamente reutilizados sem confirmação da conclusão.
-
-## Documentação e colaboração
-
-| Documento | Conteúdo |
+| Script | Responsabilidade |
 | --- | --- |
-| [README.md](README.md) | Apresentação, recursos atuais, execução e situação do projeto. |
-| [contexto.md](contexto.md) | Problema, público, objetivos, escopo, requisitos e métricas propostas. |
-| [rules.md](rules.md) | Convenções, regras de implementação, exemplos e orientações para pessoas colaboradoras e IA. |
+| [policies.sql](supabase/policies.sql) | Define RLS, permissões, regras de Storage, funções e proteções de estado para um banco previamente provisionado. |
+| [create-profile-trigger.sql](supabase/create-profile-trigger.sql) | Define o gatilho que cria um perfil a partir de uma nova conta em `auth.users`. |
+| [favoritos.sql](supabase/favoritos.sql) | Cria a tabela `favoritos`, suas chaves e as políticas de leitura, inclusão e remoção da própria conta. |
+| [historico-pedidos.sql](supabase/historico-pedidos.sql) | Define a leitura dos anúncios reservados pelos participantes do pedido e a consulta ao nome do vendedor pelo comprador. Usa o esquema `retech_private`, definido em `policies.sql`. |
 
-Antes de contribuir, consultar as regras e os arquivos relacionados à alteração. Preservar os padrões existentes, manter mudanças focadas e informar o que foi verificado.
+Os scripts complementam um esquema existente. Em uma instância nova, o esquema-base e os buckets precisam ser provisionados separadamente. `policies.sql` também referencia objetos preexistentes, como `public.artigos`, o bucket `avatares` e a função `public.rls_auto_enable()`. Para uso pelo navegador, mantenha apenas a chave publicável no cliente e deixe `retech_private` fora dos esquemas expostos pela API.
 
-A pasta `docs/` permanece prevista para diário de bordo, evidências de testes, registros de acessibilidade e orçamento de hospedagem e domínio. O planejamento acadêmico inclui comparação de três opções de hospedagem, incluindo Railway, e três opções de domínio, com justificativa da escolha; isso não altera a stack atual.
+### Operações transacionais
 
+- `finalizar_carrinho` valida no banco os itens selecionados, a disponibilidade e o total esperado. Na mesma transação, cria os pedidos e itens, pausa os anúncios reservados e remove os itens comprados do carrinho. A confirmação abre **Meus pedidos**.
+- `criar_solicitacao_com_mensagem` registra a solicitação e a mensagem na mesma transação. Se já houver solicitação pendente do usuário para o mesmo anúncio, reutiliza esse registro.
+- `listar_vendedores_publicos` fornece os campos públicos dos anunciantes com ofertas ativas. `listar_vendedores_pedidos` fornece o nome dos vendedores dos pedidos do comprador autenticado.
 
-### Revisão da compra e histórico
+## Testes
 
-O carrinho direciona para pagar.html?itens=IDs. Comprar Agora usa o mesmo fluxo para o produto escolhido. Apenas IDs seguem na URL; preços e total são consultados no Supabase. A confirmação usa finalizar_carrinho, que valida preços e disponibilidade, registra pedidos pendentes por vendedor e remove os itens comprados atomicamente. Não há cobrança real nem envio de CPF ou cartão.
+Execute com Node.js na raiz do projeto.
 
-Sucesso direciona para perfil.html#meus-pedidos. Falhas mantêm a página e solicitam consulta ao histórico antes de repetir, seguida de atualização dos produtos. Meus pedidos filtra comprador_id e exibe itens, preços registrados, total, data, status e detalhes, sob RLS.
+```sh
+node --test
+```
 
-**SQL pendente, não executado:** [historico-pedidos.sql](supabase/historico-pedidos.sql). A política atual oculta anúncios pausados do comprador; o ajuste permite consultar esses produtos somente aos participantes do pedido. Sem ele, nome e imagem podem ficar indisponíveis no histórico. O mesmo SQL inclui listar_vendedores_pedidos, que retorna apenas ID e nome dos vendedores de pedidos do comprador autenticado, sem liberar perfis privados. Nenhuma tabela é criada. O modelo atual guarda o preço da compra, mas o nome e a imagem refletem o anúncio disponível, sem cópia histórica.
+As cinco suítes cobrem acessibilidade, autenticação e fluxos compartilhados, compra e histórico, favoritos e carregamento da home. Elas usam ambientes e respostas simulados, sem gravar dados no Supabase.
 
-
-O histórico destaca o nome real de cada produto, data e horário, vendedor, imagem e preço registrado. Não exibe números de pedido ou produto como identificação. O status interno pendente é apresentado como **Pedido registrado**, preservando os registros existentes. Caso as permissões necessárias ainda não estejam aplicadas, exibe uma falha de consulta explícita, sem inventar nomes ou imagens. A disponibilidade dos dados de produtos reservados e dos nomes dos vendedores depende da aplicação autorizada do SQL acima.
+Para conhecer a proposta acadêmica e as convenções do repositório, consulte [contexto.md](contexto.md) e [rules.md](rules.md).
