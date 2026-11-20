@@ -2308,32 +2308,36 @@ footer {
 
 .blog-artigos {
     display: grid;
-    gap: 24px;
-    max-width: 960px;
+    gap: clamp(24px, 4vw, 44px);
+    max-width: 1160px;
     margin-inline: auto;
 }
 
 .blog-artigo {
     display: grid;
-    grid-template-columns: minmax(8rem, 1fr) minmax(0, 4fr);
-    align-items: start;
-    gap: clamp(16px, 3vw, 32px);
-    padding: clamp(18px, 3vw, 32px);
+    grid-template-columns: minmax(0, 38fr) minmax(0, 62fr);
+    overflow: hidden;
     border: 1px solid #e1e9e3;
-    border-radius: 12px;
+    border-radius: 16px;
     background: white;
+    box-shadow: 0 4px 18px #142c3e0d;
 }
 
-.blog-artigo > img {
+.blog-artigo-imagem {
+    display: grid;
+    align-items: center;
+    background: #eef7ee;
+}
+
+.blog-artigo-imagem img {
     display: block;
     width: 100%;
-    aspect-ratio: 4 / 3;
-    border-radius: 8px;
+    aspect-ratio: 5 / 4;
     object-fit: cover;
 }
 
 .blog-artigo-conteudo {
-    max-width: 70ch;
+    padding: clamp(18px, 4vw, 36px);
     color: #405663;
     line-height: 1.65;
 }
@@ -2369,6 +2373,16 @@ footer {
     text-decoration: underline;
     text-underline-offset: 0.15em;
     overflow-wrap: anywhere;
+}
+
+@media (max-width: 850px) {
+    .blog-artigo {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .blog-artigo-imagem img {
+        aspect-ratio: 3 / 2;
+    }
 }
 
 .blog-meta {
@@ -2706,15 +2720,6 @@ footer {
         width: 120px;
         height: 120px;
         font-size: 3.125rem;
-    }
-
-    .blog-artigo {
-        grid-template-columns: minmax(0, 1fr);
-    }
-
-    .blog-artigo > img {
-        width: min(100%, 260px);
-        aspect-ratio: 16 / 9;
     }
 
     .blog-temas-grade {
