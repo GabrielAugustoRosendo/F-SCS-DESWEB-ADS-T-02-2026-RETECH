@@ -2,7 +2,7 @@
 
 **Tecnologia que ganha uma nova vida.**
 
-O ReTech é uma plataforma web acadêmica para divulgar, encontrar e reaproveitar eletrônicos usados. O catálogo reúne ofertas de venda, doação e troca. O blog complementa a experiência com orientações sobre compra de usados, conservação dos aparelhos e descarte de resíduos eletrônicos.
+O ReTech é um market place para divulgar, encontrar e reaproveitar eletrônicos usados. O catálogo reúne ofertas de venda, doação e troca. O blog complementa a experiência com orientações sobre compra de usados, conservação dos aparelhos e descarte de resíduos eletrônicos.
 
 O projeto busca manter equipamentos em circulação por mais tempo, facilitar o acesso à tecnologia e incentivar o consumo consciente. Foi desenvolvido em 2026 na disciplina de Desenvolvimento Web do curso de Análise e Desenvolvimento de Sistemas, sob orientação do professor Paulo Fratta.
 
