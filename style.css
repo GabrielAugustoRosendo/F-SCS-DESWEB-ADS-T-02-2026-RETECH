@@ -53,7 +53,7 @@
 .pagina-inicio .acoes-cabecalho { gap: 10px; }
 .pagina-inicio .anunciar-topo { padding: 11px 15px; font-size: 0.8125rem; }
 .pagina-inicio .banner { background: #eef7ee; border-bottom: 1px solid #e0ede1; }
-.pagina-inicio .banner-conteudo { display: grid; grid-template-columns: 1.05fr 1fr; align-items: center; gap: 52px; padding: 46px 0; min-height: 0; }
+.pagina-inicio .banner-conteudo { display: grid; grid-template-columns: minmax(0, 9fr) minmax(0, 11fr); align-items: center; gap: 36px; padding: 46px 0; min-height: 0; }
 .pagina-inicio .banner-texto { width: auto; max-width: 590px; }
 .pagina-inicio .etiqueta { font-size: 0.6875rem; font-weight: bold; letter-spacing: 1.2px; line-height: 1.7; }
 .pagina-inicio .banner-texto h1 { font-size: clamp(2.125rem, calc(3.4vw * var(--retech-escala-fonte, 1)), 3.1875rem); line-height: 1.13; letter-spacing: -1.6px; margin: 17px 0 19px; }
@@ -63,10 +63,8 @@
 .pagina-inicio .botao { border-radius: 8px; min-height: 44px; font-size: 0.875rem; transition: background-color .18s ease, box-shadow .18s ease, transform .18s ease; }
 .pagina-inicio .botao:hover { transform: translateY(-2px); box-shadow: 0 5px 14px rgba(20, 44, 62, .12); }
 .pagina-inicio .inicio-banner-nota { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: #42634d; margin-top: 23px; line-height: 1.5; }
-.pagina-inicio .banner-imagem { width: auto; position: relative; padding: 0; }
-.pagina-inicio .banner-imagem img { display: block; width: 100%; height: 310px; object-fit: contain; background: #f4f9f1; border: 7px solid #fff; border-radius: 24px; box-shadow: 0 14px 35px rgba(20, 44, 62, .1); }
-.pagina-inicio .inicio-imagem-legenda { position: absolute; left: 22px; bottom: 20px; background: #fff; border-radius: 8px; padding: 11px 14px; color: #142c3e; box-shadow: 0 3px 12px rgba(20, 44, 62, .1); font-size: 0.75rem; font-weight: bold; }
-.pagina-inicio .inicio-imagem-legenda i { color: #16813d; margin-right: 6px; }
+.pagina-inicio .banner-imagem { width: auto; min-width: 0; padding: clamp(8px, 1.2vw, 16px); background: #f0f6ed; border: 1px solid #fff; border-radius: 18px; box-shadow: 0 14px 35px rgba(20, 44, 62, .1); }
+.pagina-inicio .banner-imagem img { display: block; width: 100%; height: auto; object-fit: contain; }
 .pagina-inicio .inicio-secao { padding-top: 52px; padding-bottom: 52px; }
 .pagina-inicio .inicio-categorias { padding-bottom: 12px; }
 .pagina-inicio .inicio-secao-topo { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 25px; }
@@ -164,7 +162,6 @@
     .pagina-inicio .banner-conteudo { grid-template-columns: 1fr; padding: 30px 0; gap: 26px; }
     .pagina-inicio .banner-texto { max-width: none; }
     .pagina-inicio .banner-texto h1 { font-size: clamp(2.0625rem, calc(7vw * var(--retech-escala-fonte, 1)), 2.8125rem); max-width: 600px; letter-spacing: -1px; }
-    .pagina-inicio .banner-imagem img { height: 235px; }
     .pagina-inicio .inicio-secao { padding-top: 35px; padding-bottom: 35px; }
     .pagina-inicio .inicio-categorias { padding-bottom: 0; }
     .pagina-inicio .inicio-secao-topo { align-items: flex-start; flex-direction: column; gap: 15px; }
