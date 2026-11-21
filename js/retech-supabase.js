@@ -15,6 +15,56 @@
         return elemento.innerHTML.replaceAll('"', "&quot;").replaceAll("'", "&#39;");
     }
 
+    function notificar(mensagem, detalhe = "", tipo = "sucesso") {
+        const toast = document.createElement("div");
+        toast.className = `retech-toast retech-toast-${tipo}`;
+        toast.setAttribute("role", tipo === "erro" ? "alert" : "status");
+        toast.setAttribute("aria-live", tipo === "erro" ? "assertive" : "polite");
+
+        const icone = document.createElement("span");
+        icone.className = "retech-toast-icone";
+        icone.setAttribute("aria-hidden", "true");
+        icone.textContent = tipo === "erro" ? "!" : "✓";
+
+        const conteudo = document.createElement("div");
+        conteudo.className = "retech-toast-conteudo";
+        const titulo = document.createElement("strong");
+        titulo.textContent = mensagem;
+        conteudo.appendChild(titulo);
+        if (detalhe) {
+            const descricao = document.createElement("span");
+            descricao.textContent = detalhe;
+            conteudo.appendChild(descricao);
+        }
+
+        const fechar = document.createElement("button");
+        fechar.className = "retech-toast-fechar";
+        fechar.type = "button";
+        fechar.setAttribute("aria-label", "Fechar notificação");
+        fechar.textContent = "×";
+        const dispensar = () => {
+            clearTimeout(toast.dataset.timer);
+            toast.remove();
+        };
+        fechar.addEventListener("click", dispensar);
+        toast.append(icone, conteudo, fechar);
+        document.body.appendChild(toast);
+        toast.dataset.timer = String(setTimeout(dispensar, 4000));
+        return toast;
+    }
+
+    window.retechNotificar = notificar;
+    try {
+        const aviso = sessionStorage.getItem("retech-toast-pendente");
+        if (aviso) {
+            sessionStorage.removeItem("retech-toast-pendente");
+            const { mensagem, detalhe, tipo } = JSON.parse(aviso);
+            notificar(mensagem, detalhe, tipo);
+        }
+    } catch {
+        // A notificação continua disponível mesmo quando o armazenamento da sessão está bloqueado.
+    }
+
     function mostrarMensagem(elemento, texto, sucesso = false) {
         if (!elemento) return;
         elemento.textContent = texto;
@@ -601,8 +651,18 @@
                 if (erroAnuncio) throw erroAnuncio;
                 if (!anuncioCriado?.id) throw new Error("Não foi possível confirmar a publicação.");
                 anuncioConfirmado = true;
-
-                window.location.href = tipo === "venda" ? "catalogo.html" : "doar-trocar.html";
+                const aviso = JSON.stringify({
+                    mensagem: "Anúncio publicado com sucesso!",
+                    detalhe: "Seu anúncio já está disponível para outros usuários.",
+                    tipo: "sucesso"
+                });
+                try {
+                    sessionStorage.setItem("retech-toast-pendente", aviso);
+                    window.location.href = tipo === "venda" ? "catalogo.html" : "doar-trocar.html";
+                } catch {
+                    notificar("Anúncio publicado com sucesso!", "Seu anúncio já está disponível para outros usuários.");
+                    setTimeout(() => { window.location.href = tipo === "venda" ? "catalogo.html" : "doar-trocar.html"; }, 1800);
+                }
             } catch (erro) {
                 status.textContent = erro.message || "Não foi possível publicar o anúncio.";
                 // Em falhas de transporte, o servidor pode ter gravado o anúncio.
@@ -623,6 +683,7 @@
                         status.textContent += " Não foi possível confirmar a limpeza da imagem. Consulte Meus anúncios antes de reenviar.";
                     }
                 }
+                notificar("Não foi possível publicar o anúncio.", "Verifique os dados e tente novamente.", "erro");
             } finally {
                 botao.disabled = false;
             }
@@ -646,7 +707,7 @@
             : nomeTipo[anuncio.tipo_anuncio];
         const destino = `produto.html?id=${encodeURIComponent(anuncio.id)}`;
         artigo.innerHTML = `
-            ${opcoes.inicio ? `<a class="inicio-card-link" href="${destino}">` : ""}
+            <a class="produto-card-link" href="${destino}" aria-label="Ver produto: ${escapeHtml(anuncio.nome_anuncio)}"></a>
             <span class="selo-produto ${anuncio.tipo_anuncio === "venda" ? "selo-neutro" : "selo-verde"}">${escapeHtml(opcoes.inicio ? seloInicio : nomeTipo[anuncio.tipo_anuncio] || nomeEstado[anuncio.estado] || "")}</span>
             <img src="${escapeHtml(anuncio.imagem_url || "imagens/vitrine.jpg")}" alt="${escapeHtml(anuncio.nome_anuncio)}" ${opcoes.inicio ? 'loading="lazy" width="400" height="280"' : ""}>
             <div class="produto-info">
@@ -656,8 +717,7 @@
                 <p>${escapeHtml(anuncio.descricao_anuncio || "")}</p>
                 ${vendedor ? `<p class="produto-vendedor">Vendedor: ${escapeHtml(vendedor.nome || "Usuário")}${vendedor.local ? ` - ${escapeHtml(vendedor.local)}` : ""}</p>` : ""}
                 <strong>${anuncio.tipo_anuncio === "venda" ? (opcoes.inicio && (anuncio.preco_anuncio == null || !Number.isFinite(Number(anuncio.preco_anuncio))) ? "Preço não informado" : formatarPreco(anuncio.preco_anuncio)) : anuncio.tipo_anuncio === "doacao" ? "Grátis" : "Para trocar"}</strong>
-                ${opcoes.inicio ? '<span class="link-produto">Ver detalhes <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>' : `<a href="${destino}" class="link-produto">Ver detalhes <i class="fa-solid fa-arrow-right"></i></a>`}
-            </div>${opcoes.inicio ? "</a>" : ""}`;
+            </div>`;
         if (opcoes.inicio || opcoes.favoritos) {
             const imagem = artigo.querySelector("img");
             imagem.addEventListener("error", () => { imagem.src = "imagens/vitrine.jpg"; }, { once: true });
@@ -766,7 +826,8 @@
         atualizarCoracao(botao);
         const status = statusDaAcao(controle);
         controle.prepend(botao);
-        botao.addEventListener("click", async () => {
+        botao.addEventListener("click", async (evento) => {
+            evento.stopPropagation();
             if (alterandoFavoritos) return;
             const estavaFocado = document.activeElement === botao;
             await executarAcao(botao, status, async () => {

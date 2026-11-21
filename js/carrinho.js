@@ -31,17 +31,30 @@
         <p class="carrinho-status" role="status" aria-live="polite"></p>
         <div class="carrinho-resumo"><p>Total <strong class="carrinho-total">R$ 0,00</strong></p>
             <button type="button" class="botao botao-verde carrinho-finalizar" disabled>Finalizar compra</button>
-            <small>Revise os produtos na página de pagamento. A compra é uma simulação, sem cobrança.</small></div>`;
+            <small>Revise os produtos na página de pagamento. A compra é uma simulação, sem cobrança.</small></div>
+        <section class="carrinho-confirmacao" aria-labelledby="carrinho-confirmacao-titulo" hidden>
+            <p id="carrinho-confirmacao-titulo" role="alert">Você está prestes a remover este produto do carrinho: <strong class="carrinho-confirmacao-nome"></strong></p>
+            <div class="carrinho-confirmacao-acoes">
+                <button type="button" class="carrinho-confirmar-exclusao">Confirmar exclusão</button>
+                <button type="button" class="carrinho-cancelar-exclusao">Cancelar</button>
+            </div>
+        </section>`;
     document.body.appendChild(janela);
 
     const lista = janela.querySelector(".carrinho-itens");
     const status = janela.querySelector(".carrinho-status");
     const finalizar = janela.querySelector(".carrinho-finalizar");
+    const confirmacao = janela.querySelector(".carrinho-confirmacao");
+    const nomeConfirmacao = janela.querySelector(".carrinho-confirmacao-nome");
+    const confirmarExclusao = janela.querySelector(".carrinho-confirmar-exclusao");
+    const cancelarExclusao = janela.querySelector(".carrinho-cancelar-exclusao");
     let itens = [];
     let usuarioId = null;
     let geracao = 0;
     let ocupado = false;
     let carregado = false;
+    let itemPendente = null;
+    let botaoRemoverOrigem = null;
     const disponivel = (item) => item.anuncios?.status === "ativo"
         && item.anuncios.tipo_anuncio === "venda" && item.anuncios.usuario_id !== usuarioId
         && Number.isFinite(Number(item.anuncios.preco_anuncio)) && Number(item.anuncios.preco_anuncio) > 0;
@@ -116,28 +129,78 @@
         if (evento.key === "Escape" && janela.open) janela.close();
     });
     janela.addEventListener("close", () => {
+        confirmacao.hidden = true;
+        itemPendente = null;
+        botaoRemoverOrigem = null;
+        confirmarExclusao.disabled = false;
+        cancelarExclusao.disabled = false;
         botao.setAttribute("aria-expanded", "false");
         botao.focus();
     });
 
-    lista.addEventListener("click", async (evento) => {
+    function solicitarConfirmacao(item, origem) {
+        itemPendente = item;
+        botaoRemoverOrigem = origem;
+        nomeConfirmacao.textContent = item.anuncios?.nome_anuncio || "Produto indisponível";
+        confirmacao.hidden = false;
+        confirmarExclusao.focus();
+    }
+
+    function cancelarConfirmacao() {
+        const id = itemPendente?.id;
+        confirmacao.hidden = true;
+        itemPendente = null;
+        const origem = botaoRemoverOrigem;
+        botaoRemoverOrigem = null;
+        const botaoAtual = Array.from(lista.querySelectorAll(".carrinho-remover"))
+            .find((elemento) => elemento.dataset.id === String(id));
+        (origem?.isConnected ? origem : botaoAtual || janela.querySelector(".carrinho-fechar")).focus();
+    }
+
+    cancelarExclusao.addEventListener("click", cancelarConfirmacao);
+    confirmarExclusao.addEventListener("click", async () => {
+        if (!itemPendente || ocupado) return;
+        const item = itemPendente;
+        ocupado = true;
+        let exclusaoConcluida = false;
+        confirmarExclusao.disabled = true;
+        cancelarExclusao.disabled = true;
+        renderizar();
+        try {
+            const { data: removido, error } = await db.from("carrinho")
+                .delete().eq("id", item.id).eq("usuario_id", usuarioId).select("id").single();
+            if (error) throw error;
+            if (!removido) throw new Error("Não foi possível confirmar a remoção do produto.");
+
+            itens = itens.filter((registro) => registro.id !== item.id);
+            confirmacao.hidden = true;
+            itemPendente = null;
+            botaoRemoverOrigem = null;
+            status.textContent = "Produto removido do carrinho com sucesso.";
+            status.dataset.tipo = "sucesso";
+            exclusaoConcluida = true;
+        } catch (erro) {
+            status.textContent = "Não foi possível excluir o produto. " + (erro.message || "Tente novamente.");
+            status.dataset.tipo = "erro";
+        } finally {
+            ocupado = false;
+            confirmarExclusao.disabled = false;
+            cancelarExclusao.disabled = false;
+            renderizar();
+            if (exclusaoConcluida) {
+                (lista.querySelector(".carrinho-remover") || janela.querySelector(".carrinho-fechar")).focus();
+            }
+        }
+    });
+
+    lista.addEventListener("click", (evento) => {
         const remover = evento.target.closest(".carrinho-remover");
         if (!remover || ocupado) return;
         const item = itens.find((registro) => String(registro.id) === remover.dataset.id);
-        if (!item || !window.confirm(`Tem certeza de que deseja excluir "${item.anuncios?.nome_anuncio || "este item"}" do carrinho?`)) return;
-        ocupado = true;
-        renderizar();
-        try {
-            const { error } = await db.from("carrinho").delete().eq("id", item.id).eq("usuario_id", usuarioId);
-            if (error) throw error;
-            await carregar();
-            status.textContent = "Item excluído do carrinho.";
-        } catch (erro) {
-            status.textContent = "Não foi possível excluir o item. " + (erro.message || "Tente novamente.");
-        } finally {
-            ocupado = false;
-            renderizar();
-        }
+        if (!item) return;
+        status.textContent = "";
+        status.dataset.tipo = "";
+        solicitarConfirmacao(item, remover);
     });
 
     finalizar.addEventListener("click", () => {
