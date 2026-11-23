@@ -6,6 +6,8 @@ O ReTech é um market place para divulgar, encontrar e reaproveitar eletrônicos
 
 O projeto busca manter equipamentos em circulação por mais tempo, facilitar o acesso à tecnologia e incentivar o consumo consciente. Foi desenvolvido em 2026 na disciplina de Desenvolvimento Web do curso de Análise e Desenvolvimento de Sistemas, sob orientação do professor Paulo Fratta.
 
+**Custo informado do projeto:** R$ 0,00. O site foi desenvolvido com ferramentas e recursos gratuitos, sem contratação de serviços pagos.
+
 **Equipe:** André Carvalho, Gabriel Augusto e Pedro Victor.
 
 ## Sumário
@@ -26,7 +28,7 @@ O projeto busca manter equipamentos em circulação por mais tempo, facilitar o 
 | Perfil | Consulta e edição de nome, localidade, telefone e apresentação pessoal. Reúne anúncios próprios, favoritos, solicitações, pedidos e saída da conta. |
 | Anúncios | Usuários autenticados podem publicar ofertas de venda, doação ou troca e consultar seus anúncios no perfil. O formulário registra categoria, conservação, descrição e imagem. O preço é exigido para venda. |
 | Upload | A publicação envia uma imagem JPEG, PNG ou WebP de até 5 MB ao Supabase Storage e associa sua URL ao anúncio. |
-| Busca e filtros | O catálogo de vendas tem busca por nome ou categoria, filtros por categoria e conservação e ordenação por preço ou nome. A listagem de doações e trocas tem filtros por modalidade e categoria. |
+| Busca e filtros | O catálogo de vendas tem busca por nome ou categoria, filtros por categoria e conservação e ordenação por preço ou nome. A listagem de doações e trocas tem filtros por modalidade, categoria e conservação. |
 | Carrinho | Janela disponível pelo cabeçalho, com contador, links para os produtos, total e remoção de itens. O carrinho direciona para a revisão da compra. |
 | Compra simulada | A revisão oferece Pix, cartão de crédito e débito como opções de demonstração. A confirmação registra pedidos por vendedor e reserva os anúncios. Não há cobrança, e CPF e dados do cartão permanecem no formulário. |
 | Favoritos | O coração nos cards e nos detalhes permite salvar ou remover anúncios. A lista fica associada à conta e pode ser consultada na aba **Favoritos**, com contador e opção de remoção. |
@@ -41,17 +43,17 @@ As políticas de `anuncios` definidas no SQL autorizam atualização e exclusão
 
 | Página | Conteúdo |
 | --- | --- |
-| [Início](index.html) | Apresentação, contagens de vendas ativas por categoria, até quatro vendas recentes e até três ofertas de doação ou troca. |
-| [Catálogo](catalogo.html) | Listagem de vendas, busca, filtros e ordenação. |
-| [Detalhes do produto](produto.html) | Imagem, descrição, conservação, modalidade, anunciante e ações conforme o tipo de oferta. |
-| [Anunciar](anunciar.html) | Formulário de publicação com envio de imagem. |
-| [Doações e trocas](doar-trocar.html) | Listagem de ofertas com filtros por modalidade e categoria. |
-| [Entrar e criar conta](login.html) | Formulários de login e cadastro. |
-| [Perfil](perfil.html) | Dados pessoais, anúncios próprios, favoritos, solicitações e histórico de compras. |
-| [Revisar compra](pagar.html) | Itens, total e confirmação da compra simulada. Acessada pelo carrinho ou por **Comprar agora**. |
-| [Blog](blog.html) | Artigos sobre compra, vida útil e descarte de eletrônicos, cards educativos, vídeos e inscrição na newsletter. |
-| [Sobre](sobre.html) | Missão, visão, valores e equipe do ReTech. |
-| [Contato](contato.html) | Informações de suporte e formulário de mensagem. |
+| [Início](../index.html) | Apresentação, contagens de vendas ativas por categoria, até quatro vendas recentes e até três ofertas de doação ou troca. |
+| [Catálogo](../catalogo.html) | Listagem de vendas, busca, filtros e ordenação. |
+| [Detalhes do produto](../produto.html) | Imagem, descrição, conservação, modalidade, anunciante e ações conforme o tipo de oferta. |
+| [Anunciar](../anunciar.html) | Formulário de publicação com envio de imagem. |
+| [Doações e trocas](../doar-trocar.html) | Listagem de ofertas com filtros por modalidade, categoria e conservação. |
+| [Entrar e criar conta](../login.html) | Formulários de login e cadastro. |
+| [Perfil](../perfil.html) | Dados pessoais, anúncios próprios, favoritos, solicitações e histórico de compras. |
+| [Revisar compra](../pagar.html) | Itens, total e confirmação da compra simulada. Acessada pelo carrinho ou por **Comprar agora**. |
+| [Blog](../blog.html) | Artigos sobre compra, vida útil e descarte de eletrônicos, cards educativos, vídeos e inscrição na newsletter. |
+| [Sobre](../sobre.html) | Missão, visão, valores e equipe do ReTech. |
+| [Contato](../contato.html) | Informações de suporte e formulário de mensagem. |
 
 ## Tecnologias
 
@@ -60,7 +62,7 @@ As políticas de `anuncios` definidas no SQL autorizam atualização e exclusão
 | HTML5 e CSS3 | Páginas estáticas, formulários e layout responsivo. |
 | JavaScript puro | Interações, filtros, validações, acessibilidade e comunicação com o Supabase. |
 | Supabase Auth, PostgreSQL e Storage | Autenticação, persistência, autorização por RLS e armazenamento de imagens. |
-| `supabase-js` v2 | Cliente do Supabase carregado pelo jsDelivr e inicializado em `js/supabase.js`. |
+| `supabase-js` v2 | Cliente do Supabase carregado pelo jsDelivr e inicializado em `../js/supabase.js`. |
 | Font Awesome Free | Ícones e fontes WOFF2 distribuídos localmente. |
 | YouTube | Players incorporados no blog, com carregamento sob demanda. |
 | Node.js | Execução das suítes automatizadas. |
@@ -105,8 +107,14 @@ ReTech/
 │   └── fontawesome/
 │       ├── css/
 │       └── webfonts/
-├── README.md
-├── contexto.md
+├── docs/
+│   ├── README.md
+│   ├── escopo_projeto.md
+│   ├── diario_de_bordo.md
+│   ├── evidencias_de_testes.md
+│   ├── orcamento_hospedagem.md
+│   ├── relatorio_melhorias_mvp.md
+│   └── rules.md
 └── rules.md
 ```
 
@@ -117,7 +125,7 @@ ReTech/
 1. Clone o repositório ou abra a pasta do projeto.
 2. Sirva a raiz por HTTP local, por exemplo, com a extensão Live Server do VS Code.
 3. Abra `index.html` pela URL do servidor. Mantenha a conexão com a internet para carregar a biblioteca por CDN, acessar o Supabase e assistir aos vídeos incorporados.
-4. Para conectar outro ambiente, configure a URL do projeto e a chave **publicável** em [js/supabase.js](js/supabase.js) e use um banco com o esquema e os objetos descritos abaixo.
+4. Para conectar outro ambiente, configure a URL do projeto e a chave **publicável** em [js/supabase.js](../js/supabase.js) e use um banco com o esquema e os objetos descritos abaixo.
 
 O front-end é servido diretamente, sem `npm install` ou compilação. O Supabase Auth controla a exigência de confirmação de e-mail. Quando o cadastro retorna uma sessão, a aplicação confirma o perfil e volta ao formulário **Entrar**.
 
@@ -140,10 +148,10 @@ O catálogo público consulta anúncios ativos. As políticas de segurança em n
 
 | Script | Responsabilidade |
 | --- | --- |
-| [policies.sql](supabase/policies.sql) | Define RLS, permissões, regras de Storage, funções e proteções de estado para um banco previamente provisionado. |
-| [create-profile-trigger.sql](supabase/create-profile-trigger.sql) | Define o gatilho que cria um perfil a partir de uma nova conta em `auth.users`. |
-| [favoritos.sql](supabase/favoritos.sql) | Cria a tabela `favoritos`, suas chaves e as políticas de leitura, inclusão e remoção da própria conta. |
-| [historico-pedidos.sql](supabase/historico-pedidos.sql) | Define a leitura dos anúncios reservados pelos participantes do pedido e a consulta ao nome do vendedor pelo comprador. Usa o esquema `retech_private`, definido em `policies.sql`. |
+| [policies.sql](../supabase/policies.sql) | Define RLS, permissões, regras de Storage, funções e proteções de estado para um banco previamente provisionado. |
+| [create-profile-trigger.sql](../supabase/create-profile-trigger.sql) | Define o gatilho que cria um perfil a partir de uma nova conta em `auth.users`. |
+| [favoritos.sql](../supabase/favoritos.sql) | Cria a tabela `favoritos`, suas chaves e as políticas de leitura, inclusão e remoção da própria conta. |
+| [historico-pedidos.sql](../supabase/historico-pedidos.sql) | Define a leitura dos anúncios reservados pelos participantes do pedido e a consulta ao nome do vendedor pelo comprador. Usa o esquema `retech_private`, definido em `policies.sql`. |
 
 Os scripts complementam um esquema existente. Em uma instância nova, o esquema-base e os buckets precisam ser provisionados separadamente. `policies.sql` também referencia objetos preexistentes, como `public.artigos`, o bucket `avatares` e a função `public.rls_auto_enable()`. Para uso pelo navegador, mantenha apenas a chave publicável no cliente e deixe `retech_private` fora dos esquemas expostos pela API.
 
@@ -163,4 +171,4 @@ node --test
 
 As cinco suítes cobrem acessibilidade, autenticação e fluxos compartilhados, compra e histórico, favoritos e carregamento da home. Elas usam ambientes e respostas simulados, sem gravar dados no Supabase.
 
-Para conhecer a proposta acadêmica e as convenções do repositório, consulte [contexto.md](contexto.md) e [rules.md](rules.md).
+Para conhecer as convenções de desenvolvimento do repositório, consulte [rules.md](rules.md).

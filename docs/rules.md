@@ -47,7 +47,7 @@ Estas regras orientam a implementação; não representam uma declaração de qu
 | `imagens/` | Imagens utilizadas no site. |
 | `vendor/` | Dependências locais de terceiros. |
 
-A pasta `docs/` é prevista no README; criar quando houver documentação complementar a armazenar.
+A pasta `docs/` reúne a documentação complementar, conforme a estrutura descrita em `README.md`.
 
 ### Estilo de código
 
@@ -171,7 +171,7 @@ Esse padrão permite compartilhar o script com páginas que não possuem o mesmo
 | Ajustar o menu em telas pequenas | `style.css`, `js/script.js` e cabeçalhos das páginas afetadas. |
 | Alterar os campos de publicação | `anunciar.html` e `js/retech-supabase.js`; conferir compatibilidade com os dados persistidos. |
 | Corrigir o filtro do catálogo | `catalogo.html`, `js/script.js` e geração dinâmica dos cards em `js/retech-supabase.js`. |
-| Atualizar a missão do projeto | `sobre.html`, `README.md` e `contexto.md`, conforme o alcance da mudança. |
+| Atualizar a missão do projeto | `sobre.html`, `README.md` e `escopo_projeto.md`, conforme o alcance da mudança. |
 
 ## 5. Erros
 
