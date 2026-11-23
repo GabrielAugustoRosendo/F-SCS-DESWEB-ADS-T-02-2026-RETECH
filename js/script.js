@@ -205,12 +205,14 @@ function atualizarDoacaoTroca() {
     if (!grade || !window.location.pathname.toLowerCase().includes("doar-trocar.html")) return;
     const modalidade = document.querySelector('input[name="modalidade"]:checked')?.value || "todos";
     const categoria = document.querySelector('input[name="categoria"]:checked')?.value || "todos";
+    const estado = document.querySelector('input[name="estado"]:checked')?.value || "todos";
     const anuncios = Array.from(grade.querySelectorAll(".produto-catalogo"));
     let encontrados = 0;
 
     anuncios.forEach((anuncio) => {
         const visivel = (modalidade === "todos" || anuncio.dataset.modalidade === modalidade)
-            && (categoria === "todos" || anuncio.dataset.categoria === categoria);
+            && (categoria === "todos" || anuncio.dataset.categoria === categoria)
+            && (estado === "todos" || anuncio.dataset.estado === estado);
         anuncio.hidden = !visivel;
         if (visivel) encontrados += 1;
     });

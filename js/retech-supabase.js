@@ -933,6 +933,11 @@
             return;
         }
 
+        const linkVoltar = document.getElementById("voltar-catalogo");
+        if (linkVoltar && data.tipo_anuncio !== "venda") {
+            linkVoltar.href = "doar-trocar.html";
+        }
+
         nome.textContent = data.nome_anuncio;
         document.getElementById("produto-categoria").textContent = data.categorias?.nome || "Produto";
         document.getElementById("produto-estado").textContent = `Condição: ${nomeEstado[data.estado] || data.estado}`;
